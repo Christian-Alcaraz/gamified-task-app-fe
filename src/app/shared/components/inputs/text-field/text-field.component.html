@@ -1,0 +1,35 @@
+<section class="flex flex-col w-full gap-1.5" [class.dark]="theme() === 'dark'">
+  @if (props.label && props.labelLoc !== "hide") {
+    <p
+      class="text-sm text-foreground"
+      [ngClass]="{
+        '!text-destructive': fControl.errors && fControl.dirty,
+      }"
+    >
+      {{ props.label }}
+    </p>
+  }
+  <input
+    [type]="props.type"
+    [placeholder]="props.placeholder ?? ''"
+    [formControl]="fControl"
+    class="bg-white py-2 px-3 rounded-xl w-full border hover:outline-2 hover:outline-offset-2 focus:outline-2 focus:outline-offset-2"
+    [ngClass]="{
+      'border-transparent hover:outline-primary focus:outline-primary':
+        !fControl.errors,
+      'border-transparent hover:outline-destructive focus:outline-destructive':
+        fControl.errors && fControl.dirty,
+    }"
+  />
+
+  @if (!props.hideError) {
+    <app-input-error
+      [fControl]="fControl"
+      [labelProps]="props.label"
+    ></app-input-error>
+  }
+
+  @if (props.hint && (fControl.pristine ? true : fControl.errors)) {
+    <small class="text-xs text-foreground">{{ props.hint }}</small>
+  }
+</section>

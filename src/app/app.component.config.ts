@@ -12,7 +12,7 @@ import {
   withCaching,
   withContentSecurityPolicy,
 } from '@ng-icons/core';
-import { routes } from './app.routes';
+import { routes } from './app.component.routes';
 import { HttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {

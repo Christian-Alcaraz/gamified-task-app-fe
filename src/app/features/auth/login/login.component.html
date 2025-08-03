@@ -1,0 +1,48 @@
+<main
+  class="w-[25vw] border border-foreground rounded-[10%] shadow-xs py-12 px-10"
+  [class.dark]="theme() === 'dark'"
+>
+  <section class="flex items-center gap-4">
+    <section>
+      <h1
+        class="text-xl font-bold tracking-wide"
+        [class.text-primary]="theme() === 'dark'"
+        [class.text-black]="theme() !== 'dark'"
+      >
+        Welcome to Task Quest
+      </h1>
+      <small class="text-muted-foreground">This is description</small>
+    </section>
+
+    <section class="ml-auto">
+      <a
+        class="text-primary hover:underline cursor-pointer"
+        tabindex="0"
+        (keypress)="navigateToSignup()"
+        (click)="navigateToSignup()"
+        >Signup</a
+      >
+    </section>
+  </section>
+
+  <section
+    class="mt-4 flex flex-col justify-center gap-5"
+    [formGroup]="credentialForm"
+  >
+    <app-text-field
+      fcName="email"
+      [props]="{ type: 'text', label: 'Email' }"
+    ></app-text-field>
+    <app-text-field
+      fcName="password"
+      [props]="{ type: 'text', label: 'Password' }"
+    ></app-text-field>
+  </section>
+
+  <button
+    class="block mt-4 bg-primary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-primary/85"
+    (click)="submit()"
+  >
+    Login
+  </button>
+</main>

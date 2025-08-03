@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NgIcon } from '@ng-icons/core';
+import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
+import { Const } from '@core/constants';
 import { provideIcons } from '@ng-icons/core';
 import * as heroIconsMicro from '@ng-icons/heroicons/micro';
 import * as heroIconsMini from '@ng-icons/heroicons/mini';
@@ -22,11 +23,17 @@ const compiledIcons = {
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NgIcon],
+  imports: [RouterOutlet],
   viewProviders: [provideIcons(compiledIcons)],
-  templateUrl: './app.html',
-  styleUrl: './app.scss',
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss',
 })
-export class App {
+export class App extends ThemeAwareComponent {
   protected readonly title = signal('gamified-task-app');
+
+  constructor() {
+    super();
+    const themeSavedOption = localStorage[Const.AppTheme] ?? 'dark';
+    this.setTheme(themeSavedOption);
+  }
 }
