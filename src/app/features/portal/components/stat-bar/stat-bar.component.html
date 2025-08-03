@@ -1,7 +1,9 @@
 <p class="text-white">{{ userState | json }}</p>
 
 <p class="grid grid-cols-8 items-center gap-2">
-  <span class="col-span-2 text-sm">{{ props!.prefix ?? "Unknown Stat" }}:</span>
+  <span class="col-span-2 text-sm"
+    >{{ props()!.prefix ?? "Unknown Stat" }}:</span
+  >
   <span
     class="inline-flex relative col-span-6 justify-center bg-gray-700 w-full h-[24px] rounded-sm shadow-sm"
   >
@@ -13,7 +15,7 @@
 
     <div
       class="block absolute top-0 left-0 0 h-[inherit] rounded-sm"
-      [class]="props!.bgColorTailwindCss ?? ''"
+      [class]="props()!.bgColorTailwindCss ?? ''"
       [style.width.%]="userState()?.[currentStr]! ?? 0"
     ></div>
   </span>

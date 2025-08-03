@@ -4,3 +4,4 @@ export const Token = {
 };
 
 export const Tokens = Object.values(Token);
+export type TokenType = (typeof Token)[keyof typeof Token];

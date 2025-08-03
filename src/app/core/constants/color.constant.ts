@@ -4,8 +4,8 @@ export const Color = {
   Warning: 'warning',
   Success: 'success',
   Neutral: 'neutral',
-};
+} as const;
 
 export const Colors = Object.keys(Color);
 
-export type ColorType = 'primary' | 'error' | 'warning' | 'success' | 'neutral';
+export type ColorType = (typeof Color)[keyof typeof Color];

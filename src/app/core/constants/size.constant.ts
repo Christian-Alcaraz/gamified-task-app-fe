@@ -8,4 +8,4 @@ export const Size = {
 
 export const Sizes = Object.keys(Size);
 
-export type SizeType = 'xl' | 'lg' | 'md' | 'sm' | 'xs';
+export type SizeType = (typeof Size)[keyof typeof Size];

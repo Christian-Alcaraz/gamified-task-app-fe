@@ -13,10 +13,8 @@ export const routes: Routes = [
   },
   {
     path: 'portal',
-    loadComponent: () =>
-      import('./features/portal/portal.component').then(
-        (c) => c.PortalComponent,
-      ),
+    loadChildren: () =>
+      import('./features/portal/portal.component.routes').then((m) => m.routes),
   },
   {
     path: '**',

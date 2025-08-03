@@ -1,15 +1,15 @@
 import { Component, inject } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
 import {
   StatKey,
   UserState,
   UserStateService,
 } from '@shared/services/state/user-state.service';
-import { StatBarComponent } from './components/stat-bar/stat-bar.component';
 
 @Component({
   selector: 'app-portal',
-  imports: [StatBarComponent],
+  imports: [RouterOutlet],
   templateUrl: './portal.component.html',
   styleUrl: './portal.component.scss',
 })

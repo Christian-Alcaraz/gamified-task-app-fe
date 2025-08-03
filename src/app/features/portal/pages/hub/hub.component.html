@@ -1,0 +1,79 @@
+<main class="h-full bg-background" [class.dark]="theme() === 'dark'">
+  <section class="flex items-center">
+    <div class="w-[128px] h-[128px] border border-foreground text-foreground">
+      Character Pic
+    </div>
+    <div
+      class="w-[calc(100vw*0.2)] flex flex-col justify-center text-foreground ml-4 gap-2"
+    >
+      <app-stat-bar
+        statCursor="hp"
+        [props]="{ bgColorTailwindCss: 'bg-rose-500', prefix: 'HP' }"
+      ></app-stat-bar>
+      <app-stat-bar
+        statCursor="mana"
+        [props]="{ bgColorTailwindCss: 'bg-blue-500', prefix: 'MP' }"
+      ></app-stat-bar>
+    </div>
+  </section>
+
+  <div>
+    <button
+      class="bg-primary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-primary/85 mr-4"
+      (click)="increaseStat('hp', 10)"
+    >
+      HP +1
+    </button>
+    <button
+      class="bg-primary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-primary/85 mr-4"
+      (click)="decreaseStat('hp', 10)"
+    >
+      HP -1
+    </button>
+    <button
+      class="bg-primary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-primary/85 mr-4"
+      (click)="increaseStat('mana', 10)"
+    >
+      MP +1
+    </button>
+    <button
+      class="bg-primary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-primary/85 mr-4"
+      (click)="decreaseStat('mana', 10)"
+    >
+      MP -1
+    </button>
+  </div>
+
+  <section class="h-[calc(100vh-20%)] grid grid-cols-12 pt-5">
+    <aside class="flex flex-col items-center col-span-2 px-4 py-2 h-full">
+      <h3
+        class="inline-block bg-accent border px-3 py-1 rounded-xl text-accent-foreground tracking-wide font-medium shadow-sm"
+      >
+        Pinned Task
+      </h3>
+    </aside>
+    <main
+      class="flex flex-col col-span-10 border rounded-sm py-2 h-full overflow-y-hidden"
+    >
+      <h3 class="inline-block py-1 text-foreground px-4 pb-2 text-center">
+        Task Entries
+      </h3>
+      <section
+        class="flex-1 border-t overflow-y-auto min-h-[0] gap-2 px-4 pb-3"
+      >
+        @for (task of tempTaskList; track task._id) {
+          <div class="flex flex-col border rounded-xl px-4 py-5 mt-2">
+            <h4 class="text-foreground">{{ task.name }}</h4>
+            <p class="text-sm text-muted-foreground">{{ task.description }}</p>
+            <p class="text-sm text-muted-foreground">{{ task.difficulty }}</p>
+            <p class="text-sm text-muted-foreground">{{ task.status }}</p>
+          </div>
+        } @empty {
+          <div class="flex flex-col border rounded-xl px-4 py-5 mt-2">
+            <h4 class="text-foreground">No Task Available</h4>
+          </div>
+        }
+      </section>
+    </main>
+  </section>
+</main>

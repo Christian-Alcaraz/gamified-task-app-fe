@@ -1,6 +1,9 @@
 import { JsonPipe } from '@angular/common';
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { UserStateService } from '@shared/services/state/user-state.service';
+import { Component, inject, input, OnInit } from '@angular/core';
+import {
+  StatKey,
+  UserStateService,
+} from '@shared/services/state/user-state.service';
 
 export interface StatBarProps {
   bgColorTailwindCss?: string;
@@ -14,8 +17,8 @@ export interface StatBarProps {
   styleUrl: './stat-bar.component.scss',
 })
 export class StatBarComponent implements OnInit {
-  @Input({ required: true }) statCursor = '';
-  @Input() props!: StatBarProps;
+  statCursor = input<StatKey>();
+  props = input<StatBarProps>();
 
   /**
    * ? I don't know if it is good to encapsulate userState here?
@@ -30,7 +33,7 @@ export class StatBarComponent implements OnInit {
   totalStr!: string;
 
   ngOnInit(): void {
-    this.currentStr = this.statCursor + 'Current';
-    this.totalStr = this.statCursor + 'Total';
+    this.currentStr = this.statCursor() + 'Current';
+    this.totalStr = this.statCursor() + 'Total';
   }
 }
