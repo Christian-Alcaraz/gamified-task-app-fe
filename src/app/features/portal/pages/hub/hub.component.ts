@@ -4,6 +4,9 @@ import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
 import { Task } from '@core/models/task.model';
 import { StatBarComponent } from '@features/portal/components/stat-bar/stat-bar.component';
 import { UpsertTaskModalComponent } from '@features/portal/components/upsert-task-modal/upsert-task-modal.component';
+import { NgIcon } from '@ng-icons/core';
+import { BadgeComponent } from '@shared/components/badge/badge.component';
+import { BadgeDirective } from '@shared/directives';
 import {
   StatKey,
   UserState,
@@ -13,7 +16,13 @@ import { sampleTasks } from './hub.config';
 
 @Component({
   selector: 'app-hub',
-  imports: [StatBarComponent, DialogModule],
+  imports: [
+    StatBarComponent,
+    DialogModule,
+    BadgeComponent,
+    BadgeDirective,
+    NgIcon,
+  ],
   templateUrl: './hub.component.html',
   styleUrl: './hub.component.scss',
 })
@@ -31,6 +40,17 @@ export class HubComponent extends ThemeAwareComponent {
   };
 
   tempTaskList: Task[] = sampleTasks;
+
+  tempStatusBadgeConfig = {
+    Active:
+      'block text-xs px-2 py-1 rounded-sm w-fit shadow-sm text-foreground bg-emerald-500',
+    Cancelled:
+      'block text-xs px-2 py-1 rounded-sm w-fit shadow-sm text-foreground bg-rose-500',
+    Completed:
+      'block text-xs px-2 py-1 rounded-sm w-fit shadow-sm text-foreground bg-sky-500',
+    Paused:
+      'block text-xs px-2 py-1 rounded-sm w-fit shadow-sm text-foreground bg-amber-500',
+  };
 
   constructor() {
     super();
