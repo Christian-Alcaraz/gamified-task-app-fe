@@ -1,11 +1,9 @@
-<p class="text-white">{{ userState | json }}</p>
-
 <p class="grid grid-cols-8 items-center gap-2">
-  <span class="col-span-2 text-sm"
+  <span class="col-span-2 text-sm text-foreground"
     >{{ props()!.prefix ?? "Unknown Stat" }}:</span
   >
   <span
-    class="inline-flex relative col-span-6 justify-center bg-gray-700 w-full h-[24px] rounded-sm shadow-sm"
+    class="inline-flex relative col-span-6 justify-center bg-statbar text-foreground w-full h-[24px] rounded-sm shadow-sm"
   >
     <p class="static z-2">
       {{ userState()?.[currentStr]! ?? "???" }}/{{

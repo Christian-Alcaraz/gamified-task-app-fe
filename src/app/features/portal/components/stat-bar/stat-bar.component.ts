@@ -1,4 +1,3 @@
-import { JsonPipe } from '@angular/common';
 import { Component, inject, input, OnInit } from '@angular/core';
 import {
   StatKey,
@@ -12,7 +11,7 @@ export interface StatBarProps {
 
 @Component({
   selector: 'app-stat-bar',
-  imports: [JsonPipe],
+  imports: [],
   templateUrl: './stat-bar.component.html',
   styleUrl: './stat-bar.component.scss',
 })
