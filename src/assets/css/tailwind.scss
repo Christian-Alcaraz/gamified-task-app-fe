@@ -186,10 +186,10 @@
   --animate-slide-in-right: slide-in-right 200ms ease-out forwards;
   --animate-slide-out-right: slide-out-right 200ms ease-in forwards;
 
-  --animate-slide-in-top: slide-in-top 200ms ease-out forwards;
+  --animate-slide-in-top: slide-in-top 100ms ease-out forwards;
   --animate-slide-out-top: slide-out-top 200ms ease-in forwards;
 
-  --animate-slide-in-bottom: slide-in-bottom 200ms ease-out forwards;
+  --animate-slide-in-bottom: slide-in-bottom 100ms ease-out forwards;
   --animate-slide-out-bottom: slide-out-bottom 200ms ease-in forwards;
 
   @keyframes slide-in-left {
