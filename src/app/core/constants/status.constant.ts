@@ -5,4 +5,4 @@ export const Status = {
 } as const;
 
 export const Statuses = Object.values(Status);
-export type StatusType = (typeof Status)[keyof typeof Status];
+export type StatusTyping = (typeof Status)[keyof typeof Status];

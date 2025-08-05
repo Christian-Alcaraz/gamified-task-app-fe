@@ -1,27 +1,3 @@
-/**
- * 
- *  --- TASK DIFFICULTIES ---
- * 
- * Brainstorm Samples
-Beginner
-Intermediate
-Advanced
-Expert
-Master 
- 
-Easy Win (Beginner)
-Daily Grind (Intermediate)
-Big Project (Advanced)
-Hard Deadline (Expert)
-Impossible Goal (Master)
-
-Quick Fix (Beginner)
-Steady Task (Intermediate)
-Tough Challenge (Advanced)
-Critical Mission (Expert)
-Final Showdown (Master)
-*/
-
 export const TaskDifficulty = {
   Beginner: 'Beginner',
   Intermediate: 'Intermediate',
@@ -30,12 +6,10 @@ export const TaskDifficulty = {
   Master: 'Master',
 } as const;
 export const TaskDifficulties = Object.values(TaskDifficulty);
-export type TaskDifficultyType =
+export type TaskDifficultyTyping =
   (typeof TaskDifficulty)[keyof typeof TaskDifficulty];
 
-/**
- *  --- TASK STATUS ---
- */
+//  --- TASK STATUS ---
 export const TaskStatus = {
   Active: 'Active',
   Cancelled: 'Cancelled',
@@ -44,11 +18,9 @@ export const TaskStatus = {
 } as const;
 
 export const TaskStatuses = Object.values(TaskStatus);
-export type TaskStatusType = (typeof TaskStatus)[keyof typeof TaskStatus];
+export type TaskStatusTyping = (typeof TaskStatus)[keyof typeof TaskStatus];
 
-/**
- *  --- TASK STAT ---
- */
+// --- TASK STAT ---
 export const TaskStat = {
   HpTotal: 'hpTotal',
   HpCurrent: 'hpCurrent',
@@ -56,19 +28,28 @@ export const TaskStat = {
   RewardXp: 'rewardXp',
 } as const;
 export const TaskStats = Object.values(TaskStat);
-export type TaskStatType = (typeof TaskStat)[keyof typeof TaskStat];
+export type TaskStatTyping = (typeof TaskStat)[keyof typeof TaskStat];
+
+export const TaskType = {
+  Dailies: 'dailies',
+  Todo: 'todo',
+} as const;
+
+export const TaskTypes = Object.values(TaskType);
+export type TaskTyping = (typeof TaskType)[keyof typeof TaskType];
 
 export class Task {
   _id?: string;
   name?: string;
   description?: string;
+  type?: TaskTyping;
   subtaskIds?: string[];
-  status?: TaskStatusType;
+  status?: TaskStatusTyping;
   userLimit?: number;
   userIds?: string[];
   deadlineDatetime?: Date;
-  difficulty?: TaskDifficultyType;
-  stat?: Record<TaskStatType, number>;
+  difficulty?: TaskDifficultyTyping;
+  stat?: Record<TaskStatTyping, number>;
 
   createdAt?: Date;
   updatedAt?: Date;

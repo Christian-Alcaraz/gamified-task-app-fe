@@ -1,12 +1,12 @@
-import { StatusType } from '@core/constants/status.constant';
+import { StatusTyping } from '@core/constants/status.constant';
 
-export type UserType = 'User' | 'Admin';
+export type UserTyping = 'User' | 'Admin';
 
 export class User {
   _id?: string;
   email?: string;
-  userType?: UserType;
-  status?: StatusType;
+  userType?: UserTyping;
+  status?: StatusTyping;
   createdAt?: Date;
   updatedAt?: Date;
 
