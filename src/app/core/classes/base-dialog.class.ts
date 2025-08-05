@@ -14,6 +14,7 @@ type DialogPositionType =
 export interface BaseDialogData {
   class?: string;
   position?: DialogPositionType; // 'center' | 'left' | 'right';
+  disableOutsideClose?: boolean;
 }
 
 const DIALOG_DEFAULT_CSS =
@@ -43,6 +44,9 @@ export abstract class BaseDialog<T = any | BaseDialogData> {
     this.updateCss();
 
     this.dialogRef.backdropClick.subscribe(() => {
+      //eslint-disable-next-line
+      const disableOutsideClose = !!(this.data as any).disableOutsideClose;
+      if (disableOutsideClose) return;
       this.closeDialog();
     });
 
