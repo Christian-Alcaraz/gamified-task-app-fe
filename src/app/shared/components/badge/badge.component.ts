@@ -30,7 +30,8 @@ const BADGE_BG = 'bg-card border';
 })
 export class BadgeComponent extends ThemeAwareComponent {
   badgeValue = input.required<string | number>();
-  badgeClassificationConfig = input<Record<string, string>>();
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  badgeClassificationConfig = input<any>();
   badgeProps = input<BadgeProps>();
   badgeType = input<BadgeType>();
 

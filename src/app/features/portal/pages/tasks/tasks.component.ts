@@ -5,18 +5,17 @@ import { DialogOptions } from '@core/constants';
 import { Task } from '@core/models/task.model';
 import { StatBarComponent } from '@features/portal/components/stat-bar/stat-bar.component';
 import { UpsertTaskModalComponent } from '@features/portal/components/upsert-task-modal/upsert-task-modal.component';
-import { NgIcon } from '@ng-icons/core';
-import { BadgeComponent } from '@shared/components/badge/badge.component';
 import {
   StatKey,
   UserState,
   UserStateService,
 } from '@shared/services/state/user-state.service';
-import { sampleTasks } from '../hub/hub.config';
+import { TaskListComponent } from './task-list/task-list.component';
+import { sampleTasks } from './tasks.config';
 
 @Component({
   selector: 'app-tasks',
-  imports: [StatBarComponent, DialogModule, BadgeComponent, NgIcon],
+  imports: [StatBarComponent, DialogModule, TaskListComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss',
 })
@@ -37,18 +36,23 @@ export class TasksComponent extends ThemeAwareComponent {
 
   tempStatusBadgeConfig = {
     Active:
-      'block text-xs px-2 py-1 rounded-sm w-fit shadow-sm text-foreground bg-emerald-500',
+      'block border text-xs px-2 py-1 rounded-sm w-fit shadow-sm text-foreground bg-emerald-500',
     Cancelled:
-      'block text-xs px-2 py-1 rounded-sm w-fit shadow-sm text-foreground bg-rose-500',
+      'block border text-xs px-2 py-1 rounded-sm w-fit shadow-sm text-foreground bg-rose-500',
     Completed:
-      'block text-xs px-2 py-1 rounded-sm w-fit shadow-sm text-foreground bg-sky-500',
+      'block border text-xs px-2 py-1 rounded-sm w-fit shadow-sm text-foreground bg-sky-500',
     Paused:
-      'block text-xs px-2 py-1 rounded-sm w-fit shadow-sm text-foreground bg-amber-500',
+      'block border text-xs px-2 py-1 rounded-sm w-fit shadow-sm text-foreground bg-amber-500',
   };
 
   constructor() {
     super();
     this._userStateService.setUserState(this.tempUserState);
+  }
+
+  toggleTheme() {
+    const newTheme = this.theme() === 'dark' ? 'light' : 'dark';
+    this.themeService.setTheme(newTheme);
   }
 
   increaseStat = (stat: StatKey, amount: number) =>
