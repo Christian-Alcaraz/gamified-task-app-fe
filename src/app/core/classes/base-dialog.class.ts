@@ -18,9 +18,9 @@ export interface BaseDialogData {
 }
 
 const DIALOG_DEFAULT_CSS =
-  'bg-background w-full gap-4 p-6 shadow-lg duration-100 sm:max-w-lg';
+  'bg-card w-full gap-4 p-6 shadow-lg duration-100 sm:max-w-lg';
 const DIALOG_CENTER_CSS =
-  'relative grid justify-self-end rounded-lg max-w-[calc(100%-2rem)] border';
+  'relative grid justify-self-end rounded-lg min-w-[calc(45vw-3rem)] max-w-[calc(100%-2rem)] border';
 const DIALOG_LEFT_CSS =
   'absolute top-0 left-0 h-full max-w-[calc(100%-2rem)] border-r';
 const DIALOG_RIGHT_CSS =
@@ -45,7 +45,7 @@ export abstract class BaseDialog<T = any | BaseDialogData> {
 
     this.dialogRef.backdropClick.subscribe(() => {
       //eslint-disable-next-line
-      const disableOutsideClose = !!(this.data as any).disableOutsideClose;
+      const disableOutsideClose = !!(this.data as any)?.disableOutsideClose;
       if (disableOutsideClose) return;
       this.closeDialog();
     });
@@ -57,7 +57,7 @@ export abstract class BaseDialog<T = any | BaseDialogData> {
 
   updateCss() {
     //eslint-disable-next-line
-    const pos = (this.data as any)?.position ?? 'right';
+    const pos = (this.data as any)?.position ?? 'center';
     let css = `${this.theme() === 'dark' ? 'dark ' : ''}${DIALOG_DEFAULT_CSS} `;
     let openAnimationCss, closeAnimationCss;
 
