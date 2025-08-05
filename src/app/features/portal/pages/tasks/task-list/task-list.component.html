@@ -1,0 +1,22 @@
+<main class="flex flex-col border rounded-sm py-2 h-full overflow-y-hidden">
+  <h3 class="inline-block py-1 text-foreground px-4 pb-2">
+    {{ props()?.header ?? "No Header Found" }}
+  </h3>
+  <section
+    class="flex-1 border-t overflow-y-auto will-change-scroll min-h-[0] gap-2 px-4 pb-3 styled-scrollbars transition-all duration-[50ms] ease-burst-in-slow-out"
+  >
+    @for (task of tasks(); track task._id) {
+      <app-task-item
+        [task]="task"
+        [badgeConfig]="tempStatusBadgeConfig"
+        (taskSelect)="openTaskModal($event)"
+      ></app-task-item>
+    } @empty {
+      <div class="flex items-center justify-center px-4 py-5 mt-2">
+        <h4 class="text-foreground text-center mt-8 select-none">
+          No Task Available
+        </h4>
+      </div>
+    }
+  </section>
+</main>
