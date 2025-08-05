@@ -16,12 +16,12 @@ export interface CookieOptions {
   providedIn: 'root',
 })
 export class CookieService {
-  private readonly documentIsAccessible: boolean;
-  private readonly document: Document = inject(DOCUMENT);
-  private readonly platformId: object = inject(PLATFORM_ID);
+  private readonly _documentIsAccessible: boolean;
+  private readonly _document: Document = inject(DOCUMENT);
+  private readonly _platformId: object = inject(PLATFORM_ID);
 
   constructor() {
-    this.documentIsAccessible = isPlatformBrowser(this.platformId);
+    this._documentIsAccessible = isPlatformBrowser(this._platformId);
   }
 
   /**
@@ -74,12 +74,12 @@ export class CookieService {
    * @since: 1.0.0
    */
   check(name: string): boolean {
-    if (!this.documentIsAccessible) {
+    if (!this._documentIsAccessible) {
       return false;
     }
     name = encodeURIComponent(name);
     const regExp = CookieService.getCookieRegExp(name);
-    return regExp.test(this.document.cookie);
+    return regExp.test(this._document.cookie);
   }
 
   /**
@@ -95,7 +95,7 @@ export class CookieService {
     if (this.check(name)) {
       name = encodeURIComponent(name);
       const regExp: RegExp = CookieService.getCookieRegExp(name);
-      const result = regExp.exec(this.document.cookie);
+      const result = regExp.exec(this._document.cookie);
       return result?.[1] ? CookieService.safeDecodeURIComponent(result[1]) : '';
     } else {
       return '';
@@ -110,13 +110,13 @@ export class CookieService {
    * @author: Stepan Suvorov
    * @since: 1.0.0
    */
-  getAll(): { [key: string]: string } {
-    if (!this.documentIsAccessible) {
+  getAll(): Record<string, string> {
+    if (!this._documentIsAccessible) {
       return {};
     }
 
-    const cookies: { [key: string]: string } = {};
-    const document: any = this.document;
+    const cookies: Record<string, string> = {};
+    const document = this._document;
 
     if (document.cookie && document.cookie !== '') {
       document.cookie.split(';').forEach((currentCookie: string) => {
@@ -187,7 +187,7 @@ export class CookieService {
     sameSite?: SameSite,
     partitioned?: CookieOptions['partitioned'],
   ): void {
-    if (!this.documentIsAccessible) {
+    if (!this._documentIsAccessible) {
       return;
     }
 
@@ -258,7 +258,7 @@ export class CookieService {
       cookieString += 'Partitioned;';
     }
 
-    this.document.cookie = cookieString;
+    this._document.cookie = cookieString;
   }
 
   /**
@@ -280,7 +280,7 @@ export class CookieService {
     secure?: CookieOptions['secure'],
     sameSite: SameSite = 'Lax',
   ): void {
-    if (!this.documentIsAccessible) {
+    if (!this._documentIsAccessible) {
       return;
     }
     const expiresDate = new Date('Thu, 01 Jan 1970 00:00:01 GMT');
@@ -310,13 +310,14 @@ export class CookieService {
     secure?: CookieOptions['secure'],
     sameSite: SameSite = 'Lax',
   ): void {
-    if (!this.documentIsAccessible) {
+    if (!this._documentIsAccessible) {
       return;
     }
 
-    const cookies: any = this.getAll();
+    const cookies = this.getAll();
 
     for (const cookieName in cookies) {
+      //eslint-disable-next-line no-prototype-builtins
       if (cookies.hasOwnProperty(cookieName)) {
         this.delete(cookieName, path, domain, secure, sameSite);
       }

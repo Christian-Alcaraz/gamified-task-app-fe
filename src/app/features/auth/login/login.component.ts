@@ -16,24 +16,24 @@ import { TextFieldComponent } from '@shared/components/inputs/text-field/text-fi
   styleUrl: './login.component.scss',
 })
 export class LoginComponent extends ThemeAwareComponent {
-  private readonly formBuilder = inject(FormBuilder);
-  private readonly router = inject(Router);
+  private readonly _formBuilder = inject(FormBuilder);
+  private readonly _router = inject(Router);
 
   credentialForm!: FormGroup;
 
   constructor() {
     super();
-    this.credentialForm = this.formBuilder.group({
+    this.credentialForm = this._formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
     });
   }
 
   submit() {
-    this.router.navigate(['portal']);
+    this._router.navigate(['hub']);
   }
 
   navigateToSignup() {
-    this.router.navigate(['auth', 'sign-up']);
+    this._router.navigate(['auth', 'sign-up']);
   }
 }

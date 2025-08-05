@@ -22,8 +22,8 @@ const BADGE_DEFAULT = 'border bg-card text-foreground';
   selector: '[appBadgeDisplay]',
 })
 export class BadgeDirective implements OnInit, OnChanges {
-  private readonly renderer = inject(Renderer2);
-  private readonly elRef = inject(ElementRef);
+  private readonly _renderer = inject(Renderer2);
+  private readonly _elRef = inject(ElementRef);
 
   @Input({ alias: 'appBadgeDisplay' }) badgeValue!: string | number;
   @Input() badgeConfig!: Record<string, string>;
@@ -34,24 +34,24 @@ export class BadgeDirective implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
-    const host = this.elRef.nativeElement;
+    const host = this._elRef.nativeElement;
     const existingClasses = Array.from(host.classList);
 
     host.setAttribute('class', '');
 
     if (existingClasses.length) {
       existingClasses.forEach((cls) =>
-        this.renderer.addClass(host, cls as string),
+        this._renderer.addClass(host, cls as string),
       );
     }
 
     this._getClassArray().forEach((clsStr) =>
-      this.renderer.addClass(host, clsStr),
+      this._renderer.addClass(host, clsStr),
     );
 
-    this.renderer.appendChild(
+    this._renderer.appendChild(
       host,
-      this.renderer.createText(this.badgeValue as string),
+      this._renderer.createText(this.badgeValue as string),
     );
   }
 

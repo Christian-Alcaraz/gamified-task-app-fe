@@ -21,17 +21,17 @@ export class PortalComponent extends ThemeAwareComponent {
     manaTotal: 100,
   };
 
-  private readonly userStateService = inject(UserStateService);
-  readonly userState = this.userStateService.userState;
+  private readonly _userStateService = inject(UserStateService);
+  readonly userState = this._userStateService.userState;
 
   constructor() {
     super();
-    this.userStateService.setUserState(this.tempUserState);
+    this._userStateService.setUserState(this.tempUserState);
   }
 
   increaseStat = (stat: StatKey, amount: number) =>
-    this.userStateService.increaseStat(stat, amount);
+    this._userStateService.increaseStat(stat, amount);
 
   decreaseStat = (stat: StatKey, amount: number) =>
-    this.userStateService.decreaseStat(stat, amount);
+    this._userStateService.decreaseStat(stat, amount);
 }

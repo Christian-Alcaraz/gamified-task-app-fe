@@ -36,4 +36,6 @@ export class App extends ThemeAwareComponent {
     const themeSavedOption = localStorage[Const.AppTheme] ?? 'dark';
     this.setTheme(themeSavedOption);
   }
+
+  setTheme = (theme: 'light' | 'dark') => this.themeService.setTheme(theme);
 }

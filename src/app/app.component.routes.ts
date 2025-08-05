@@ -12,7 +12,7 @@ export const routes: Routes = [
       import('./features/auth/auth.component.routes').then((m) => m.routes),
   },
   {
-    path: 'portal',
+    path: 'hub',
     loadChildren: () =>
       import('./features/portal/portal.component.routes').then((m) => m.routes),
   },

@@ -7,11 +7,6 @@ export const routes: Routes = [
     component: PortalComponent,
     children: [
       {
-        path: 'hub',
-        loadComponent: () =>
-          import('./pages/hub/hub.component').then((m) => m.HubComponent),
-      },
-      {
         path: 'tasks',
         loadComponent: () =>
           import('./pages/tasks/tasks.component').then((m) => m.TasksComponent),
@@ -23,12 +18,12 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'hub',
+        redirectTo: 'tasks',
         pathMatch: 'full',
       },
       {
         path: '**',
-        redirectTo: 'hub',
+        redirectTo: 'tasks',
         pathMatch: 'full',
       },
     ],

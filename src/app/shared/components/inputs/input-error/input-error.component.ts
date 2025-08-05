@@ -13,7 +13,7 @@ export class InputErrorComponent implements OnInit {
   @Input({ required: true }) fControl!: FormControl;
   @Input() labelProps!: string | null | undefined;
 
-  private utilService = inject(UtilService);
+  private readonly _utilService = inject(UtilService);
   readonly theme = inject(ThemeService).theme;
 
   errorMessage!: string;
@@ -50,7 +50,7 @@ export class InputErrorComponent implements OnInit {
         let firstErrorMessage = errorList[firstErrorKey];
 
         if (firstErrorMessage.includes('{value}')) {
-          firstErrorMessage = this.utilService.string.replacePlaceholders(
+          firstErrorMessage = this._utilService.string.replacePlaceholders(
             firstErrorMessage,
             { value: firstErrorValue },
           );

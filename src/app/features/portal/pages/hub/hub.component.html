@@ -60,7 +60,7 @@
         Task Entries
       </h3>
       <section
-        class="flex-1 border-t overflow-y-auto min-h-[0] gap-2 px-4 pb-3"
+        class="flex-1 border-t overflow-y-auto will-change-scroll min-h-[0] gap-2 px-4 pb-3 styled-scrollbars transition-all duration-[50ms] ease-burst-in-slow-out"
       >
         @for (task of tempTaskList; track task._id) {
           <div

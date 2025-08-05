@@ -6,7 +6,6 @@ import { StatBarComponent } from '@features/portal/components/stat-bar/stat-bar.
 import { UpsertTaskModalComponent } from '@features/portal/components/upsert-task-modal/upsert-task-modal.component';
 import { NgIcon } from '@ng-icons/core';
 import { BadgeComponent } from '@shared/components/badge/badge.component';
-import { BadgeDirective } from '@shared/directives';
 import {
   StatKey,
   UserState,
@@ -16,21 +15,15 @@ import { sampleTasks } from './hub.config';
 
 @Component({
   selector: 'app-hub',
-  imports: [
-    StatBarComponent,
-    DialogModule,
-    BadgeComponent,
-    BadgeDirective,
-    NgIcon,
-  ],
+  imports: [StatBarComponent, DialogModule, BadgeComponent, NgIcon],
   templateUrl: './hub.component.html',
   styleUrl: './hub.component.scss',
 })
 export class HubComponent extends ThemeAwareComponent {
-  private readonly userStateService = inject(UserStateService);
-  private readonly dialog = inject(Dialog);
+  private readonly _userStateService = inject(UserStateService);
+  private readonly _dialog = inject(Dialog);
 
-  readonly userState = this.userStateService.userState;
+  readonly userState = this._userStateService.userState;
 
   tempUserState: UserState = {
     hpCurrent: 98,
@@ -54,17 +47,17 @@ export class HubComponent extends ThemeAwareComponent {
 
   constructor() {
     super();
-    this.userStateService.setUserState(this.tempUserState);
+    this._userStateService.setUserState(this.tempUserState);
   }
 
   increaseStat = (stat: StatKey, amount: number) =>
-    this.userStateService.increaseStat(stat, amount);
+    this._userStateService.increaseStat(stat, amount);
 
   decreaseStat = (stat: StatKey, amount: number) =>
-    this.userStateService.decreaseStat(stat, amount);
+    this._userStateService.decreaseStat(stat, amount);
 
   openTaskModal(task?: Task) {
-    this.dialog.open(UpsertTaskModalComponent, {
+    this._dialog.open(UpsertTaskModalComponent, {
       minWidth: '55vw',
       maxWidth: '55vw',
       autoFocus: 'false',
