@@ -17,9 +17,9 @@ export interface BaseDialogData {
 }
 
 const DIALOG_DEFAULT_CSS =
-  'bg-background z-50  w-full gap-4 p-6 shadow-lg duration-100 sm:max-w-lg';
+  'bg-background w-full gap-4 p-6 shadow-lg duration-100 sm:max-w-lg';
 const DIALOG_CENTER_CSS =
-  'relative justify-self-end rounded-lg max-w-[calc(100%-2rem)] border';
+  'relative grid justify-self-end rounded-lg max-w-[calc(100%-2rem)] border';
 const DIALOG_LEFT_CSS =
   'absolute top-0 left-0 h-full max-w-[calc(100%-2rem)] border-r';
 const DIALOG_RIGHT_CSS =
@@ -42,8 +42,8 @@ export abstract class BaseDialog<T = any | BaseDialogData> {
   constructor() {
     this.updateCss();
 
-    this.dialogRef.backdropClick.subscribe((event) => {
-      console.log(event);
+    this.dialogRef.backdropClick.subscribe(() => {
+      this.closeDialog();
     });
 
     effect(() => {
