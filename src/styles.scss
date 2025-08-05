@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+
 * {
   box-sizing: border-box;
 }
@@ -9,4 +10,35 @@ body {
 }
 body {
   margin: 0;
+}
+
+.styled-scrollbars {
+  scrollbar-color: transparent transparent;
+  scrollbar-width: thin;
+}
+
+.styled-scrollbars.visible,
+.styled-scrollbars:hover {
+  scrollbar-color: var(--foreground) transparent;
+}
+
+.styled-scrollbars::-webkit-scrollbar {
+  height: 6px;
+  background-color: none;
+}
+.styled-scrollbars:hover::-webkit-scrollbar {
+  background-color: #eee;
+}
+
+.styled-scrollbars::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 5px;
+}
+.styled-scrollbars:hover::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 5px;
+}
+
+body:not(.browser-safari) .styled-scrollbars {
+  scrollbar-width: thin;
 }
