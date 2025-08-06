@@ -18,13 +18,13 @@ export interface BaseDialogData {
 }
 
 const DIALOG_DEFAULT_CSS =
-  'bg-card w-full gap-4 p-6 shadow-lg duration-100 sm:max-w-lg';
+  'bg-card w-full gap-4 shadow-lg duration-100 sm:max-w-lg';
 const DIALOG_CENTER_CSS =
   'relative grid justify-self-end rounded-lg min-w-[calc(45vw-3rem)] max-w-[calc(100%-2rem)] border';
 const DIALOG_LEFT_CSS =
-  'absolute top-0 left-0 h-full max-w-[calc(100%-2rem)] border-r';
+  'absolute top-0 left-0 flex flex-col h-full max-w-[calc(100%-2rem)] border-r';
 const DIALOG_RIGHT_CSS =
-  'absolute top-0 right-0 h-full max-w-[calc(100%-2rem)] border-l';
+  'absolute top-0 right-0 flex flex-col h-full max-w-[calc(100%-2rem)] border-l';
 
 @Directive({
   host: {
@@ -55,13 +55,16 @@ export abstract class BaseDialog<T = any | BaseDialogData> {
     });
   }
 
-  updateCss() {
+  get position() {
     //eslint-disable-next-line
-    const pos = (this.data as any)?.position ?? 'center';
+    return (this.data as any)?.position ?? 'center';
+  }
+
+  updateCss() {
     let css = `${this.theme() === 'dark' ? 'dark ' : ''}${DIALOG_DEFAULT_CSS} `;
     let openAnimationCss, closeAnimationCss;
 
-    switch (pos) {
+    switch (this.position) {
       case BaseDialogPosition.Left:
         css += DIALOG_LEFT_CSS;
         openAnimationCss = 'animate-slide-in-left';
