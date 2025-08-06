@@ -3,8 +3,9 @@ import { Component, inject, input } from '@angular/core';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
 import { DialogOptions } from '@core/constants';
 import { Task } from '@core/models/task.model';
-import { UpsertTaskModalComponent } from '@features/portal/components/upsert-task-modal/upsert-task-modal.component';
+import { BaseDialogData } from '@shared/components/dialog';
 import { TaskItemComponent } from '../task-item/task-item.component';
+import { UpsertTaskModalComponent } from '../upsert-task-modal/upsert-task-modal.component';
 
 export interface TaskListFilter {
   title: string;
@@ -13,6 +14,7 @@ export interface TaskListFilter {
 export interface TaskListProps {
   header: string;
   filters?: TaskListFilter[];
+  dialogProps?: BaseDialogData;
 }
 
 @Component({
@@ -38,19 +40,16 @@ export class TaskListComponent extends ThemeAwareComponent {
       'block border text-xs px-2 py-1 rounded-sm w-fit shadow-sm text-foreground bg-amber-500',
   };
 
-  //eslint-disable-next-line
   openTaskModal(task?: Task) {
+    const dialogProps = this.props()?.dialogProps ?? {};
     const dialog = this._dialog.open(UpsertTaskModalComponent, {
       ...DialogOptions,
       data: {
-        props: 'panda',
+        task,
+        ...dialogProps,
       },
     });
 
-    dialog.closed.subscribe({
-      next: (value) => {
-        console.log(value);
-      },
-    });
+    dialog.closed.subscribe({});
   }
 }

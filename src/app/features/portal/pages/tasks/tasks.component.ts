@@ -1,10 +1,8 @@
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
-import { DialogOptions } from '@core/constants';
 import { Task } from '@core/models/task.model';
 import { StatBarComponent } from '@features/portal/components/stat-bar/stat-bar.component';
-import { UpsertTaskModalComponent } from '@features/portal/components/upsert-task-modal/upsert-task-modal.component';
 import {
   StatKey,
   UserState,
@@ -60,21 +58,4 @@ export class TasksComponent extends ThemeAwareComponent {
 
   decreaseStat = (stat: StatKey, amount: number) =>
     this._userStateService.decreaseStat(stat, amount);
-
-  //eslint-disable-next-line
-  openTaskModal(task?: Task) {
-    const dialog = this._dialog.open(UpsertTaskModalComponent, {
-      ...DialogOptions,
-      data: {
-        props: 'panda',
-        position: 'right',
-      },
-    });
-
-    dialog.closed.subscribe({
-      next: (value) => {
-        console.log(value);
-      },
-    });
-  }
 }
