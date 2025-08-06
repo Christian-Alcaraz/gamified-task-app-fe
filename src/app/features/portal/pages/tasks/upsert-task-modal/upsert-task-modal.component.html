@@ -1,0 +1,20 @@
+<section appDialogTitle>
+  <h1>{{ data.task ? "Update" : "Add" }} Task</h1>
+  <p>Showing total visitors for the last 6 months</p>
+  <app-dialog-close-button (willClose)="closeDialog()" />
+</section>
+
+<main appDialogContent>
+  <p>Fill this with Text Field</p>
+</main>
+
+<footer appDialogActions class="border-t">
+  <button
+    class="group text-foreground border bg-card rounded-xl px-4 py-2 w-full hover:bg-accent"
+    (click)="closeDialog()"
+  >
+    <p class="group-hover:text-accent-foreground cursor-pointer text-sm">
+      Close
+    </p>
+  </button>
+</footer>
