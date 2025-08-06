@@ -79,8 +79,8 @@ export abstract class BaseDialog<T = any | BaseDialogData> {
 
       case BaseDialogPosition.Center:
         css += DIALOG_CENTER_CSS;
-        openAnimationCss = 'animate-slide-in-top';
-        closeAnimationCss = 'animate-slide-out-top';
+        openAnimationCss = 'animate-scale-in';
+        closeAnimationCss = 'animate-scale-out';
         break;
     }
 
