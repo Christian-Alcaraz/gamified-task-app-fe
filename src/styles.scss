@@ -42,3 +42,18 @@ body {
 body:not(.browser-safari) .styled-scrollbars {
   scrollbar-width: thin;
 }
+
+.app-dialog-title > h1,
+.app-dialog-title > h2,
+.app-dialog-title > h3,
+.app-dialog-title > h4,
+.app-dialog-title > h5,
+.app-dialog-title > h6 {
+  color: var(--foreground);
+  margin-bottom: calc(1rem * 0.25);
+}
+
+.app-dialog-title > p {
+  color: var(--muted-foreground);
+  font-size: calc(1rem * 0.875);
+}
