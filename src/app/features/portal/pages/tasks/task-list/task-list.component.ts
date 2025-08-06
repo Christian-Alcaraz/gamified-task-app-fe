@@ -2,7 +2,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { Component, inject, input } from '@angular/core';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
 import { DialogOptions } from '@core/constants';
-import { Task } from '@core/models/task.model';
+import { Task, TaskTyping } from '@core/models/task.model';
 import { BaseDialogData } from '@shared/components/dialog';
 import { TaskItemComponent } from '../task-item/task-item.component';
 import { UpsertTaskModalComponent } from '../upsert-task-modal/upsert-task-modal.component';
@@ -27,6 +27,7 @@ export class TaskListComponent extends ThemeAwareComponent {
   private readonly _dialog = inject(Dialog);
 
   readonly tasks = input.required<Task[]>();
+  readonly taskType = input.required<TaskTyping>();
   readonly props = input<TaskListProps>();
 
   tempStatusBadgeConfig = {

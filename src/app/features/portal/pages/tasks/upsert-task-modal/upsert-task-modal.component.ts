@@ -1,5 +1,11 @@
+import { TitleCasePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Task } from '@core/models/task.model';
 import {
   DialogActionsDirective,
@@ -11,6 +17,7 @@ import {
   BaseDialogData,
 } from '@shared/components/dialog/base-dialog.class';
 import { DialogCloseButtonComponent } from '@shared/components/dialog/dialog-close-button.component';
+import { provideBaseDialogToken } from '@shared/components/dialog/dialog.provider';
 import { TextFieldComponent } from '@shared/components/inputs';
 
 export interface TaskDialogData extends BaseDialogData {
@@ -26,23 +33,40 @@ export interface TaskDialogData extends BaseDialogData {
     DialogCloseButtonComponent,
     ReactiveFormsModule,
     TextFieldComponent,
+    TitleCasePipe,
   ],
+  providers: [provideBaseDialogToken(UpsertTaskModalComponent)],
   templateUrl: './upsert-task-modal.component.html',
   styleUrl: './upsert-task-modal.component.scss',
 })
 export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
   private readonly formBuilder = inject(FormBuilder);
 
-  public taskForm = this.formBuilder.group({
-    name: ['', Validators.required],
-    description: [''],
-    type: ['', Validators.required],
-    subtaskIds: [''],
-    status: ['', Validators.required],
-    userLimit: ['', Validators.required],
-    userIds: [''],
-    deadlineDatetime: [''],
-    difficulty: ['', Validators.required],
-    stat: [''],
-  });
+  taskForm!: FormGroup;
+
+  /**
+   * Todo: Add Select Field for Difficulty
+   * Todo: Add Number +- for User Limit; with Max Limit | Min Limit
+   */
+
+  constructor() {
+    super();
+
+    this.taskForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      type: ['', Validators.required],
+      subtaskIds: ['', Validators.required],
+      status: ['', Validators.required],
+      userLimit: [1, Validators.required],
+      userIds: [''],
+      // deadlineDatetime: ['', Validators.required],
+      // difficulty: ['', Validators.required],
+      // stat: ['', Validators.required],
+    });
+
+    if (this.data.task) {
+      this.taskForm.patchValue(this.data.task);
+    }
+  }
 }

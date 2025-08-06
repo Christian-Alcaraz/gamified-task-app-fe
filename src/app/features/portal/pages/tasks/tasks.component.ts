@@ -1,7 +1,7 @@
-import { Dialog, DialogModule } from '@angular/cdk/dialog';
+import { DialogModule } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
-import { Task } from '@core/models/task.model';
+import { Task, TaskType } from '@core/models/task.model';
 import { StatBarComponent } from '@features/portal/components/stat-bar/stat-bar.component';
 import {
   StatKey,
@@ -19,9 +19,9 @@ import { sampleTasks } from './tasks.config';
 })
 export class TasksComponent extends ThemeAwareComponent {
   private readonly _userStateService = inject(UserStateService);
-  private readonly _dialog = inject(Dialog);
 
   readonly userState = this._userStateService.userState;
+  readonly taskType = TaskType;
 
   tempUserState: UserState = {
     hpCurrent: 98,

@@ -1,7 +1,7 @@
 <section class="flex flex-col w-full gap-1.5" [class.dark]="theme() === 'dark'">
   @if (props.label && props.labelLoc !== "hide") {
     <p
-      class="text-sm text-foreground"
+      class="text-sm text-foreground mb-1"
       [ngClass]="{
         '!text-destructive': fControl.errors && fControl.dirty,
       }"
@@ -13,7 +13,7 @@
     [type]="props.type"
     [placeholder]="props.placeholder ?? ''"
     [formControl]="fControl"
-    class="bg-white py-2 px-3 transition-all duration-75 ease-[cubic-bezier(0.95,0.05,0.795,0.035)] rounded-xl w-full border outline-primary hover:outline-2 hover:outline-offset-2 focus:outline-2 focus:outline-offset-2"
+    class="bg-transparent text-foreground placeholder:text-input py-2 px-3 transition-all duration-75 ease-[cubic-bezier(0.95,0.05,0.795,0.035)] rounded-xl w-full border outline-primary hover:outline-2 hover:outline-offset-2 focus:outline-2 focus:outline-offset-2"
     [ngClass]="{
       'border-destructive hover:outline-destructive focus:outline-destructive':
         fControl.errors && fControl.dirty,

@@ -51,12 +51,14 @@
     <main class="col-span-4 h-full overflow-y-hidden">
       <app-task-list
         [tasks]="tempTaskList"
-        [props]="{ header: 'Dailies', dialogProps: { position: 'left' } }"
+        [taskType]="taskType.Dailies"
+        [props]="{ header: 'Dailies', dialogProps: { position: 'right' } }"
       ></app-task-list>
     </main>
     <main class="col-span-4 h-full overflow-y-hidden">
       <app-task-list
         [tasks]="tempTaskList"
+        [taskType]="taskType.Todo"
         [props]="{ header: 'Todo' }"
       ></app-task-list>
     </main>

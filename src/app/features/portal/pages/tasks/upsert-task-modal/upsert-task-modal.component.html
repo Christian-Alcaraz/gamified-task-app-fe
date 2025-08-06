@@ -1,20 +1,34 @@
 <section appDialogTitle>
-  <h1>{{ data.task ? "Update" : "Add" }} Task</h1>
-  <p>Showing total visitors for the last 6 months</p>
+  <h1>
+    {{ data.task ? "Update" : "Add" }}
+    {{ (data.task?.type | titlecase) ?? "[ERR: Type not Found]" }} Task
+  </h1>
+  <p>
+    Planning made easy! Add a new task or edit your existing task details here.
+  </p>
   <app-dialog-close-button (willClose)="closeDialog()" />
 </section>
 
-<main appDialogContent>
-  <p>Fill this with Text Field</p>
+<main appDialogContent class="gap-2" [formGroup]="taskForm">
+  <app-text-field fcName="name" [props]="{ label: 'Name', type: 'text' }" />
+  <app-text-field
+    fcName="description"
+    [props]="{ label: 'Description', type: 'text' }"
+  />
+  <app-text-field fcName="type" [props]="{ label: 'Type', type: 'text' }" />
 </main>
 
-<footer appDialogActions class="border-t">
+<footer appDialogActions class="flex flex-col gap-2 border-t">
   <button
-    class="group text-foreground border bg-card rounded-xl px-4 py-2 w-full hover:bg-accent"
+    class="group cursor-pointer transition-colors duration-100 ease-burst-in-slow-out text-primary-foreground border bg-primary rounded-xl px-4 py-2 w-full hover:bg-primary/55"
+  >
+    <p class="group-hover:text-primary-foreground text-sm">Submit</p>
+  </button>
+
+  <button
+    class="group cursor-pointer transition-colors duration-100 ease-burst-in-slow-out text-foreground border bg-card rounded-xl px-4 py-2 w-full hover:bg-accent"
     (click)="closeDialog()"
   >
-    <p class="group-hover:text-accent-foreground cursor-pointer text-sm">
-      Close
-    </p>
+    <p class="group-hover:text-accent-foreground text-sm">Close</p>
   </button>
 </footer>
