@@ -9,11 +9,11 @@ import { ValidatorType } from '@core/interfaces/base-input.interface';
 import { valueMustMatchWithControlName } from '@shared/validators/custom-validators';
 
 export class BaseInput {
-  fControl!: FormControl;
-  fGroup!: FormGroup;
+  protected fControl!: FormControl;
+  protected fGroup!: FormGroup;
   private readonly _controlContainer = inject(ControlContainer);
 
-  initFormControl(fcName: string, validators?: Validators) {
+  protected initFormControl(fcName: string, validators?: Validators) {
     this.fGroup = this._controlContainer.control as FormGroup;
     this.fControl = this.fGroup.get(fcName) as FormControl;
 
