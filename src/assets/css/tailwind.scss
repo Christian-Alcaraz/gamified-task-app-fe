@@ -59,6 +59,7 @@
   --spacing: 0.25rem;
 
   --burst-in-slow-out: cubic-bezier(0, 0.86, 0.84, 1.1);
+  --delay-in-burst: cubic-bezier(0.95, 0.05, 0.795, 0.035);
 }
 
 .dark {
@@ -180,6 +181,7 @@
   --tracking-widest: calc(var(--tracking-normal) + 0.1em);
 
   --ease-burst-in-slow-out: var(--burst-in-slow-out);
+  --ease-delay-in-burst: var(--delay-in-burst);
 
   --animate-slide-in-left: slide-in-left 200ms
     cubic-bezier(0.28, 0.26, 0.35, 1.02) forwards;
