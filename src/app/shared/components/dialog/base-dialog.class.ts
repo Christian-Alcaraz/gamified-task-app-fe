@@ -1,5 +1,6 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { Directive, effect, inject, signal } from '@angular/core';
+import { computed, Directive, effect, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ThemeService } from '@shared/services/theme/theme.service';
 
 export const BaseDialogPosition = {
@@ -28,40 +29,18 @@ const DIALOG_RIGHT_CSS =
 
 @Directive({
   host: {
-    '[class]': 'hostCss',
+    '[class]': 'hostCss()',
   },
 })
 //eslint-disable-next-line
 export abstract class BaseDialog<T = any | BaseDialogData> {
   protected readonly dialogRef = inject(DialogRef);
   protected readonly data = inject(DIALOG_DATA) as T;
-  protected readonly theme = inject(ThemeService).theme;
+  protected readonly theme = inject(ThemeService).theme();
 
   protected isClosing = signal(false);
-  protected hostCss = '';
-
-  constructor() {
-    this.updateCss();
-
-    this.dialogRef.backdropClick.subscribe(() => {
-      //eslint-disable-next-line
-      const disableOutsideClose = !!(this.data as any)?.disableOutsideClose;
-      if (disableOutsideClose) return;
-      this.closeDialog();
-    });
-
-    effect(() => {
-      this.updateCss();
-    });
-  }
-
-  get position() {
-    //eslint-disable-next-line
-    return (this.data as any)?.position ?? 'center';
-  }
-
-  updateCss() {
-    let css = `${this.theme() === 'dark' ? 'dark ' : ''}${DIALOG_DEFAULT_CSS} `;
+  protected hostCss = computed(() => {
+    let css = `${this.theme === 'dark' ? 'dark ' : ''}${DIALOG_DEFAULT_CSS} `;
     let openAnimationCss, closeAnimationCss;
 
     switch (this.position) {
@@ -84,9 +63,24 @@ export abstract class BaseDialog<T = any | BaseDialogData> {
         break;
     }
 
-    this.hostCss = this.isClosing()
+    return this.isClosing()
       ? `${css} ${closeAnimationCss}`
       : `${css} ${openAnimationCss}`;
+  });
+
+  private readonly backdropClick = toSignal(this.dialogRef.backdropClick);
+  private backdropClickEffect = effect(() => {
+    if (this.backdropClick()) {
+      //eslint-disable-next-line
+      const disableOutsideClose = !!(this.data as any)?.disableOutsideClose;
+      if (disableOutsideClose) return;
+      this.closeDialog();
+    }
+  });
+
+  get position() {
+    //eslint-disable-next-line
+    return (this.data as any)?.position ?? 'center';
   }
 
   //eslint-disable-next-line

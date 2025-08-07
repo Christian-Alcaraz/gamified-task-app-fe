@@ -1,5 +1,5 @@
 import { coerceNumberProperty } from '@angular/cdk/coercion';
-import { Component, computed, effect, input, signal } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
 
 export type BadgeType = 'badge' | 'notification';
@@ -38,6 +38,7 @@ export class BadgeComponent extends ThemeAwareComponent {
   resolvedType = computed(
     () => this.badgeType() || this.badgeProps()?.type || 'badge',
   );
+
   resolvedConfig = computed(() => {
     if (this.resolvedType() === 'notification') {
       return null;
@@ -52,26 +53,15 @@ export class BadgeComponent extends ThemeAwareComponent {
     return number;
   });
 
-  assignedCss = signal<string>('');
-
-  constructor() {
-    super();
-    effect(() => {
-      this._assignBadgeCss();
-    });
-  }
-
-  private _assignBadgeCss() {
+  assignedCss = computed(() => {
     if (this.resolvedType() === 'notification') {
-      const notifClass = `${BADGE_CLASS} ${this.badgeProps()?.bgTailwindCss || BADGE_NOTIFICATION_BG}`;
-      this.assignedCss.set(notifClass);
-      return;
+      return `${BADGE_CLASS} ${this.badgeProps()?.bgTailwindCss || BADGE_NOTIFICATION_BG}`;
     }
     /* eslint-disable */
     const badgeConfig = this.resolvedConfig() as any;
     const badgeValue = this.resolvedValue() as any;
     const css = badgeConfig[badgeValue] ?? `${BADGE_CLASS} ${BADGE_BG}`;
-    this.assignedCss.set(css);
+    return css;
     /* eslint-enable */
-  }
+  });
 }
