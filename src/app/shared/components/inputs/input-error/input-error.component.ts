@@ -1,6 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ThemeService } from '@shared/services/theme/theme.service';
 import { UtilService } from '@shared/services/util/util.service';
 
 @Component({
@@ -14,10 +13,8 @@ export class InputErrorComponent implements OnInit {
   @Input() labelProps!: string | null | undefined;
 
   private readonly _utilService = inject(UtilService);
-  readonly theme = inject(ThemeService).theme;
 
   errorMessage!: string;
-
   label!: string;
 
   ngOnInit(): void {
