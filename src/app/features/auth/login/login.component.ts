@@ -7,11 +7,12 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
+import { PasswordFieldComponent } from '@shared/components/inputs';
 import { TextFieldComponent } from '@shared/components/inputs/text-field/text-field.component';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, TextFieldComponent],
+  imports: [ReactiveFormsModule, TextFieldComponent, PasswordFieldComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })

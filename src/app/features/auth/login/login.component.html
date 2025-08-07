@@ -3,7 +3,7 @@
   class="min-w-[55vw] w-[55vw] lg:min-w-[25vw] lg:w-[25vw] bg-card border rounded-xl shadow-xs py-12 px-10"
   [class.dark]="theme() === 'dark'"
 >
-  <section class="flex items-center gap-4">
+  <section class="flex items-center gap-2.5">
     <section>
       <h1
         class="text-xl font-bold tracking-wide"
@@ -27,17 +27,15 @@
   </section>
 
   <section
-    class="mt-4 flex flex-col justify-center gap-5"
+    class="mt-4 flex flex-col justify-center gap-2.5"
     [formGroup]="credentialForm"
   >
     <app-text-field
       fcName="email"
       [props]="{ type: 'text', label: 'Email' }"
     ></app-text-field>
-    <app-text-field
-      fcName="password"
-      [props]="{ type: 'text', label: 'Password' }"
-    ></app-text-field>
+
+    <app-password-field fcName="password" [props]="{ label: 'Password' }" />
   </section>
 
   <button
