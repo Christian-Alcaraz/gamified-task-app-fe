@@ -30,16 +30,11 @@ export class TextFieldComponent extends BaseInput implements OnInit {
   @Input({ required: true }) props!: TextFieldProps;
   @Input() fcName!: string;
 
-  readonly theme = inject(ThemeService).theme;
-
-  constructor() {
-    super();
-  }
+  readonly theme = inject(ThemeService).theme();
 
   ngOnInit(): void {
     this.fcName = this.fcName ?? this.props.fcName;
-
-    this.initFormControl(this.fcName, this.props.validators);
+    this.initFormControl(this.fcName as string, this.props.validators);
 
     if (this.props.type === 'number' && this.fControl) {
       this.fControl.valueChanges.subscribe((value) => {
@@ -50,5 +45,17 @@ export class TextFieldComponent extends BaseInput implements OnInit {
         }
       });
     }
+  }
+
+  get showError(): boolean {
+    return (
+      !this.props?.hideError || (!!this.fControl.errors && this.fControl.dirty)
+    );
+  }
+
+  get showHint() {
+    return (
+      this.props.hint && (this.fControl.pristine ? true : !this.fControl.errors)
+    );
   }
 }
