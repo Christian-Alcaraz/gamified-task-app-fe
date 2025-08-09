@@ -6,7 +6,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { ValidatorType } from '@core/interfaces/base-input.interface';
-import { valueMustMatchWithControlName } from '@shared/validators/custom-validators';
+import {
+  atleastHasOneLowercase,
+  atleastHasOneNumeric,
+  atleastHasOneUppercase,
+  valueMustMatchWithControlName,
+} from '@shared/validators/custom-validators';
 
 export class BaseInput {
   protected fControl!: FormControl;
@@ -60,11 +65,21 @@ export class BaseInput {
             valueMustMatchWithControlName(matchingFormControl, value as string),
           );
           break;
+        case 'atleastHasOneUppercase':
+          requirements.push(atleastHasOneUppercase);
+          break;
+        case 'atleastHasOneLowercase':
+          requirements.push(atleastHasOneLowercase);
+          break;
+        case 'atleastHasOneNumeric':
+          requirements.push(atleastHasOneNumeric);
+          break;
       }
     }
 
     if (requirements.length) {
       this.fControl.setValidators(Validators.compose(requirements));
+      this.fControl.updateValueAndValidity();
     }
   }
 }

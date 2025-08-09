@@ -38,6 +38,9 @@ export class InputErrorComponent implements OnInit {
         passwordStrength:
           'must have atleast 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.',
         mustMatchWithControl: 'is not matched with {value}',
+        hasUppercase: 'must have atleast 1 uppercase letter',
+        hasLowercase: 'must have atleast 1 lowercase letter',
+        hasNumeric: 'must have atleast 1 number',
       };
 
       if (this.fControl?.errors) {
@@ -46,10 +49,11 @@ export class InputErrorComponent implements OnInit {
 
         let firstErrorMessage = errorList[firstErrorKey];
 
-        if (firstErrorMessage.includes('{value}')) {
+        if (firstErrorMessage?.includes('{value}')) {
           firstErrorMessage = this._utilService.string.replacePlaceholders(
             firstErrorMessage,
             { value: firstErrorValue },
+            { toCapitalize: true },
           );
         }
 

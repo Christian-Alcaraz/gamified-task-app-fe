@@ -15,4 +15,7 @@ export interface ValidatorType {
   minLength?: number;
   passwordStrength?: boolean;
   mustMatchWithControl?: string;
+  atleastHasOneUppercase?: boolean;
+  atleastHasOneLowercase?: boolean;
+  atleastHasOneNumeric?: boolean;
 }

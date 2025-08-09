@@ -19,10 +19,29 @@ export class StringService {
       .toLowerCase()
       .includes(keyword.toString().trim().toLowerCase());
   }
-
-  replacePlaceholders(template: string, data: Record<string, any>) {
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  replacePlaceholders(template: string, data: Record<string, any>, opts?: any) {
     return template.replace(/{(\w+)}/g, (match, key) => {
-      return key in data ? data[key] : match;
+      let newStr = key in data ? data[key] : match;
+
+      if (opts?.toCapitalize) {
+        newStr = this.toTitleCase(newStr);
+      }
+
+      return newStr;
     });
+  }
+
+  toTitleCase(str: string) {
+    if (!str) {
+      return ''; // Handle empty or null strings
+    }
+    return str
+      .toLowerCase()
+      .split(' ')
+      .map((word) => {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      })
+      .join(' ');
   }
 }

@@ -23,32 +23,32 @@ export function valueMustMatchWithControlName(
   };
 }
 
-export function atleastHasOneUppercase(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const value = control.value;
+export function atleastHasOneUppercase(
+  control: AbstractControl,
+): ValidationErrors | null {
+  const value = control.value;
 
-    if (!value) return null;
+  if (!value) return null;
 
-    return !/[A-Z]+/.test(value) ? { hasUppercase: false } : null;
-  };
+  return !/[A-Z]+/.test(value) ? { hasUppercase: true } : null;
 }
 
-export function atleastHasOneLowercase(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const value = control.value;
+export function atleastHasOneLowercase(
+  control: AbstractControl,
+): ValidationErrors | null {
+  const value = control.value;
 
-    if (!value) return null;
+  if (!value) return null;
 
-    return !/[a-z]+/.test(value) ? { hasLowercase: false } : null;
-  };
+  return !/[a-z]+/.test(value) ? { hasLowercase: true } : null;
 }
 
-export function atleastHasOneNumeric(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const value = control.value;
+export function atleastHasOneNumeric(
+  control: AbstractControl,
+): ValidationErrors | null {
+  const value = control.value;
 
-    if (!value) return null;
+  if (!value) return null;
 
-    return !/[0-9]+/.test(value) ? { hasNumeric: false } : null;
-  };
+  return !/[0-9]+/.test(value) ? { hasNumeric: true } : null;
 }
