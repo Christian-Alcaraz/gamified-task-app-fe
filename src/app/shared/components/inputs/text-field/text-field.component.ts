@@ -48,9 +48,9 @@ export class TextFieldComponent extends BaseInput implements OnInit {
   }
 
   get showError(): boolean {
-    return (
-      !this.props?.hideError || (!!this.fControl.errors && this.fControl.dirty)
-    );
+    return this.props?.hideError
+      ? false
+      : !!this.fControl.errors && this.fControl.dirty;
   }
 
   get showHint() {
