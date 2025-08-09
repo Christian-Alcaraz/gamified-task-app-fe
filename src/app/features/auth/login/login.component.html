@@ -3,16 +3,18 @@
   class="min-w-[55vw] w-[55vw] lg:min-w-[25vw] lg:w-[25vw] bg-card border rounded-xl shadow-xs py-12 px-10"
   [class.dark]="theme() === 'dark'"
 >
-  <section class="flex items-center gap-2.5">
-    <section>
+  <section class="flex items-center gap-2.5 pb-4">
+    <section class="pr-10">
       <h1
         class="text-xl font-bold tracking-wide"
         [class.text-primary]="theme() === 'dark'"
         [class.text-black]="theme() !== 'dark'"
       >
-        Welcome to Task Quest
+        Welcome back, achiever!
       </h1>
-      <small class="text-muted-foreground">This is description</small>
+      <small class="inline-block mt-2.5 text-muted-foreground"
+        >Ready to conquer your tasks and level up your day?
+      </small>
     </section>
 
     <section class="ml-auto">
@@ -39,7 +41,7 @@
   </section>
 
   <button
-    class="block mt-4 bg-primary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-primary/85"
+    class="block mt-4 bg-primary h-[2.4rem] px-4 py-1 text-primary-foreground ml-auto rounded-full cursor-pointer hover:bg-primary/85"
     (click)="submit()"
   >
     Login

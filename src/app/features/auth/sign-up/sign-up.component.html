@@ -1,17 +1,24 @@
+@let passwordControl = this.credentialForm.get("password");
+@let oneUppercaseError = passwordControl?.errors?.["hasUppercase"];
+@let oneLowercaseError = passwordControl?.errors?.["hasLowercase"];
+@let oneNumericError = passwordControl?.errors?.["hasNumeric"];
+
 <main
   class="min-w-[55vw] w-[55vw] lg:min-w-[25vw] lg:w-[25vw] bg-card border rounded-xl shadow-xs py-12 px-10"
   [class.dark]="theme() === 'dark'"
 >
-  <section class="flex items-center gap-4">
-    <section>
+  <section class="flex items-center gap-2.5 pb-4">
+    <section class="pr-10">
       <h1
         class="text-xl font-bold tracking-wide"
         [class.text-primary]="theme() === 'dark'"
         [class.text-black]="theme() !== 'dark'"
       >
-        Signup
+        Turn your to-dos into achievements.
       </h1>
-      <small class="text-muted-foreground">This is description</small>
+      <small class="inline-block mt-2.5 text-muted-foreground"
+        >Join now and start making progress — one task at a time.</small
+      >
     </section>
 
     <section class="ml-auto">
@@ -26,22 +33,62 @@
   </section>
 
   <section
-    class="mt-4 flex flex-col justify-center gap-5"
+    class="mt-4 flex flex-col justify-center gap-2.5"
     [formGroup]="credentialForm"
   >
+    {{ credentialForm.valid }}
     <app-text-field
       fcName="email"
       [props]="{ type: 'text', label: 'Email' }"
     ></app-text-field>
-    <app-text-field
+    <app-password-field
       fcName="password"
-      [props]="{ type: 'text', label: 'Password' }"
-    ></app-text-field>
+      [props]="{
+        label: 'Password',
+        hideError: true,
+        validators: passwordPropsValidators,
+      }"
+    ></app-password-field>
+    <div class="flex flex-col gap-1 -mt-3 pb-2">
+      <p
+        class="text-xs text-destructive"
+        [ngClass]="{
+          'text-emerald-500': !oneUppercaseError && passwordControl?.value,
+        }"
+      >
+        Must have atleast 1 uppercase letter
+      </p>
+      <p
+        class="text-xs text-destructive"
+        [ngClass]="{
+          'text-emerald-500': !oneLowercaseError && passwordControl?.value,
+        }"
+      >
+        Must have atleast 1 lowercase letter
+      </p>
+      <p
+        class="text-xs text-destructive"
+        [ngClass]="{
+          'text-emerald-500': !oneNumericError && passwordControl?.value,
+        }"
+      >
+        Must have atleast 1 number
+      </p>
+    </div>
+
+    <app-password-field
+      fcName="retypePassword"
+      [props]="{
+        label: 'Re-type Password',
+        validators: retypePasswordPropsValidators,
+      }"
+    ></app-password-field>
   </section>
 
   <button
-    class="block mt-4 bg-primary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-primary/85"
+    class="block mt-4 bg-primary h-[2.4rem] px-4 py-1 text-primary-foreground ml-auto rounded-full cursor-pointer hover:bg-primary/85 disabled:bg-neutral-500"
     (click)="submit()"
+    [disabled]="!credentialForm.valid"
   >
     Login
   </button>
