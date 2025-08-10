@@ -85,10 +85,10 @@
   </section>
 
   <button
-    class="block mt-4 bg-primary h-[2.4rem] px-4 py-1 text-primary-foreground ml-auto rounded-full cursor-pointer hover:bg-primary/85 disabled:cursor-default disabled:bg-neutral-500"
+    class="block mt-4 bg-primary h-[2.4rem] px-4 py-1 text-sm text-primary-foreground ml-auto rounded-full cursor-pointer border hover:bg-primary/85 disabled:bg-muted/25 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:pointer-events-none"
     (click)="submit()"
-    [disabled]="!credentialForm.valid"
+    [disabled]="credentialForm.invalid || credentialForm.pristine"
   >
-    Login
+    Create Account
   </button>
 </main>

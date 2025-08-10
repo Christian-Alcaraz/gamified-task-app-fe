@@ -47,7 +47,9 @@
   </section>
 
   <button
-    class="block mt-4 bg-primary h-[2.4rem] px-4 py-1 text-primary-foreground ml-auto rounded-full cursor-pointer hover:bg-primary/85"
+    class="block mt-4 bg-primary h-[2.4rem] px-4 py-1 text-sm text-primary-foreground ml-auto rounded-full border cursor-pointer hover:bg-primary/85 disabled:bg-muted/25 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:pointer-events-none"
+    [ariaDisabled]="credentialForm.invalid || credentialForm.pristine"
+    [disabled]="credentialForm.invalid || credentialForm.pristine"
     (click)="submit()"
   >
     Login
