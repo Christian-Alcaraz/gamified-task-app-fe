@@ -2,11 +2,17 @@ import { TitleCasePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import {
   FormBuilder,
+  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Task, TaskTypes, TaskTyping } from '@core/models/task.model';
+import {
+  Task,
+  TaskStatuses,
+  TaskTypes,
+  TaskTyping,
+} from '@core/models/task.model';
 import {
   DialogActionsDirective,
   DialogContentDirective,
@@ -19,6 +25,7 @@ import {
 import { DialogCloseButtonComponent } from '@shared/components/dialog/dialog-close-button.component';
 import { provideBaseDialogToken } from '@shared/components/dialog/dialog.provider';
 import {
+  InputService,
   SelectFieldComponent,
   TextFieldComponent,
 } from '@shared/components/inputs';
@@ -46,10 +53,11 @@ export interface TaskDialogData extends BaseDialogData {
 })
 export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
   private readonly formBuilder = inject(FormBuilder);
+  private readonly inputService = inject(InputService);
 
   taskForm!: FormGroup;
-
   taskTypes = TaskTypes;
+  taskStatuses = TaskStatuses;
 
   /**
    * Todo: Add Select Field for Difficulty
@@ -63,9 +71,9 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
       name: ['', Validators.required],
       description: ['', Validators.required],
       type: [this.data.taskType ?? '', Validators.required],
-      subtaskIds: ['', Validators.required],
-      status: ['', Validators.required],
-      userLimit: [1, Validators.required],
+      subtaskIds: [''],
+      status: [''],
+      userLimit: [1],
       userIds: [''],
       // deadlineDatetime: ['', Validators.required],
       // difficulty: ['', Validators.required],
@@ -73,7 +81,16 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
     });
 
     if (this.data.task) {
-      this.taskForm.patchValue(this.data.task);
+      const statusControl = this.taskForm.get('status') as FormControl;
+      statusControl.addValidators(Validators.required);
+      this.taskForm.patchValue(this.data.task, { emitEvent: false });
+      this.taskForm.updateValueAndValidity();
+    }
+  }
+
+  submit() {
+    if (this.taskForm.valid && this.taskForm.dirty) {
+      this.closeDialog();
     }
   }
 }
