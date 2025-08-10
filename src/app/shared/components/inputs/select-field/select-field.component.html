@@ -1,7 +1,7 @@
 <section class="flex flex-col w-full gap-1.5" [class.dark]="theme === 'dark'">
   @if (props.label && props.labelLoc !== "hide") {
     <p
-      class="text-sm text-foreground mb-1"
+      class="text-[11px] text-foreground mb-1"
       [ngClass]="{
         '!text-destructive': fControl.errors && fControl.dirty,
       }"
@@ -9,27 +9,100 @@
       {{ props.label }}
     </p>
   }
-  <input
-    [type]="props.type"
-    [placeholder]="props.placeholder ?? ''"
-    [formControl]="fControl"
-    class="bg-transparent text-foreground text-sm placeholder:text-input py-2 px-3 transition-all duration-75 ease-[cubic-bezier(0.95,0.05,0.795,0.035)] rounded-xl w-full border outline-primary hover:outline-2 hover:outline-offset-2 focus:outline-2 focus:outline-offset-2"
-    [ngClass]="{
-      'border-destructive hover:outline-destructive focus:outline-destructive':
-        fControl.errors && fControl.dirty,
-    }"
-  />
 
+  <div class="relative flex items-center w-full">
+    <input
+      #triggerInput
+      type="text"
+      class="bg-transparent cursor-pointer text-foreground text-xs placeholder:text-input py-2 pl-3 pr-11 transition-all duration-75 ease-[cubic-bezier(0.95,0.05,0.795,0.035)] rounded-xl w-full border outline-primary hover:outline-2 hover:outline-offset-2 focus:outline-2 focus:outline-offset-2"
+      [ngClass]="{
+        'border-destructive hover:outline-destructive focus:outline-destructive':
+          fControl.errors && fControl.dirty,
+      }"
+      [formControl]="displayControl"
+      [placeholder]="props.placeholder ?? 'Select an option'"
+      (focus)="openDropdown()"
+      readonly
+    />
+    <button
+      class="group pointer-events-none absolute top-1.3 right-2 cursor-pointer h-4 w-4 mr-2 transition-all duration-75 ease-delay-in-burst flex items-center justify-center rounded-full"
+    >
+      <ng-icon
+        name="saxArrowDown1Outline"
+        class="!flex items-center justify-center transition-transform duration-100 ease-delay-in-burst [&>svg]:fill-foreground [&>svg]:!h-4 [&>svg]:!w-4"
+        [ngClass]="{
+          'rotate-180': isDropdownOpen(),
+          'rotate-0': !isDropdownOpen(),
+        }"
+      ></ng-icon>
+    </button>
+  </div>
   <div class="flex items-center py-1">
-    @if (showError) {
-      <app-input-error
-        [fControl]="fControl"
-        [labelProps]="props.label"
-      ></app-input-error>
-    }
+    <app-input-error
+      [ngClass]="{ visible: showError, invisible: !showError }"
+      [fControl]="fControl"
+      [labelProps]="props.label"
+    ></app-input-error>
 
     @if (showHint) {
       <small class="text-xs text-muted-foreground">{{ props?.hint }}</small>
     }
   </div>
 </section>
+
+<!-- Trigger button -->
+
+<!-- Dropdown template -->
+<ng-template #dropdownTemplate>
+  <section
+    class="flex flex-col bg-card text-card-foreground border rounded-lg w-full shadow-2xl mt-1"
+    [class.dark]="theme === 'dark'"
+  >
+    <div class="flex items-center py-1 px-1.5 border-b">
+      <button class="flex items-center justify-center rounded-full">
+        <ng-icon
+          name="saxSearchNormal1Outline"
+          class="!flex items-center justify-center [&>svg]:fill-foreground [&>svg]:!h-4 [&>svg]:!w-4"
+        ></ng-icon>
+      </button>
+      <input
+        [formControl]="searchOptionControl"
+        [placeholder]="
+          props.searchPlaceholder ?? 'Search ' + (props.label ?? 'option')
+        "
+        class="bg-transparent placeholder:text-muted-foreground text-xs outline-0 text-foreground text-xs py-2 pl-1 pr-3"
+      />
+    </div>
+    <ul
+      #listRef
+      class="px-1.5 py-2 max-h-[200px] min-h-[0] overflow-y-auto styled-scrollbars"
+      [ngClass]="{
+        'animate-drop-menu-in': isDropdownOpen(),
+        'animate-drop-menu-out': !isDropdownOpen(),
+      }"
+      tabindex="-1"
+    >
+      @for (option of filteredOptions; track $index) {
+        <button
+          [attr.tabindex]="0"
+          class="w-full text-left text-xs px-2 py-1 hover:bg-accent hover:text-accent-foreground rounded-xl"
+          [ngClass]="{
+            'bg-secondary text-secondary-foreground':
+              isSameWithDisplayValue(option),
+          }"
+          (click)="selectOption(option)"
+        >
+          {{ displayWith(option) }}
+        </button>
+      } @empty {
+        <button
+          class="w-full text-center text-xs px-2 py-1 hover:bg-accent hover:text-accent-foreground rounded-xl"
+        >
+          No results found
+        </button>
+      }
+
+      <li *ngFor="let option of filteredOptions"></li>
+    </ul>
+  </section>
+</ng-template>
