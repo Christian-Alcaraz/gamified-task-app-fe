@@ -3,7 +3,7 @@
     >{{ props()!.prefix ?? "Unknown Stat" }}:</span
   >
   <span
-    class="inline-flex relative col-span-6 justify-center bg-statbar text-foreground w-full h-[24px] rounded-sm shadow-sm"
+    class="inline-flex relative col-span-6 border justify-center bg-statbar text-foreground w-full h-[24px] rounded-sm shadow-sm overflow-hidden"
   >
     <p class="static z-2">
       {{ userState()?.[currentStr]! ?? "???" }}/{{
