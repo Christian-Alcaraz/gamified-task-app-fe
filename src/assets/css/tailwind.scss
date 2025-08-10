@@ -210,6 +210,11 @@
   --animate-scale-out: scale-out 200ms cubic-bezier(0.53, -0.01, 0.47, 0.99)
     forwards;
 
+  --animate-drop-menu-in: drop-menu-in 200ms
+    cubic-bezier(0.28, 0.26, 0.35, 1.02) forwards;
+  --animate-drop-menu-out: drop-menu-out 150ms
+    cubic-bezier(0.28, 0.26, 0.35, 1.02) forwards;
+
   @keyframes scale-in {
     0% {
       transform: scale(0);
@@ -316,6 +321,26 @@
     }
     100% {
       transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+  @keyframes drop-menu-in {
+    0% {
+      max-height: 0;
+      opacity: 0;
+    }
+    100% {
+      max-height: 200px;
+      opacity: 1;
+    }
+  }
+  @keyframes drop-menu-out {
+    0% {
+      max-height: 200px;
+      opacity: 1;
+    }
+    100% {
+      max-height: 0;
       opacity: 0;
     }
   }
