@@ -3,6 +3,7 @@ import { Component, inject, input } from '@angular/core';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
 import { DialogOptions } from '@core/constants';
 import { Task, TaskTyping } from '@core/models/task.model';
+import { NgIcon } from '@ng-icons/core';
 import { BaseDialogData } from '@shared/components/dialog';
 import { TaskItemComponent } from '../task-item/task-item.component';
 import { UpsertTaskModalComponent } from '../upsert-task-modal/upsert-task-modal.component';
@@ -19,7 +20,7 @@ export interface TaskListProps {
 
 @Component({
   selector: 'app-task-list',
-  imports: [TaskItemComponent],
+  imports: [TaskItemComponent, NgIcon],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
 })
@@ -47,6 +48,7 @@ export class TaskListComponent extends ThemeAwareComponent {
       ...DialogOptions,
       data: {
         task,
+        taskType: this.taskType(),
         ...dialogProps,
       },
     });

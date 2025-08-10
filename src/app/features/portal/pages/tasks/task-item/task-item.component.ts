@@ -15,7 +15,7 @@ import { BadgeComponent } from '@shared/components/badge/badge.component';
           class="inline-flex flex-1 items-center font-medium text-foreground overflow-x-hidden mr-1"
         >
           <button
-            class="text-start hover:underline hover:text-accent cursor-pointer"
+            class="text-start text-sm hover:underline hover:text-accent cursor-pointer"
             (click)="taskSelect.emit(task())"
           >
             {{ task().name }}

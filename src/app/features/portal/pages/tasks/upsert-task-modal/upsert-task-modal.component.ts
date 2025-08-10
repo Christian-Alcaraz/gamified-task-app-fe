@@ -6,7 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Task, TaskTypes } from '@core/models/task.model';
+import { Task, TaskTypes, TaskTyping } from '@core/models/task.model';
 import {
   DialogActionsDirective,
   DialogContentDirective,
@@ -25,6 +25,7 @@ import {
 
 export interface TaskDialogData extends BaseDialogData {
   task?: Task;
+  taskType?: TaskTyping;
 }
 
 @Component({
@@ -61,7 +62,7 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
     this.taskForm = this.formBuilder.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      type: ['', Validators.required],
+      type: [this.data.taskType ?? '', Validators.required],
       subtaskIds: ['', Validators.required],
       status: ['', Validators.required],
       userLimit: [1, Validators.required],
