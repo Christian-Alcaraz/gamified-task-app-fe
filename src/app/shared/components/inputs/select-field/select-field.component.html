@@ -14,13 +14,16 @@
     <input
       #triggerInput
       type="text"
-      class="bg-transparent cursor-pointer text-foreground text-xs placeholder:text-input py-2 pl-3 pr-11 transition-all duration-75 ease-[cubic-bezier(0.95,0.05,0.795,0.035)] rounded-xl w-full border outline-primary hover:outline-2 hover:outline-offset-2 focus:outline-2 focus:outline-offset-2"
+      class="cursor-pointer text-foreground text-xs placeholder:text-input py-2 pl-3 pr-11 transition-all duration-75 ease-[cubic-bezier(0.95,0.05,0.795,0.035)] rounded-xl w-full border outline-primary hover:outline-2 hover:outline-offset-2 focus:outline-2 focus:outline-offset-2"
       [ngClass]="{
         'border-destructive hover:outline-destructive focus:outline-destructive':
           fControl.errors && fControl.dirty,
+        'pointer-events-none bg-neutral-500/25': disabled,
       }"
       [formControl]="displayControl"
       [placeholder]="props.placeholder ?? 'Select an option'"
+      [disabled]="disabled"
+      [attr.disabled]="disabled"
       (focus)="openDropdown()"
       readonly
     />

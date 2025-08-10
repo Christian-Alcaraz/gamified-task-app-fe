@@ -43,6 +43,7 @@ export class SelectFieldComponent
   @Input() props!: any;
   @Input() fcName!: string;
   @Input() options!: any[];
+  @Input() disabled = false;
   /* eslint-enable  */
 
   private readonly overlay = inject(Overlay);
@@ -69,6 +70,8 @@ export class SelectFieldComponent
 
   openDropdown() {
     if (this.overlayRef) return;
+    if (this.disabled) return;
+
     this.isDropdownOpen.set(true);
 
     const positionStrategy = this.overlayPositionBuilder
@@ -159,11 +162,12 @@ export class SelectFieldComponent
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
   displayWith(option: any) {
     let displayStr = option;
+
     if (typeof option === 'object') {
       const key = this.props.displayKey ?? 'label';
       displayStr = option[key];
     }
-    return this.utilString.toTitleCase(displayStr);
+    return displayStr ? this.utilString.toTitleCase(displayStr) : '';
   }
 
   private setDisplayValue() {
