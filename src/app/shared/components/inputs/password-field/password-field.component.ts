@@ -49,7 +49,8 @@ export class PasswordFieldComponent extends BaseInput implements OnInit {
   get showError(): boolean {
     return this.props?.hideError
       ? false
-      : !!this.fControl.errors && this.fControl.dirty;
+      : !!this.fControl.errors &&
+          (this.fControl.dirty || this.fControl.touched);
   }
 
   get showHint() {

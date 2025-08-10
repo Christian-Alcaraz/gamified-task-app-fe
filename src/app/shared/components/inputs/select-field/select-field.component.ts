@@ -118,6 +118,8 @@ export class SelectFieldComponent
 
   selectOption(option: string) {
     this.fControl.setValue(option);
+    this.fControl.markAsTouched();
+    this.fControl.markAsDirty();
     this.closeDropdown();
   }
 
@@ -178,7 +180,8 @@ export class SelectFieldComponent
   get showError(): boolean {
     return this.props?.hideError
       ? false
-      : !!this.fControl.errors && this.fControl.dirty;
+      : !!this.fControl.errors &&
+          (this.fControl.dirty || this.fControl.touched);
   }
 
   get showHint(): boolean {
