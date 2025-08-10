@@ -34,7 +34,7 @@ export class PasswordFieldComponent extends BaseInput implements OnInit {
   @Input() fcName!: string;
   @Input() disabled = false;
 
-  theme = inject(ThemeService).theme();
+  readonly theme = inject(ThemeService).theme();
 
   showPassword = signal(false);
   showPasswordIcon = computed(() =>

@@ -21,12 +21,11 @@
   />
 
   <div class="flex items-center py-1">
-    @if (showError) {
-      <app-input-error
-        [fControl]="fControl"
-        [labelProps]="props.label"
-      ></app-input-error>
-    }
+    <app-input-error
+      [ngClass]="{ visible: showError, invisible: !showError }"
+      [fControl]="fControl"
+      [labelProps]="props.label"
+    ></app-input-error>
 
     @if (showHint) {
       <small class="text-xs text-muted-foreground">{{ props.hint }}</small>

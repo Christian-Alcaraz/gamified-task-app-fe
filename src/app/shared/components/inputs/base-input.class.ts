@@ -79,7 +79,10 @@ export class BaseInput {
 
     if (requirements.length) {
       this.fControl.setValidators(Validators.compose(requirements));
-      this.fControl.updateValueAndValidity();
+      this.fControl.updateValueAndValidity({
+        onlySelf: true,
+        emitEvent: false,
+      });
     }
   }
 }

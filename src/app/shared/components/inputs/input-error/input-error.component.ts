@@ -1,6 +1,7 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { UtilService } from '@shared/services/util/util.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-input-error',
@@ -8,11 +9,12 @@ import { UtilService } from '@shared/services/util/util.service';
   templateUrl: './input-error.component.html',
   styleUrl: './input-error.component.scss',
 })
-export class InputErrorComponent implements OnInit {
+export class InputErrorComponent implements OnInit, OnDestroy {
   @Input({ required: true }) fControl!: FormControl;
   @Input() labelProps!: string | null | undefined;
 
   private readonly _utilService = inject(UtilService);
+  private destroy$ = new Subject<void>();
 
   errorMessage!: string;
   label!: string;
@@ -21,60 +23,68 @@ export class InputErrorComponent implements OnInit {
     this.label = this.labelProps || 'This field';
 
     const sentenceCaseRegex = /(?<=^|[.!?]\s)\w/g;
-    this.fControl?.statusChanges.subscribe(() => {
-      this.errorMessage = '';
-      //eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const errorList: any = {
-        required: 'is required',
-        email: 'is invalid format',
-        max: 'has exceeded max number',
-        maxlength: 'has exceeded max length',
-        min: 'has exceeded min number',
-        minlength: 'has exceeded min length',
-        invalidenumvalue: 'must be valid',
-        nan: 'must be a number',
-        invaliddate: 'must be a date',
-        expectedvaluetypeinvalid: 'has a invalid type/input.',
-        passwordStrength:
-          'must have atleast 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.',
-        mustMatchWithControl: 'is not matched with {value}',
-        hasUppercase: 'must have atleast 1 uppercase letter',
-        hasLowercase: 'must have atleast 1 lowercase letter',
-        hasNumeric: 'must have atleast 1 number',
-      };
+    this.fControl?.statusChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.errorMessage = '';
+        //eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const errorList: any = {
+          required: 'is required',
+          email: 'is invalid format',
+          max: 'has exceeded max number',
+          maxlength: 'has exceeded max length',
+          min: 'has exceeded min number',
+          minlength: 'has exceeded min length',
+          invalidenumvalue: 'must be valid',
+          nan: 'must be a number',
+          invaliddate: 'must be a date',
+          expectedvaluetypeinvalid: 'has a invalid type/input.',
+          passwordStrength:
+            'must have atleast 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.',
+          mustMatchWithControl: 'is not matched with {value}',
+          hasUppercase: 'must have atleast 1 uppercase letter',
+          hasLowercase: 'must have atleast 1 lowercase letter',
+          hasNumeric: 'must have atleast 1 number',
+        };
 
-      if (this.fControl?.errors) {
-        const firstErrorKey = Object.keys(this.fControl.errors)[0];
-        const firstErrorValue = Object.values(this.fControl.errors)[0];
+        if (this.fControl?.errors) {
+          const firstErrorKey = Object.keys(this.fControl.errors)[0];
+          const firstErrorValue = Object.values(this.fControl.errors)[0];
 
-        let firstErrorMessage = errorList[firstErrorKey];
+          let firstErrorMessage = errorList[firstErrorKey];
 
-        if (firstErrorMessage?.includes('{value}')) {
-          firstErrorMessage = this._utilService.string.replacePlaceholders(
-            firstErrorMessage,
-            { value: firstErrorValue },
-            { toCapitalize: true },
+          if (firstErrorMessage?.includes('{value}')) {
+            firstErrorMessage = this._utilService.string.replacePlaceholders(
+              firstErrorMessage,
+              { value: firstErrorValue },
+              { toCapitalize: true },
+            );
+          }
+
+          this.errorMessage = `${this.label} ${firstErrorMessage}`.replace(
+            sentenceCaseRegex,
+            function (c) {
+              return c.toUpperCase();
+            },
           );
         }
+      });
+  }
 
-        // if (firstKey === 'serverError') {
-        //   const [errorCode, errorValue] =
-        //     this.fControl.errors[firstKey].split(':');
-        //   this.errorMessage = `${this.label} ${errorList[errorCode]}`.replace(
-        //     sentenceCaseRegex,
-        //     function (c) {
-        //       return c.toUpperCase();
-        //     },
-        //   );
-        //   return;
-        // }
-        this.errorMessage = `${this.label} ${firstErrorMessage}`.replace(
-          sentenceCaseRegex,
-          function (c) {
-            return c.toUpperCase();
-          },
-        );
-      }
-    });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
+
+// if (firstKey === 'serverError') {
+//   const [errorCode, errorValue] =
+//     this.fControl.errors[firstKey].split(':');
+//   this.errorMessage = `${this.label} ${errorList[errorCode]}`.replace(
+//     sentenceCaseRegex,
+//     function (c) {
+//       return c.toUpperCase();
+//     },
+//   );
+//   return;
+// }

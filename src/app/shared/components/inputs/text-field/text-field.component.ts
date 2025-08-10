@@ -29,12 +29,13 @@ export interface TextFieldProps extends BaseInputProps {
 export class TextFieldComponent extends BaseInput implements OnInit {
   @Input({ required: true }) props!: TextFieldProps;
   @Input() fcName!: string;
+  @Input() disabled = false;
 
   readonly theme = inject(ThemeService).theme();
 
   ngOnInit(): void {
     this.fcName = this.fcName ?? this.props.fcName;
-    this.initFormControl(this.fcName as string, this.props.validators);
+    this.initFormControl(this.fcName, this.props?.validators);
 
     if (this.props.type === 'number' && this.fControl) {
       this.fControl.valueChanges.subscribe((value) => {
