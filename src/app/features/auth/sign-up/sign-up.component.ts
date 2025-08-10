@@ -33,7 +33,7 @@ export class SignUpComponent extends ThemeAwareComponent {
     atleastHasOneNumeric: true,
   };
 
-  retypePasswordPropsValidators = {
+  confirmPasswordPropsValidators = {
     required: true,
     mustMatchWithControl: 'password',
   };
@@ -43,7 +43,7 @@ export class SignUpComponent extends ThemeAwareComponent {
     this.credentialForm = this._formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: [''],
-      retypePassword: [''],
+      confirmPassword: [''],
     });
   }
 

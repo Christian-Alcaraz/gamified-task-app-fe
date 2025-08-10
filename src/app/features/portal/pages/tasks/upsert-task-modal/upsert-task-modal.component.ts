@@ -6,7 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Task } from '@core/models/task.model';
+import { Task, TaskTypes } from '@core/models/task.model';
 import {
   DialogActionsDirective,
   DialogContentDirective,
@@ -18,7 +18,10 @@ import {
 } from '@shared/components/dialog/base-dialog.class';
 import { DialogCloseButtonComponent } from '@shared/components/dialog/dialog-close-button.component';
 import { provideBaseDialogToken } from '@shared/components/dialog/dialog.provider';
-import { TextFieldComponent } from '@shared/components/inputs';
+import {
+  SelectFieldComponent,
+  TextFieldComponent,
+} from '@shared/components/inputs';
 
 export interface TaskDialogData extends BaseDialogData {
   task?: Task;
@@ -33,6 +36,7 @@ export interface TaskDialogData extends BaseDialogData {
     DialogCloseButtonComponent,
     ReactiveFormsModule,
     TextFieldComponent,
+    SelectFieldComponent,
     TitleCasePipe,
   ],
   providers: [provideBaseDialogToken(UpsertTaskModalComponent)],
@@ -43,6 +47,8 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
   private readonly formBuilder = inject(FormBuilder);
 
   taskForm!: FormGroup;
+
+  taskTypes = TaskTypes;
 
   /**
    * Todo: Add Select Field for Difficulty

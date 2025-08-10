@@ -14,7 +14,7 @@
         [class.text-primary]="theme() === 'dark'"
         [class.text-black]="theme() !== 'dark'"
       >
-        Turn your to-dos into achievements.
+        Create an account
       </h1>
       <small class="inline-block mt-2.5 text-muted-foreground"
         >Join now and start making progress — one task at a time.</small
@@ -36,7 +36,6 @@
     class="mt-4 flex flex-col justify-center gap-2.5"
     [formGroup]="credentialForm"
   >
-    {{ credentialForm.valid }}
     <app-text-field
       fcName="email"
       [props]="{ type: 'text', label: 'Email' }"
@@ -77,16 +76,16 @@
     </div>
 
     <app-password-field
-      fcName="retypePassword"
+      fcName="confirmPassword"
       [props]="{
-        label: 'Re-type Password',
-        validators: retypePasswordPropsValidators,
+        label: 'Confirm Password',
+        validators: confirmPasswordPropsValidators,
       }"
     ></app-password-field>
   </section>
 
   <button
-    class="block mt-4 bg-primary h-[2.4rem] px-4 py-1 text-primary-foreground ml-auto rounded-full cursor-pointer hover:bg-primary/85 disabled:bg-neutral-500"
+    class="block mt-4 bg-primary h-[2.4rem] px-4 py-1 text-primary-foreground ml-auto rounded-full cursor-pointer hover:bg-primary/85 disabled:cursor-default disabled:bg-neutral-500"
     (click)="submit()"
     [disabled]="!credentialForm.valid"
   >

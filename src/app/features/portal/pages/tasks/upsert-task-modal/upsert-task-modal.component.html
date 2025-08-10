@@ -15,7 +15,11 @@
     fcName="description"
     [props]="{ label: 'Description', type: 'text' }"
   />
-  <app-text-field fcName="type" [props]="{ label: 'Type', type: 'text' }" />
+  <app-select-field
+    fcName="type"
+    [options]="taskTypes"
+    [props]="{ label: 'Type' }"
+  />
 </main>
 
 <footer appDialogActions class="flex flex-col gap-2 border-t">

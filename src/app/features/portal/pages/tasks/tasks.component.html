@@ -1,5 +1,5 @@
 <main class="h-full bg-background" [class.dark]="theme() === 'dark'">
-  <section class="flex items-center px-4">
+  <section class="flex items-center px-4 pt-4">
     <div class="w-[128px] h-[128px] border border-foreground text-foreground">
       Character Pic
     </div>
@@ -52,7 +52,7 @@
       <app-task-list
         [tasks]="tempTaskList"
         [taskType]="taskType.Dailies"
-        [props]="{ header: 'Dailies', dialogProps: { position: 'right' } }"
+        [props]="{ header: 'Dailies' }"
       ></app-task-list>
     </main>
     <main class="col-span-4 h-full overflow-y-hidden">

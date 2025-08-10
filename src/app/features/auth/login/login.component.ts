@@ -22,10 +22,19 @@ export class LoginComponent extends ThemeAwareComponent {
 
   credentialForm!: FormGroup;
 
+  emailPropsValidators = {
+    required: true,
+    email: true,
+  };
+
+  passwordPropsValidators = {
+    required: true,
+  };
+
   constructor() {
     super();
     this.credentialForm = this._formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
   }
