@@ -54,5 +54,8 @@
 </section>
 
 <ng-template #datePicker>
-  <date-picker (dateChange)="updateValue($event)"></date-picker>
+  <date-picker
+    [date]="fControl.value ?? null"
+    (dateChange)="updateValue($event)"
+  ></date-picker>
 </ng-template>
