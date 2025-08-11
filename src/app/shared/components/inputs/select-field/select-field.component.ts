@@ -37,7 +37,7 @@ export class SelectFieldComponent
 {
   @ViewChild('dropdownTemplate') dropdownTemplate!: TemplateRef<unknown>;
   @ViewChild('triggerInput', { read: ElementRef })
-  triggerInput!: ElementRef<HTMLButtonElement>;
+  triggerInput!: ElementRef<HTMLInputElement>;
 
   /* eslint-disable */
   @Input() props!: any;

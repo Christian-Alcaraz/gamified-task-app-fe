@@ -18,7 +18,7 @@ export class DialogContentDirective {
   constructor() {
     const position = this._baseDialog?.position;
     let css =
-      'text-card-foreground text-sm flex flex-col relative w-full flex-1 px-6 py-2' +
+      'text-card-foreground text-sm flex flex-col relative w-full flex-1 py-2' +
       SPACE;
 
     switch (position) {

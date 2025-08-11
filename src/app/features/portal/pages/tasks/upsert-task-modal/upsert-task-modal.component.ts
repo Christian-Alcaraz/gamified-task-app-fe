@@ -1,3 +1,4 @@
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { TitleCasePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import {
@@ -10,10 +11,13 @@ import {
 import {
   Task,
   TaskDifficulties,
+  TaskFrequencies,
   TaskStatuses,
+  TaskType,
   TaskTypes,
   TaskTyping,
 } from '@core/models/task.model';
+import { DatePickerComponent } from '@shared/components/date-picker/date-picker-wrapper.component';
 import {
   DialogActionsDirective,
   DialogContentDirective,
@@ -46,7 +50,9 @@ export interface TaskDialogData extends BaseDialogData {
     ReactiveFormsModule,
     TextFieldComponent,
     SelectFieldComponent,
+    DatePickerComponent,
     TitleCasePipe,
+    ScrollingModule,
   ],
   providers: [provideBaseDialogToken(UpsertTaskModalComponent)],
   templateUrl: './upsert-task-modal.component.html',
@@ -57,12 +63,13 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
   private readonly inputService = inject(InputService);
 
   taskForm!: FormGroup;
+  taskType = TaskType;
   types = TaskTypes;
   statuses = TaskStatuses;
   difficulties = TaskDifficulties;
+  frequncies = TaskFrequencies;
 
   /**
-   * Todo: Add Select Field for Difficulty
    * Todo: Add Number +- for User Limit; with Max Limit | Min Limit
    */
 
@@ -78,9 +85,18 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
       userLimit: [1],
       userIds: [''],
       difficulty: ['', Validators.required],
-      // deadlineDatetime: ['', Validators.required],
+      deadlineDate: [''],
+      frequency: [''],
       // stat: ['', Validators.required],
     });
+
+    if (this.data.task?.type === TaskType.Dailies) {
+      this.taskForm.get('frequency')?.addValidators(Validators.required);
+    }
+
+    if (this.data.task?.type === TaskType.Todo) {
+      this.taskForm.get('deadlineDate')?.addValidators(Validators.required);
+    }
 
     if (this.data.task) {
       const statusControl = this.taskForm.get('status') as FormControl;
