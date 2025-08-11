@@ -1,0 +1,58 @@
+<section class="flex flex-col w-full gap-1.5" [class.dark]="theme === 'dark'">
+  @if (props.label && props.labelLoc !== "hide") {
+    <p
+      class="text-[11px] text-foreground mb-1"
+      [ngClass]="{
+        '!text-destructive': fControl.errors && fControl.dirty,
+      }"
+    >
+      {{ props.label }}
+    </p>
+  }
+
+  <div class="relative flex items-center w-full">
+    <input
+      #triggerInput
+      type="text"
+      class="cursor-pointer text-foreground text-xs placeholder:text-muted-foreground py-2 pl-3 pr-11 transition-all duration-75 ease-[cubic-bezier(0.95,0.05,0.795,0.035)] rounded-xl w-full border outline-primary hover:outline-2 hover:outline-offset-2 focus:outline-2 focus:outline-offset-2"
+      [ngClass]="{
+        'border-destructive hover:outline-destructive focus:outline-destructive':
+          fControl.errors && fControl.dirty,
+        'pointer-events-none bg-neutral-500/25': disabled,
+      }"
+      [formControl]="displayControl"
+      [placeholder]="props.placeholder ?? 'Select a Date'"
+      [disabled]="disabled"
+      [attr.disabled]="disabled"
+      (focus)="openDropdown()"
+      readonly
+    />
+    <!-- <button
+      class="group pointer-events-none absolute top-1.3 right-2 cursor-pointer h-4 w-4 mr-2 transition-all duration-75 ease-delay-in-burst flex items-center justify-center rounded-full"
+    >
+      <ng-icon
+        name="saxArrowDown1Outline"
+        class="!flex items-center justify-center transition-transform duration-100 ease-delay-in-burst [&>svg]:fill-foreground [&>svg]:!h-4 [&>svg]:!w-4"
+        [ngClass]="{
+          'rotate-180': isDropdownOpen(),
+          'rotate-0': !isDropdownOpen(),
+        }"
+      ></ng-icon>
+    </button> -->
+  </div>
+  <div class="flex items-center pb-1">
+    <!-- <app-input-error
+      [ngClass]="{ visible: showError, invisible: !showError }"
+      [fControl]="fControl"
+      [labelProps]="props.label"
+    ></app-input-error>
+
+    @if (showHint) {
+      <small class="text-xs text-muted-foreground">{{ props?.hint }}</small>
+    } -->
+  </div>
+</section>
+
+<ng-template #datePicker>
+  <date-picker (dateChange)="updateValue($event)"></date-picker>
+</ng-template>
