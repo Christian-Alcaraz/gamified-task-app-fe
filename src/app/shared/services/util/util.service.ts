@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { CookieService } from './cookie.service';
+import { DateService } from './date.service';
 import { StringService } from './string.service';
 
 @Injectable({
@@ -8,4 +9,5 @@ import { StringService } from './string.service';
 export class UtilService {
   public cookie = inject(CookieService);
   public string = inject(StringService);
+  public date = inject(DateService);
 }
