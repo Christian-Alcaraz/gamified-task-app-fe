@@ -20,12 +20,12 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ThemeService } from '@shared/services/theme/theme.service';
 import { UtilService } from '@shared/services/util/util.service';
 import { Subject, takeUntil } from 'rxjs';
-import { BaseInput } from '../inputs';
+import { BaseInput, InputErrorComponent } from '../inputs';
 import { DatePicker } from './components/date-picker.component';
 
 @Component({
   selector: 'app-date-picker',
-  imports: [CommonModule, ReactiveFormsModule, DatePicker],
+  imports: [CommonModule, ReactiveFormsModule, DatePicker, InputErrorComponent],
   standalone: true,
   styles: ``,
   templateUrl: './date-picker-wrapper.component.html',
@@ -60,6 +60,20 @@ export class DatePickerComponent extends BaseInput implements OnInit {
   private overlayRef?: OverlayRef;
 
   displayControl = new FormControl('');
+
+  get showError(): boolean {
+    return this.props?.hideError
+      ? false
+      : !!this.fControl.errors &&
+          (this.fControl.dirty || this.fControl.touched);
+  }
+
+  get showHint(): boolean {
+    return (
+      this.props?.hint &&
+      (this.fControl.pristine ? true : !this.fControl.errors)
+    );
+  }
 
   ngOnInit(): void {
     this.fcName = this.fcName ?? this.props.fcName;

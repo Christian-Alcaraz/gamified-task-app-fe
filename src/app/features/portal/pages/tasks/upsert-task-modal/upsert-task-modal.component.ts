@@ -91,23 +91,30 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
     });
 
     if (this.data.task?.type === TaskType.Dailies) {
-      this.taskForm.get('frequency')?.addValidators(Validators.required);
+      this.taskForm.get('frequency')?.setValidators(Validators.required);
+      this.taskForm.updateValueAndValidity();
     }
 
     if (this.data.task?.type === TaskType.Todo) {
-      this.taskForm.get('deadlineDate')?.addValidators(Validators.required);
+      this.taskForm.get('deadlineDate')?.setValidators(Validators.required);
+      this.taskForm.updateValueAndValidity();
     }
 
     if (this.data.task) {
       const statusControl = this.taskForm.get('status') as FormControl;
-      statusControl.addValidators(Validators.required);
+      statusControl.setValidators(Validators.required);
       this.taskForm.patchValue(this.data.task, { emitEvent: false });
       this.taskForm.updateValueAndValidity();
     }
   }
 
   submit() {
-    if (this.taskForm.valid && this.taskForm.dirty) {
+    this.taskForm.markAllAsTouched();
+    this.taskForm.markAllAsDirty();
+    this.taskForm.updateValueAndValidity();
+    this.inputService.triggerManualValidation();
+
+    if (this.taskForm.valid) {
       this.closeDialog();
     }
   }

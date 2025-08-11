@@ -68,6 +68,20 @@ export class SelectFieldComponent
 
   isDropdownOpen = signal(false);
 
+  get showError(): boolean {
+    return this.props?.hideError
+      ? false
+      : !!this.fControl.errors &&
+          (this.fControl.dirty || this.fControl.touched);
+  }
+
+  get showHint(): boolean {
+    return (
+      this.props?.hint &&
+      (this.fControl.pristine ? true : !this.fControl.errors)
+    );
+  }
+
   openDropdown() {
     if (this.overlayRef) return;
     if (this.disabled) return;
@@ -176,20 +190,6 @@ export class SelectFieldComponent
   private setDisplayValue() {
     const formatted = this.displayWith(this.fControl.value);
     this.displayControl.setValue(this.displayWith(formatted));
-  }
-
-  get showError(): boolean {
-    return this.props?.hideError
-      ? false
-      : !!this.fControl.errors &&
-          (this.fControl.dirty || this.fControl.touched);
-  }
-
-  get showHint(): boolean {
-    return (
-      this.props?.hint &&
-      (this.fControl.pristine ? true : !this.fControl.errors)
-    );
   }
 
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
