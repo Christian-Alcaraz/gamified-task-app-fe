@@ -1,3 +1,15 @@
+// --- TASK Frequency for Dailies ---
+export const TaskFrequency = {
+  Daily: 'daily',
+  Weekly: 'weekly',
+  Monthly: 'monthly',
+  Yearly: 'yearly',
+} as const;
+export const TaskFrequencies = Object.values(TaskFrequency);
+export type TaskFrequencyTyping =
+  (typeof TaskFrequency)[keyof typeof TaskFrequency];
+
+// --- TASK Difficulty ---
 export const TaskDifficulty = {
   Beginner: 'Beginner',
   Intermediate: 'Intermediate',
@@ -30,11 +42,11 @@ export const TaskStat = {
 export const TaskStats = Object.values(TaskStat);
 export type TaskStatTyping = (typeof TaskStat)[keyof typeof TaskStat];
 
+// --- TASK TYPE ---
 export const TaskType = {
   Dailies: 'dailies',
   Todo: 'todo',
 } as const;
-
 export const TaskTypes = Object.values(TaskType);
 export type TaskTyping = (typeof TaskType)[keyof typeof TaskType];
 
