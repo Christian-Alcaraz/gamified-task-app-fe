@@ -14,7 +14,7 @@
     <input
       #triggerInput
       type="text"
-      class="cursor-pointer text-foreground text-xs placeholder:text-input py-2 pl-3 pr-11 transition-all duration-75 ease-[cubic-bezier(0.95,0.05,0.795,0.035)] rounded-xl w-full border outline-primary hover:outline-2 hover:outline-offset-2 focus:outline-2 focus:outline-offset-2"
+      class="cursor-pointer text-foreground text-xs placeholder:text-muted-foreground py-2 pl-3 pr-11 transition-all duration-75 ease-[cubic-bezier(0.95,0.05,0.795,0.035)] rounded-xl w-full border outline-primary hover:outline-2 hover:outline-offset-2 focus:outline-2 focus:outline-offset-2"
       [ngClass]="{
         'border-destructive hover:outline-destructive focus:outline-destructive':
           fControl.errors && fControl.dirty,
@@ -53,8 +53,6 @@
   </div>
 </section>
 
-<!-- Trigger button -->
-
 <!-- Dropdown template -->
 <ng-template #dropdownTemplate>
   <section
@@ -62,19 +60,30 @@
     [class.dark]="theme === 'dark'"
   >
     <div class="flex items-center py-1 px-1.5 border-b">
-      <button class="flex items-center justify-center rounded-full">
+      <div class="flex items-center justify-center rounded-full">
         <ng-icon
           name="saxSearchNormal1Outline"
           class="!flex items-center justify-center [&>svg]:fill-foreground [&>svg]:!h-4 [&>svg]:!w-4"
         ></ng-icon>
-      </button>
+      </div>
       <input
         [formControl]="searchOptionControl"
         [placeholder]="
           props.searchPlaceholder ?? 'Search ' + (props.label ?? 'option')
         "
-        class="bg-transparent placeholder:text-muted-foreground text-xs outline-0 text-foreground text-xs py-2 pl-1 pr-3"
+        class="flex-1 bg-transparent placeholder:text-muted-foreground text-xs outline-0 text-foreground text-xs py-2 pl-1 pr-3"
       />
+      @if (searchOptionControl.value) {
+        <button
+          class="group cursor-pointer transition-all duration-150 ease-burst-in-slow-out hover:scale-125 hover:bg-muted/15 flex items-center justify-center rounded-full mr-2"
+          (click)="searchOptionControl.setValue('')"
+        >
+          <ng-icon
+            name="saxCloseCircleOutline"
+            class="!flex items-center justify-center group-hover:[&_svg]:fill-foreground/85 [&>svg]:fill-foreground [&>svg]:!h-5 [&>svg]:!w-5"
+          ></ng-icon>
+        </button>
+      }
     </div>
     <ul
       #listRef
@@ -98,9 +107,7 @@
           {{ displayWith(option) }}
         </button>
       } @empty {
-        <button
-          class="w-full text-center text-xs px-2 py-1 hover:bg-accent hover:text-accent-foreground rounded-xl"
-        >
+        <button class="w-full text-center text-xs px-2 py-1 rounded-xl">
           No results found
         </button>
       }

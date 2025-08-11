@@ -118,6 +118,7 @@ export class SelectFieldComponent
 
   selectOption(option: string) {
     this.fControl.setValue(option);
+    this.searchOptionControl.setValue('');
     this.fControl.markAsTouched();
     this.fControl.markAsDirty();
     this.closeDropdown();
@@ -173,8 +174,8 @@ export class SelectFieldComponent
   }
 
   private setDisplayValue() {
-    const value = this.fControl.value;
-    this.displayControl.setValue(this.displayWith(value));
+    const formatted = this.displayWith(this.fControl.value);
+    this.displayControl.setValue(this.displayWith(formatted));
   }
 
   get showError(): boolean {
@@ -191,12 +192,19 @@ export class SelectFieldComponent
     );
   }
 
-  private _searchFn(value: string) {
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private _searchFn(value: any) {
     if (this.props.searchFn) {
+      console.assert(
+        typeof this.props.searchFn === 'function',
+        'searchFn must be a function',
+      );
       this.filteredOptions = this.props.searchFn(value);
     } else {
       this.filteredOptions = this.options.filter((opt) =>
-        opt.toLowerCase().includes(value),
+        this.displayWith(opt)
+          .toLowerCase()
+          .includes(this.displayWith(value).toLowerCase()),
       );
     }
   }

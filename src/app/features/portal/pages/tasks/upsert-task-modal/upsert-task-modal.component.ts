@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import {
   Task,
+  TaskDifficulties,
   TaskStatuses,
   TaskTypes,
   TaskTyping,
@@ -56,8 +57,9 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
   private readonly inputService = inject(InputService);
 
   taskForm!: FormGroup;
-  taskTypes = TaskTypes;
-  taskStatuses = TaskStatuses;
+  types = TaskTypes;
+  statuses = TaskStatuses;
+  difficulties = TaskDifficulties;
 
   /**
    * Todo: Add Select Field for Difficulty
@@ -69,14 +71,14 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
 
     this.taskForm = this.formBuilder.group({
       name: ['', Validators.required],
-      description: ['', Validators.required],
+      description: [''],
       type: [this.data.taskType ?? '', Validators.required],
       subtaskIds: [''],
       status: [''],
       userLimit: [1],
       userIds: [''],
+      difficulty: ['', Validators.required],
       // deadlineDatetime: ['', Validators.required],
-      // difficulty: ['', Validators.required],
       // stat: ['', Validators.required],
     });
 

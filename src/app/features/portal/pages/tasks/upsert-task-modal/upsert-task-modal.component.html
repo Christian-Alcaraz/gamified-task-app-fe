@@ -17,15 +17,23 @@
   />
   <app-select-field
     fcName="type"
-    [options]="taskTypes"
+    [options]="types"
     [disabled]="true"
     [props]="{ label: 'Type' }"
+  />
+  <app-select-field
+    fcName="difficulty"
+    [options]="difficulties"
+    [props]="{
+      label: 'Difficulty',
+      searchPlaceholder: 'Search Difficulty',
+    }"
   />
 
   @if (data.task) {
     <app-select-field
       fcName="status"
-      [options]="taskStatuses"
+      [options]="statuses"
       [props]="{ label: 'Status' }"
     />
   }
