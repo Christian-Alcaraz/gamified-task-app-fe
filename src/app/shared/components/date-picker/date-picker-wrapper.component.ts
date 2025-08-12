@@ -18,6 +18,7 @@ import {
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { NgIcon } from '@ng-icons/core';
+import { ModalScrollCoordinatorService } from '@shared/services/modal-scroll-coordinator.service';
 import { ThemeService } from '@shared/services/theme/theme.service';
 import { UtilService } from '@shared/services/util/util.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -56,6 +57,9 @@ export class DatePickerComponent extends BaseInput implements OnInit {
   private readonly focusTrapFactory = inject(FocusTrapFactory);
   private readonly utilDate = inject(UtilService).date;
   private readonly utilString = inject(UtilService).string;
+  private readonly modalScrollCoordinator = inject(
+    ModalScrollCoordinatorService,
+  );
 
   // private readonly utilString = inject(UtilService).string;
 
@@ -95,6 +99,15 @@ export class DatePickerComponent extends BaseInput implements OnInit {
       .subscribe(() => {
         this.setDisplayValue();
       });
+
+    // Listen for scroll events from modal coordinator
+    this.modalScrollCoordinator.scrollEvent$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        if (this.overlayRef) {
+          this.overlayRef.updatePosition();
+        }
+      });
   }
 
   openDropdown() {
@@ -116,28 +129,47 @@ export class DatePickerComponent extends BaseInput implements OnInit {
           overlayX: 'start',
           overlayY: 'bottom',
         },
-      ]);
+        {
+          originX: 'end',
+          originY: 'bottom',
+          overlayX: 'end',
+          overlayY: 'top',
+        },
+        {
+          originX: 'end',
+          originY: 'top',
+          overlayX: 'end',
+          overlayY: 'bottom',
+        },
+      ])
+      .withFlexibleDimensions(true)
+      .withPush(false)
+      .withViewportMargin(8)
+      .withDefaultOffsetY(0)
+      .withDefaultOffsetX(0);
 
     this.overlayRef = this.overlay.create({
       positionStrategy,
-      hasBackdrop: true,
-      backdropClass: 'cdk-overlay-transparent-backdrop',
+      hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
       minWidth: 0,
       maxWidth: 0,
     });
 
-    this.overlayRef
-      .backdropClick()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(() => this.closeDropdown());
-
     this.overlayRef.attach(
       new TemplatePortal(this.datePicker, this.viewContainerRef),
     );
 
+    // Notify that date picker is open
+    this.modalScrollCoordinator.setDatePickerOpen(true);
+
     this.updateOverlayWidth();
     this.startResizeTracking();
+
+    // Handle click outside to close
+    setTimeout(() => {
+      document.addEventListener('click', this.handleDocumentClick.bind(this));
+    }, 0);
 
     const dropdownElement = this.overlayRef.overlayElement;
     this.focusTrap = this.focusTrapFactory.create(dropdownElement);
@@ -159,6 +191,9 @@ export class DatePickerComponent extends BaseInput implements OnInit {
   private closeDropdown() {
     this.stopResizeTracking();
 
+    // Remove document click listener
+    document.removeEventListener('click', this.handleDocumentClick.bind(this));
+
     if (this.focusTrap) {
       this.focusTrap.destroy();
     }
@@ -166,6 +201,25 @@ export class DatePickerComponent extends BaseInput implements OnInit {
     if (this.overlayRef) {
       this.overlayRef!.dispose();
       this.overlayRef = undefined;
+    }
+
+    // Notify that date picker is closed
+    this.modalScrollCoordinator.setDatePickerOpen(false);
+  }
+
+  private handleDocumentClick(event: Event) {
+    const target = event.target as HTMLElement;
+    const overlayElement = this.overlayRef?.overlayElement;
+    const triggerElement = this.triggerInput?.nativeElement;
+
+    // Close if clicked outside both the trigger and the overlay
+    if (
+      overlayElement &&
+      !overlayElement.contains(target) &&
+      triggerElement &&
+      !triggerElement.contains(target)
+    ) {
+      this.closeDropdown();
     }
   }
 

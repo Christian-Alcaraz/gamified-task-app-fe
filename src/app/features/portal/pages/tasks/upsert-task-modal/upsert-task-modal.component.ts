@@ -1,6 +1,6 @@
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { TitleCasePipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -34,6 +34,7 @@ import {
   SelectFieldComponent,
   TextFieldComponent,
 } from '@shared/components/inputs';
+import { ModalScrollCoordinatorService } from '@shared/services/modal-scroll-coordinator.service';
 
 export interface TaskDialogData extends BaseDialogData {
   task?: Task;
@@ -59,8 +60,14 @@ export interface TaskDialogData extends BaseDialogData {
   styleUrl: './upsert-task-modal.component.scss',
 })
 export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
+  @ViewChild('modalContent', { read: ElementRef })
+  modalContent!: ElementRef<HTMLElement>;
+
   private readonly formBuilder = inject(FormBuilder);
   private readonly inputService = inject(InputService);
+  private readonly modalScrollCoordinator = inject(
+    ModalScrollCoordinatorService,
+  );
 
   taskForm!: FormGroup;
   taskType = TaskType;
@@ -116,6 +123,16 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
 
     if (this.taskForm.valid) {
       this.closeDialog();
+    }
+  }
+
+  onModalScroll(event: Event) {
+    // Simple scroll event forwarding - let the reposition strategy handle it
+    if (this.modalScrollCoordinator.isDatePickerOpen) {
+      // Just trigger a small delay to allow reposition to work
+      setTimeout(() => {
+        this.modalScrollCoordinator.emitScrollEvent(event);
+      }, 0);
     }
   }
 }
