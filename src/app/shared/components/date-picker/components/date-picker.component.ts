@@ -63,13 +63,13 @@ import { ChangeFn, provideValueAccessor, TouchedFn } from 'ng-primitives/utils';
     <table ngpDatePickerGrid>
       <thead>
         <tr>
-          <th scope="col" abbr="Sunday">S</th>
-          <th scope="col" abbr="Monday">M</th>
-          <th scope="col" abbr="Tuesday">T</th>
-          <th scope="col" abbr="Wednesday">W</th>
-          <th scope="col" abbr="Thursday">T</th>
-          <th scope="col" abbr="Friday">F</th>
-          <th scope="col" abbr="Saturday">S</th>
+          <th scope="col" abbr="Sunday">Su</th>
+          <th scope="col" abbr="Monday">Mo</th>
+          <th scope="col" abbr="Tuesday">Tu</th>
+          <th scope="col" abbr="Wednesday">We</th>
+          <th scope="col" abbr="Thursday">Th</th>
+          <th scope="col" abbr="Friday">Fr</th>
+          <th scope="col" abbr="Saturday">Sa</th>
         </tr>
       </thead>
       <tbody>
@@ -93,7 +93,7 @@ import { ChangeFn, provideValueAccessor, TouchedFn } from 'ng-primitives/utils';
     }
 
     th {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 800;
       width: 40px;
       height: 40px;
@@ -152,6 +152,7 @@ import { ChangeFn, provideValueAccessor, TouchedFn } from 'ng-primitives/utils';
       justify-content: center;
       border-radius: 8px;
       cursor: pointer;
+      font-size: 12px;
       color: var(--foreground);
     }
 
@@ -202,7 +203,7 @@ import { ChangeFn, provideValueAccessor, TouchedFn } from 'ng-primitives/utils';
 })
 export class DatePicker implements ControlValueAccessor {
   readonly theme = inject(ThemeService).theme();
-  readonly hostCss = `mt-1 inline-block bg-card rounded-md p-4 shadow-md border ${this.theme === 'dark' ? 'dark ' : ''}`;
+  readonly hostCss = `my-1 inline-block bg-card rounded-md p-4 shadow-md border ${this.theme === 'dark' ? 'dark ' : ''}`;
 
   /** Access the date picker host directive */
   private readonly state = injectDatePickerState<Date>();

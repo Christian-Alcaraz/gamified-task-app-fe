@@ -17,6 +17,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { NgIcon } from '@ng-icons/core';
 import { ThemeService } from '@shared/services/theme/theme.service';
 import { UtilService } from '@shared/services/util/util.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -25,7 +26,13 @@ import { DatePicker } from './components/date-picker.component';
 
 @Component({
   selector: 'app-date-picker',
-  imports: [CommonModule, ReactiveFormsModule, DatePicker, InputErrorComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    DatePicker,
+    InputErrorComponent,
+    NgIcon,
+  ],
   standalone: true,
   styles: ``,
   templateUrl: './date-picker-wrapper.component.html',
@@ -116,7 +123,8 @@ export class DatePickerComponent extends BaseInput implements OnInit {
       hasBackdrop: true,
       backdropClass: 'cdk-overlay-transparent-backdrop',
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
-      width: this.triggerInput.nativeElement.offsetWidth,
+      minWidth: 0,
+      maxWidth: 0,
     });
 
     this.overlayRef
@@ -148,7 +156,7 @@ export class DatePickerComponent extends BaseInput implements OnInit {
     this.closeDropdown();
   }
 
-  closeDropdown() {
+  private closeDropdown() {
     this.stopResizeTracking();
 
     if (this.focusTrap) {
