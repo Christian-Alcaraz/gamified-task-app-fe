@@ -11,11 +11,10 @@ export type TaskFrequencyTyping =
 
 // --- TASK Difficulty ---
 export const TaskDifficulty = {
-  Beginner: 'Beginner',
-  Intermediate: 'Intermediate',
-  Advanced: 'Advanced',
-  Expert: 'Expert',
-  Master: 'Master',
+  Trivial: 'trivial',
+  Easy: 'easy',
+  Medium: 'medium',
+  Hard: 'hard',
 } as const;
 export const TaskDifficulties = Object.values(TaskDifficulty);
 export type TaskDifficultyTyping =
@@ -23,10 +22,10 @@ export type TaskDifficultyTyping =
 
 //  --- TASK STATUS ---
 export const TaskStatus = {
-  Active: 'Active',
-  Cancelled: 'Cancelled',
-  Completed: 'Completed',
-  Paused: 'Paused',
+  Active: 'active',
+  Cancelled: 'cancelled',
+  Completed: 'completed',
+  Paused: 'paused',
 } as const;
 
 export const TaskStatuses = Object.values(TaskStatus);
@@ -55,11 +54,11 @@ export class Task {
   name?: string;
   description?: string;
   type?: TaskTyping;
-  subtaskIds?: string[];
+  subtasks?: string[];
   status?: TaskStatusTyping;
   userLimit?: number;
   userIds?: string[];
-  deadlineDatetime?: Date;
+  deadlineDate?: Date;
   difficulty?: TaskDifficultyTyping;
   stat?: Record<TaskStatTyping, number>;
 
