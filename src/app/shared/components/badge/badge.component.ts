@@ -1,4 +1,5 @@
 import { coerceNumberProperty } from '@angular/cdk/coercion';
+import { TitleCasePipe } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
 
@@ -24,7 +25,7 @@ const BADGE_BG = 'bg-card border';
 
 @Component({
   selector: 'app-badge',
-  imports: [],
+  imports: [TitleCasePipe],
   templateUrl: './badge.component.html',
   styleUrl: './badge.component.scss',
 })
@@ -50,7 +51,7 @@ export class BadgeComponent extends ThemeAwareComponent {
     if (this.resolvedType() === 'badge') return String(this.badgeValue());
     const number = coerceNumberProperty(this.badgeValue());
     if (number >= 100) return `99+`;
-    return number;
+    return String(number);
   });
 
   assignedCss = computed(() => {
