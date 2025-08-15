@@ -1,4 +1,5 @@
 import { Dialog } from '@angular/cdk/dialog';
+import { TitleCasePipe } from '@angular/common';
 import { Component, inject, input } from '@angular/core';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
 import { DialogOptions } from '@core/constants';
@@ -20,7 +21,7 @@ export interface TaskListProps {
 
 @Component({
   selector: 'app-task-list',
-  imports: [TaskItemComponent, NgIcon],
+  imports: [TaskItemComponent, NgIcon, TitleCasePipe],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
 })
