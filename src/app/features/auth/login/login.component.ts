@@ -23,7 +23,9 @@ export class LoginComponent extends ThemeAwareComponent {
   private readonly _formBuilder = inject(FormBuilder);
   private readonly _router = inject(Router);
   private readonly _authApi = inject(ApiService).auth;
-  private readonly _env = environment.ENVIRONMENT_NAME;
+  private readonly enviroment = environment.ENVIRONMENT_NAME;
+  private readonly email = environment.EMAIL;
+  private readonly password = environment.EMAIL;
 
   credentialForm!: FormGroup;
 
@@ -38,16 +40,13 @@ export class LoginComponent extends ThemeAwareComponent {
 
   constructor() {
     super();
-    const isProd = this._env === 'production';
-    const email = isProd ? '' : 'gamified@taskapp.com';
-    const password = isProd ? '' : 'Password123!';
 
     this.credentialForm = this._formBuilder.group({
-      email: [email, [Validators.required, Validators.email]],
-      password: [password, [Validators.required]],
+      email: [this.email, [Validators.required, Validators.email]],
+      password: [this.password, [Validators.required]],
     });
 
-    if (!isProd) {
+    if (this.enviroment !== 'production') {
       this.credentialForm.markAllAsDirty();
     }
   }
