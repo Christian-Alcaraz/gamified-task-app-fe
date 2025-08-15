@@ -31,6 +31,7 @@ export class SignUpComponent extends ThemeAwareComponent {
     atleastHasOneUppercase: true,
     atleastHasOneLowercase: true,
     atleastHasOneNumeric: true,
+    minlength: 8,
   };
 
   confirmPasswordPropsValidators = {

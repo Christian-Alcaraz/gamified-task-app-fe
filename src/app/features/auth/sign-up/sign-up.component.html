@@ -2,6 +2,7 @@
 @let oneUppercaseError = passwordControl?.errors?.["hasUppercase"];
 @let oneLowercaseError = passwordControl?.errors?.["hasLowercase"];
 @let oneNumericError = passwordControl?.errors?.["hasNumeric"];
+@let minLengthError = passwordControl?.errors?.["minlength"];
 
 <main
   class="min-w-[55vw] w-[55vw] lg:min-w-[25vw] lg:w-[25vw] bg-card border rounded-xl shadow-xs py-12 px-10"
@@ -49,6 +50,14 @@
       }"
     ></app-password-field>
     <div class="flex flex-col gap-1 -mt-3 pb-2">
+      <p
+        class="text-xs text-destructive"
+        [ngClass]="{
+          'text-emerald-500': !minLengthError && passwordControl?.value,
+        }"
+      >
+        Must have atleast 8 characters
+      </p>
       <p
         class="text-xs text-destructive"
         [ngClass]="{
