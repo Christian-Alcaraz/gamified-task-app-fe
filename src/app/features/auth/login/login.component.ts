@@ -25,7 +25,7 @@ export class LoginComponent extends ThemeAwareComponent {
   private readonly _authApi = inject(ApiService).auth;
   private readonly enviroment = environment.ENVIRONMENT_NAME;
   private readonly email = environment.EMAIL;
-  private readonly password = environment.EMAIL;
+  private readonly password = environment.PASSWORD;
 
   credentialForm!: FormGroup;
 
