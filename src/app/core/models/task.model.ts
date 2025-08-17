@@ -60,6 +60,7 @@ export class Task {
   userIds?: string[];
   deadlineDate?: Date;
   difficulty?: TaskDifficultyTyping;
+  frequency?: TaskFrequencyTyping;
   stat?: Record<TaskStatTyping, number>;
 
   createdAt?: Date;
