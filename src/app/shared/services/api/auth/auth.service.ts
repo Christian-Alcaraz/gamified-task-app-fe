@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Token } from '@core/constants';
 import { BaseApiService } from '../base-api.class';
 
 @Injectable({
@@ -16,8 +17,21 @@ export class AuthService extends BaseApiService {
     });
   }
 
+  register(email: string, password: string) {
+    return this.http.post<any>(`${this.baseUrl}${this.url}/register`, {
+      email,
+      password,
+    });
+  }
+
   me() {
-    return this.http.get<any>(`${this.url}/me`);
+    const authToken = localStorage.getItem(Token.Auth);
+    const headers = new HttpHeaders({
+      authorization: `Bearer ${authToken}`,
+    });
+    return this.http.get<any>(`${this.url}/me`, {
+      headers,
+    });
   }
   /* eslint-enable */
 }
