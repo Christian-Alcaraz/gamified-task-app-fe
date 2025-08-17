@@ -1,0 +1,12 @@
+<nav class="flex items-center justify-around py-2 px-16">
+  @for (nav of navItems; track $index) {
+    <nav-item
+      class="transition-colors duration-75 ease-delay-in-burst text-foreground select-none cursor-pointer px-3 py-1.5 font-bold rounded-md"
+      [routerLink]="nav.route"
+      routerLinkActive="bg-primary "
+      (click)="selectNav(nav)"
+    >
+      {{ nav.label | titlecase }}
+    </nav-item>
+  }
+</nav>
