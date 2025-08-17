@@ -1,0 +1,20 @@
+<p class="grid grid-cols-8 items-center gap-2">
+  <span class="col-span-2 text-sm text-foreground"
+    >{{ props()!.prefix ?? "Unknown Stat" }}:</span
+  >
+  <span
+    class="inline-flex relative col-span-6 border justify-center bg-statbar text-foreground w-full h-[24px] rounded-sm shadow-sm overflow-hidden"
+  >
+    <p class="static z-2">
+      {{ userState()?.[currentStr]! ?? "???" }}/{{
+        userState()?.[totalStr] ?? "???"
+      }}
+    </p>
+
+    <div
+      class="block absolute top-0 left-0 0 h-[inherit] rounded-sm"
+      [class]="props()!.bgColorTailwindCss ?? ''"
+      [style.width.%]="userState()?.[currentStr]! ?? 0"
+    ></div>
+  </span>
+</p>

@@ -1,0 +1,69 @@
+<main class="h-full bg-background" [class.dark]="theme() === 'dark'">
+  <section class="flex items-center px-4 pt-4">
+    <div class="w-[128px] h-[128px] border border-foreground text-foreground">
+      Character Pic
+    </div>
+    <div class="w-[calc(100vw*0.2)] flex flex-col justify-center ml-4 gap-2">
+      <app-stat-bar
+        statCursor="hp"
+        [props]="{ bgColorTailwindCss: 'bg-rose-500', prefix: 'HP' }"
+      ></app-stat-bar>
+      <app-stat-bar
+        statCursor="mana"
+        [props]="{ bgColorTailwindCss: 'bg-blue-500', prefix: 'MP' }"
+      ></app-stat-bar>
+    </div>
+    <div class="ml-8">
+      <button
+        class="bg-primary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-primary/85 mr-4"
+        (click)="increaseStat('hp', 10)"
+      >
+        HP +1
+      </button>
+      <button
+        class="bg-primary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-primary/85 mr-4"
+        (click)="decreaseStat('hp', 10)"
+      >
+        HP -1
+      </button>
+      <button
+        class="bg-primary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-primary/85 mr-4"
+        (click)="increaseStat('mana', 10)"
+      >
+        MP +1
+      </button>
+      <button
+        class="bg-primary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-primary/85 mr-4"
+        (click)="decreaseStat('mana', 10)"
+      >
+        MP -1
+      </button>
+      <button
+        class="bg-secondary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-secondary/85 mr-4"
+        (click)="toggleTheme()"
+      >
+        Toggle Theme
+      </button>
+    </div>
+  </section>
+
+  <section class="h-[calc(100vh-20%)] grid grid-cols-12 pt-5 px-4 gap-4">
+    <main class="col-span-4 h-full overflow-y-hidden">
+      <app-task-list
+        [tasks]="dailiesStateService.state.tasks()"
+        [taskType]="taskType.Dailies"
+        [props]="{ header: 'Dailies' }"
+        (listChange)="refreshList(dailiesStateService)"
+      ></app-task-list>
+    </main>
+    <main class="col-span-4 h-full overflow-y-hidden">
+      <app-task-list
+        [tasks]="todoStateService.state.tasks()"
+        [taskType]="taskType.Todo"
+        [props]="{ header: 'Todo' }"
+        (listChange)="refreshList(todoStateService)"
+      ></app-task-list>
+    </main>
+    <main class="col-span-4 h-full overflow-y-hidden"></main>
+  </section>
+</main>

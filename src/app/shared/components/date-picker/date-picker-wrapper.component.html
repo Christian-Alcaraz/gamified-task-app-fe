@@ -1,0 +1,67 @@
+<section class="flex flex-col w-full gap-1.5" [class.dark]="theme === 'dark'">
+  @if (props.label && props.labelLoc !== "hide") {
+    <p
+      class="text-[11px] text-foreground mb-1"
+      [ngClass]="{
+        '!text-destructive': fControl.errors && fControl.dirty,
+      }"
+    >
+      {{ props.label }}
+    </p>
+  }
+
+  <div
+    #triggerInput
+    class="flex cursor-pointer text-foreground text-xs placeholder:text-muted-foreground transition-all duration-75 ease-[cubic-bezier(0.95,0.05,0.795,0.035)] rounded-xl w-full border outline-primary hover:outline-2 hover:outline-offset-2 focus:outline-2 focus:outline-offset-2"
+    [ngClass]="{
+      'border-destructive hover:outline-destructive focus:outline-destructive':
+        fControl.errors && fControl.dirty,
+      'pointer-events-none bg-neutral-500/25': disabled,
+    }"
+  >
+    <div
+      class="order-first peer pointer-events-none ml-2.5 flex items-center justify-center rounded-full"
+    >
+      <ng-icon
+        name="saxCalendar1Outline"
+        class="!flex items-center justify-center [&>svg]:fill-foreground [&>svg]:!h-4 [&>svg]:!w-4"
+      ></ng-icon>
+    </div>
+    <input
+      type="text"
+      class="cursor-pointer flex-1 py-2 pr-3 ml-3"
+      [formControl]="displayControl"
+      [placeholder]="props.placeholder ?? 'Select a Date'"
+      [disabled]="disabled"
+      [attr.disabled]="disabled"
+      (focus)="openDropdown()"
+      readonly
+    />
+    @if (fControl.value) {
+      <button
+        class="cursor-pointer transition-all pr-2 duration-150 text-xs text-primary ease-burst-in-slow-out hover:scale-[105%] hover:bg-muted/15 flex items-center justify-center rounded-full mr-2"
+        (click)="updateValue(null)"
+      >
+        Clear
+      </button>
+    }
+  </div>
+  <div class="flex items-center pb-1">
+    <app-input-error
+      [ngClass]="{ visible: showError, invisible: !showError }"
+      [fControl]="fControl"
+      [labelProps]="props.label"
+    ></app-input-error>
+
+    @if (showHint) {
+      <small class="text-xs text-muted-foreground">{{ props?.hint }}</small>
+    }
+  </div>
+</section>
+
+<ng-template #datePicker>
+  <date-picker
+    [date]="fControl.value ?? null"
+    (dateChange)="updateValue($event)"
+  ></date-picker>
+</ng-template>

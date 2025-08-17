@@ -1,1 +1,104 @@
 /* You can add global styles to this file, and also import other style files */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+.app-dialog-title > h1,
+.app-dialog-title > h2,
+.app-dialog-title > h3,
+.app-dialog-title > h4,
+.app-dialog-title > h5,
+.app-dialog-title > h6 {
+  color: var(--foreground);
+  margin-bottom: calc(1rem * 0.25);
+}
+
+.app-dialog-title > p {
+  color: var(--muted-foreground);
+  font-size: calc(1rem * 0.75);
+}
+
+// SCROLLBARS
+
+.styled-scrollbars {
+  scrollbar-color: transparent transparent;
+  scrollbar-width: thin;
+}
+
+.styled-scrollbars.visible,
+.styled-scrollbars:hover {
+  scrollbar-color: var(--foreground) transparent;
+}
+
+.styled-scrollbars::-webkit-scrollbar {
+  height: 6px;
+  background-color: none;
+}
+.styled-scrollbars:hover::-webkit-scrollbar {
+  background-color: #eee;
+}
+
+.styled-scrollbars::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 5px;
+}
+.styled-scrollbars:hover::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 5px;
+}
+
+// ========================
+.white-styled-scrollbars {
+  scrollbar-color: transparent transparent;
+  scrollbar-width: thin;
+  border-radius: 10px;
+}
+
+.white-styled-scrollbars.visible,
+.white-styled-scrollbars:hover {
+  scrollbar-color: transparent transparent;
+}
+
+.white-styled-scrollbars::-webkit-scrollbar {
+  height: 6px;
+  background-color: none;
+}
+.white-styled-scrollbars:hover::-webkit-scrollbar {
+  background-color: transparent;
+}
+
+.white-styled-scrollbars::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 5px;
+}
+.white-styled-scrollbars:hover::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 5px;
+}
+
+.white-styled-scrollbars {
+  scrollbar-color: transparent transparent;
+  scrollbar-width: thin;
+}

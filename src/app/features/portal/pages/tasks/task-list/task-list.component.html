@@ -1,0 +1,39 @@
+<main class="flex flex-col border rounded-sm py-2 h-full overflow-y-hidden">
+  <section class="flex items-center justify-around px-4 pb-2">
+    <h3 class="inline-block flex-1 py-1 text-foreground">
+      {{ props()?.header ?? "No Header Found" }}
+    </h3>
+    <button
+      class="group cursor-pointer border transition-colors duration-100 ease-in-out bg-primary text-sm px-4 py-1 rounded-full inline-flex items-center gap-1 text-primary-foreground hover:text-primary-foreground/65 hover:bg-primary/85 active:bg-primary/75"
+      (click)="openTaskModal()"
+    >
+      <ng-icon
+        name="saxAddOutline"
+        class="[&>*]:fill-primary-foreground group-hover:[&>*]:fill-primary-foreground/65"
+      ></ng-icon>
+      Add {{ taskType() | titlecase }}
+    </button>
+  </section>
+  <section
+    class="flex-1 border-t overflow-y-auto will-change-scroll min-h-[0] gap-2 px-4 pb-3 styled-scrollbars transition-all duration-[50ms] ease-burst-in-slow-out"
+  >
+    @for (task of tasks(); track task._id) {
+      <app-task-item
+        [task]="task"
+        [badgeConfig]="tempStatusBadgeConfig"
+        (taskSelect)="openTaskModal($event)"
+      ></app-task-item>
+    } @empty {
+      <div
+        class="flex flex-col items-center justify-center px-4 pt-[25%] pb-5 mt-2 select-none"
+      >
+        <h4 class="inline-block text-foreground text-center mt-8">
+          No {{ taskType() | titlecase }} Available
+        </h4>
+        <p class="inline-block text-sm text-muted-foreground/75">
+          Add a new {{ taskType() | titlecase }}
+        </p>
+      </div>
+    }
+  </section>
+</main>

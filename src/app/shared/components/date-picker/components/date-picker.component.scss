@@ -1,0 +1,111 @@
+.date-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 36px;
+  margin-bottom: 16px;
+}
+
+th {
+  font-size: 16px;
+  font-weight: 800;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  color: var(--secondary);
+}
+
+[ngpDatePickerLabel] {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+[ngpDatePickerPreviousMonth],
+[ngpDatePickerNextMonth] {
+  all: unset;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 20px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  color: var(--foreground);
+}
+
+[ngpDatePickerPreviousMonth][data-hover],
+[ngpDatePickerNextMonth][data-hover] {
+  background-color: var(--muted);
+}
+
+[ngpDatePickerPreviousMonth][data-focus-visible],
+[ngpDatePickerNextMonth][data-focus-visible] {
+  outline: 2px solid var(--ring);
+}
+
+[ngpDatePickerPreviousMonth][data-press],
+[ngpDatePickerNextMonth][data-press] {
+  background-color: var(--statbar);
+}
+
+[ngpDatePickerPreviousMonth][data-disabled],
+[ngpDatePickerNextMonth][data-disabled] {
+  cursor: not-allowed;
+  color: var(--muted-foreground);
+}
+
+[ngpDatePickerDateButton] {
+  all: unset;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--foreground);
+}
+
+[ngpDatePickerDateButton][data-today] {
+  color: var(--primary);
+}
+
+[ngpDatePickerDateButton][data-hover] {
+  background-color: var(--accent);
+  color: var(--accent-foreground) !important;
+}
+
+[ngpDatePickerDateButton][data-focus-visible] {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+[ngpDatePickerDateButton][data-press] {
+  background-color: var(--accent);
+  filter: brightness(80%);
+}
+
+[ngpDatePickerDateButton][data-outside-month] {
+  color: var(--muted);
+}
+
+[ngpDatePickerDateButton][data-selected] {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 600;
+}
+
+[ngpDatePickerDateButton][data-selected][data-outside-month] {
+  background-color: var(--muted);
+  filter: brightness(100%);
+  color: var(--muted-foreground);
+}
+
+[ngpDatePickerDateButton][data-disabled] {
+  cursor: not-allowed;
+  color: var(--muted);
+}

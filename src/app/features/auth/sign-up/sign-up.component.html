@@ -1,0 +1,103 @@
+@let passwordControl = this.credentialForm.get("password");
+@let oneUppercaseError = passwordControl?.errors?.["hasUppercase"];
+@let oneLowercaseError = passwordControl?.errors?.["hasLowercase"];
+@let oneNumericError = passwordControl?.errors?.["hasNumeric"];
+@let minLengthError = passwordControl?.errors?.["minlength"];
+
+<main
+  class="min-w-[55vw] w-[55vw] lg:min-w-[25vw] lg:w-[25vw] bg-card border rounded-xl shadow-xs py-12 px-10"
+  [class.dark]="theme() === 'dark'"
+>
+  <section class="flex items-center gap-2.5 pb-4">
+    <section class="pr-10">
+      <h1
+        class="text-xl font-bold tracking-wide"
+        [class.text-primary]="theme() === 'dark'"
+        [class.text-black]="theme() !== 'dark'"
+      >
+        Create an account
+      </h1>
+      <small class="inline-block mt-2.5 text-muted-foreground"
+        >Join now and start making progress — one task at a time.</small
+      >
+    </section>
+
+    <section class="ml-auto">
+      <a
+        class="text-primary hover:underline cursor-pointer"
+        tabindex="0"
+        (keypress)="navigateToLogin()"
+        (click)="navigateToLogin()"
+        >Login</a
+      >
+    </section>
+  </section>
+
+  <section
+    class="mt-4 flex flex-col justify-center gap-2.5"
+    [formGroup]="credentialForm"
+  >
+    <app-text-field
+      fcName="email"
+      [props]="{ type: 'text', label: 'Email' }"
+    ></app-text-field>
+    <app-password-field
+      fcName="password"
+      [props]="{
+        label: 'Password',
+        hideError: true,
+        validators: passwordPropsValidators,
+      }"
+    ></app-password-field>
+    <div class="flex flex-col gap-1 -mt-3 pb-2">
+      <p
+        class="text-xs text-destructive"
+        [ngClass]="{
+          'text-emerald-500': !minLengthError && passwordControl?.value,
+        }"
+      >
+        Must have atleast 8 characters
+      </p>
+      <p
+        class="text-xs text-destructive"
+        [ngClass]="{
+          'text-emerald-500': !oneUppercaseError && passwordControl?.value,
+        }"
+      >
+        Must have atleast 1 uppercase letter
+      </p>
+      <p
+        class="text-xs text-destructive"
+        [ngClass]="{
+          'text-emerald-500': !oneLowercaseError && passwordControl?.value,
+        }"
+      >
+        Must have atleast 1 lowercase letter
+      </p>
+      <p
+        class="text-xs text-destructive"
+        [ngClass]="{
+          'text-emerald-500': !oneNumericError && passwordControl?.value,
+        }"
+      >
+        Must have atleast 1 number
+      </p>
+    </div>
+
+    <app-password-field
+      fcName="confirmPassword"
+      [props]="{
+        label: 'Confirm Password',
+        validators: confirmPasswordPropsValidators,
+      }"
+    ></app-password-field>
+  </section>
+
+  <button
+    class="block mt-4 bg-primary h-[2.4rem] px-4 py-1 text-sm text-primary-foreground ml-auto rounded-full cursor-pointer border hover:bg-primary/85 disabled:bg-muted/25 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:pointer-events-none"
+    (click)="submit()"
+    [disabled]="credentialForm.invalid || credentialForm.pristine"
+  >
+    Create Account
+  </button>
+</main>

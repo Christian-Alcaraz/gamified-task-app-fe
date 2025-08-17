@@ -1,0 +1,77 @@
+@let type = data.taskType;
+
+<section appDialogTitle>
+  <h1>
+    {{ data.task ? "Update" : "Add" }}
+    {{ (data.taskType | titlecase) ?? "[ERR: Type not Found]" }} Task
+  </h1>
+  <p>
+    Planning made easy! Add a new task or edit your existing task details here.
+  </p>
+  <app-dialog-close-button (willClose)="closeDialog()" />
+</section>
+
+<main
+  appDialogContent
+  class="flex flex-col max-h-[35vh] overflow-y-auto styled-scrollbars px-6 gap-3"
+  [formGroup]="taskForm"
+>
+  <app-text-field fcName="name" [props]="{ label: 'Name', type: 'text' }" />
+  <app-text-field
+    fcName="description"
+    [props]="{ label: 'Description', type: 'text' }"
+  />
+  <app-select-field
+    fcName="type"
+    [options]="types"
+    [disabled]="true"
+    [props]="{ label: 'Type' }"
+  />
+  <app-select-field
+    fcName="difficulty"
+    [options]="difficulties"
+    [props]="{
+      label: 'Difficulty',
+      searchPlaceholder: 'Search Difficulty',
+    }"
+  />
+
+  @if (type === taskType.Todo) {
+    <app-date-picker
+      fcName="deadlineDate"
+      [props]="{ label: 'Deadline Date' }"
+    ></app-date-picker>
+  }
+
+  @if (type === taskType.Dailies) {
+    <app-select-field
+      fcName="frequency"
+      [options]="frequncies"
+      [props]="{ label: 'Frequency', validators: { required: true } }"
+    />
+  }
+
+  @if (data.task) {
+    <app-select-field
+      fcName="status"
+      [options]="statuses"
+      [props]="{ label: 'Status', validators: { required: true } }"
+    />
+  }
+</main>
+
+<footer appDialogActions class="flex flex-col gap-2 border-t">
+  <button
+    class="group cursor-pointer transition-colors duration-100 ease-burst-in-slow-out text-primary-foreground border bg-primary rounded-xl px-4 py-2 w-full hover:bg-primary/55 disabled:bg-muted/25 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:pointer-events-none"
+    (click)="submit()"
+  >
+    <p class="group-hover:text-primary-foreground text-sm">Submit</p>
+  </button>
+
+  <button
+    class="group cursor-pointer transition-colors duration-100 ease-burst-in-slow-out text-foreground border bg-card rounded-xl px-4 py-2 w-full hover:bg-accent"
+    (click)="closeDialog()"
+  >
+    <p class="group-hover:text-accent-foreground text-sm">Close</p>
+  </button>
+</footer>
