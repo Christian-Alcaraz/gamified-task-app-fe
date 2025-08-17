@@ -4,12 +4,12 @@
       {{ props()?.header ?? "No Header Found" }}
     </h3>
     <button
-      class="group cursor-pointer border transition-colors duration-100 ease-in-out bg-secondary text-sm px-4 py-1 rounded-full inline-flex items-center gap-1 text-foreground hover:text-foreground/65 hover:bg-secondary/85 active:bg-secondary/75"
+      class="group cursor-pointer border transition-colors duration-100 ease-in-out bg-primary text-sm px-4 py-1 rounded-full inline-flex items-center gap-1 text-primary-foreground hover:text-primary-foreground/65 hover:bg-primary/85 active:bg-primary/75"
       (click)="openTaskModal()"
     >
       <ng-icon
         name="saxAddOutline"
-        class="[&>*]:fill-foreground group-hover:[&>*]:fill-foreground/65"
+        class="[&>*]:fill-primary-foreground group-hover:[&>*]:fill-primary-foreground/65"
       ></ng-icon>
       Add {{ taskType() | titlecase }}
     </button>
@@ -24,10 +24,15 @@
         (taskSelect)="openTaskModal($event)"
       ></app-task-item>
     } @empty {
-      <div class="flex items-center justify-center px-4 py-5 mt-2">
-        <h4 class="text-foreground text-center mt-8 select-none">
-          No Task Available
+      <div
+        class="flex flex-col items-center justify-center px-4 pt-[25%] pb-5 mt-2 select-none"
+      >
+        <h4 class="inline-block text-foreground text-center mt-8">
+          No {{ taskType() | titlecase }} Available
         </h4>
+        <p class="inline-block text-sm text-muted-foreground/75">
+          Add a new {{ taskType() | titlecase }}
+        </p>
       </div>
     }
   </section>

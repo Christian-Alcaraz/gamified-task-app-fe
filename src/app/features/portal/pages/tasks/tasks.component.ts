@@ -1,26 +1,45 @@
 import { DialogModule } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
-import { Task, TaskType } from '@core/models/task.model';
+import { TaskType } from '@core/models/task.model';
 import { StatBarComponent } from '@features/portal/components/stat-bar/stat-bar.component';
+import {
+  DailiesTaskStateFactory,
+  DailiesTaskStateInstance,
+  TaskStateService,
+  TodoTaskStateFactory,
+  TodoTaskStateInstance,
+} from '@shared/services/state/task.state.service';
 import {
   StatKey,
   UserState,
   UserStateService,
-} from '@shared/services/state/user-state.service';
+} from '@shared/services/state/user.state.service';
 import { TaskListComponent } from './task-list/task-list.component';
-import { sampleTasks } from './tasks.config';
 
 @Component({
   selector: 'app-tasks',
   imports: [StatBarComponent, DialogModule, TaskListComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss',
+  providers: [
+    {
+      provide: DailiesTaskStateInstance,
+      useFactory: DailiesTaskStateFactory,
+    },
+    {
+      provide: TodoTaskStateInstance,
+      useFactory: TodoTaskStateFactory,
+    },
+  ],
 })
 export class TasksComponent extends ThemeAwareComponent {
   private readonly _userStateService = inject(UserStateService);
 
-  readonly userState = this._userStateService.userState;
+  readonly dailiesStateService = inject(DailiesTaskStateInstance);
+  readonly todoStateService = inject(TodoTaskStateInstance);
+
+  readonly user = this._userStateService.userState();
   readonly taskType = TaskType;
 
   tempUserState: UserState = {
@@ -30,22 +49,13 @@ export class TasksComponent extends ThemeAwareComponent {
     manaTotal: 100,
   };
 
-  tempTaskList: Task[] = sampleTasks;
-
-  tempStatusBadgeConfig = {
-    Active:
-      'block border text-xs px-2 py-1 rounded-sm w-fit shadow-sm text-foreground bg-emerald-500',
-    Cancelled:
-      'block border text-xs px-2 py-1 rounded-sm w-fit shadow-sm text-foreground bg-rose-500',
-    Completed:
-      'block border text-xs px-2 py-1 rounded-sm w-fit shadow-sm text-foreground bg-sky-500',
-    Paused:
-      'block border text-xs px-2 py-1 rounded-sm w-fit shadow-sm text-foreground bg-amber-500',
-  };
-
   constructor() {
     super();
     this._userStateService.setUserState(this.tempUserState);
+  }
+
+  refreshList(service: TaskStateService) {
+    service.retry$.next();
   }
 
   toggleTheme() {

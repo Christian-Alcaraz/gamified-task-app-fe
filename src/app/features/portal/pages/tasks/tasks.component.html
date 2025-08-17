@@ -50,16 +50,18 @@
   <section class="h-[calc(100vh-20%)] grid grid-cols-12 pt-5 px-4 gap-4">
     <main class="col-span-4 h-full overflow-y-hidden">
       <app-task-list
-        [tasks]="tempTaskList"
+        [tasks]="dailiesStateService.state.tasks()"
         [taskType]="taskType.Dailies"
         [props]="{ header: 'Dailies' }"
+        (listChange)="refreshList(dailiesStateService)"
       ></app-task-list>
     </main>
     <main class="col-span-4 h-full overflow-y-hidden">
       <app-task-list
-        [tasks]="tempTaskList"
+        [tasks]="todoStateService.state.tasks()"
         [taskType]="taskType.Todo"
         [props]="{ header: 'Todo' }"
+        (listChange)="refreshList(todoStateService)"
       ></app-task-list>
     </main>
     <main class="col-span-4 h-full overflow-y-hidden"></main>

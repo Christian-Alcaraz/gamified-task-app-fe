@@ -12,6 +12,7 @@ import {
   Task,
   TaskDifficulties,
   TaskFrequencies,
+  TaskStatus,
   TaskStatuses,
   TaskType,
   TaskTypes,
@@ -34,6 +35,7 @@ import {
   SelectFieldComponent,
   TextFieldComponent,
 } from '@shared/components/inputs';
+import { TaskApiService } from '@shared/services/api/task/task.api.service';
 
 export interface TaskDialogData extends BaseDialogData {
   task?: Task;
@@ -61,6 +63,7 @@ export interface TaskDialogData extends BaseDialogData {
 export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
   private readonly formBuilder = inject(FormBuilder);
   private readonly inputService = inject(InputService);
+  private readonly taskApiService = inject(TaskApiService);
 
   taskForm!: FormGroup;
   taskType = TaskType;
@@ -80,23 +83,18 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
       name: ['', Validators.required],
       description: [''],
       type: [this.data.taskType ?? '', Validators.required],
-      subtaskIds: [''],
-      status: [''],
-      userLimit: [1],
-      userIds: [''],
+      status: [TaskStatus.Active],
       difficulty: ['', Validators.required],
       deadlineDate: [''],
       frequency: [''],
+      // subtaskIds: [''],
+      // userLimit: [1],
+      // userIds: [''],
       // stat: ['', Validators.required],
     });
 
     if (this.data.task?.type === TaskType.Dailies) {
       this.taskForm.get('frequency')?.setValidators(Validators.required);
-      this.taskForm.updateValueAndValidity();
-    }
-
-    if (this.data.task?.type === TaskType.Todo) {
-      this.taskForm.get('deadlineDate')?.setValidators(Validators.required);
       this.taskForm.updateValueAndValidity();
     }
 
@@ -109,13 +107,60 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
   }
 
   submit() {
+    this._updateStateToDirty();
+    if (this.taskForm.invalid) return;
+
+    const task = this._formatTaskRequestBody(this.taskForm.getRawValue());
+
+    if (this.data.task) {
+      this._updateTask(task);
+    } else {
+      this._createTask(task);
+    }
+  }
+
+  private _updateStateToDirty() {
     this.taskForm.markAllAsTouched();
     this.taskForm.markAllAsDirty();
     this.taskForm.updateValueAndValidity();
     this.inputService.triggerManualValidation();
+  }
 
-    if (this.taskForm.valid) {
-      this.closeDialog();
+  private _formatTaskRequestBody(task: Task) {
+    const body = task;
+
+    if (task.type === TaskType.Dailies) {
+      delete body.deadlineDate;
+    } else {
+      delete body.frequency;
     }
+
+    return body;
+  }
+
+  private _createTask(task: Task) {
+    this.taskApiService.createTask(task).subscribe({
+      next: (createdTask) => {
+        this.closeDialog(createdTask);
+      },
+      error: (error) => {
+        console.error('Error creating task:', error);
+      },
+    });
+  }
+
+  private _updateTask(task: Task) {
+    if (!this.data.task) return;
+
+    const taskId = this.data.task!._id as string;
+
+    this.taskApiService.updateTask(task, taskId).subscribe({
+      next: (updatedTask) => {
+        this.closeDialog(updatedTask);
+      },
+      error: (error) => {
+        console.error('Error updating task:', error);
+      },
+    });
   }
 }
