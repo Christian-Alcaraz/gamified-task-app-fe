@@ -2,7 +2,7 @@ import { Component, inject, input, OnInit } from '@angular/core';
 import {
   StatKey,
   UserStateService,
-} from '@shared/services/state/user-state.service';
+} from '@shared/services/state/user.state.service';
 
 export interface StatBarProps {
   bgColorTailwindCss?: string;
