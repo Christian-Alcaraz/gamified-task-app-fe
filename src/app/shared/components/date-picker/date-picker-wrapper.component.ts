@@ -55,7 +55,6 @@ export class DatePickerComponent extends BaseInput implements OnInit {
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly focusTrapFactory = inject(FocusTrapFactory);
   private readonly utilDate = inject(UtilService).date;
-  private readonly utilString = inject(UtilService).string;
 
   // private readonly utilString = inject(UtilService).string;
 
@@ -145,13 +144,16 @@ export class DatePickerComponent extends BaseInput implements OnInit {
   }
 
   setDisplayValue() {
-    if (!this.fControl.value) return;
+    let displayVal = '';
 
-    const formatted = this.utilDate.formatDate(this.fControl.value);
-    this.displayControl.setValue(formatted);
+    if (this.fControl.value && this.fControl.value instanceof Date) {
+      displayVal = this.utilDate.formatDate(this.fControl.value);
+    }
+
+    this.displayControl.setValue(displayVal);
   }
 
-  updateValue(date: Date) {
+  updateValue(date: Date | null) {
     this.fControl.setValue(date);
     this.closeDropdown();
   }
