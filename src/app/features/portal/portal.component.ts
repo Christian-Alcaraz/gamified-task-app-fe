@@ -5,11 +5,12 @@ import {
   StatKey,
   UserState,
   UserStateService,
-} from '@shared/services/state/user-state.service';
+} from '@shared/services/state/user.state.service';
+import { HeaderComponent } from './components/header/header.component';
 
 @Component({
   selector: 'app-portal',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, HeaderComponent],
   templateUrl: './portal.component.html',
   styleUrl: './portal.component.scss',
 })
