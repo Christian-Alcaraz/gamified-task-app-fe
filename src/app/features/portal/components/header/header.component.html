@@ -1,12 +1,52 @@
-<nav class="flex items-center justify-around py-2 px-16">
-  @for (nav of navItems; track $index) {
-    <nav-item
-      class="transition-colors duration-75 ease-delay-in-burst text-foreground select-none cursor-pointer px-3 py-1.5 font-bold rounded-md"
-      [routerLink]="nav.route"
-      routerLinkActive="bg-primary "
-      (click)="selectNav(nav)"
-    >
-      {{ nav.label | titlecase }}
-    </nav-item>
-  }
-</nav>
+<main class="flex items-center justify-between bg-primary/80 py-2 px-16">
+  <nav class="flex items-center justify-around">
+    @for (nav of navItems; track $index) {
+      <nav-item
+        class="transition-colors duration-75 ease-delay-in-burst text-foreground text-lg select-none cursor-pointer px-3 py-1.5 font-medium rounded-md tracking-[0.048rem]"
+        [routerLink]="nav.route"
+        routerLinkActive="bg-primary "
+        (click)="selectNav(nav)"
+      >
+        {{ nav.label | titlecase }}
+      </nav-item>
+    }
+  </nav>
+  <button
+    class="bg-secondary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-secondary/85 mr-4"
+    (click)="toggleTheme()"
+  >
+    Toggle Theme
+  </button>
+</main>
+
+<section class="flex items-center px-4 mt-4">
+  <div class="w-[128px] h-[128px] border border-foreground text-foreground">
+    Character Pic
+  </div>
+  <div class="w-[calc(100vw*0.15)] flex flex-col justify-center ml-4 gap-2">
+    <app-stat-bar
+      statCursor="hp"
+      [props]="{
+        bgColorTailwindCss: 'bg-rose-500',
+        heightPx: 18,
+        prefix: 'HP',
+      }"
+    ></app-stat-bar>
+    <app-stat-bar
+      statCursor="mana"
+      [props]="{
+        bgColorTailwindCss: 'bg-blue-500',
+        heightPx: 18,
+        prefix: 'MP',
+      }"
+    ></app-stat-bar>
+    <app-stat-bar
+      statCursor="exp"
+      [props]="{
+        bgColorTailwindCss: 'bg-emerald-500',
+        heightPx: 18,
+        prefix: 'EXP',
+      }"
+    ></app-stat-bar>
+  </div>
+</section>
