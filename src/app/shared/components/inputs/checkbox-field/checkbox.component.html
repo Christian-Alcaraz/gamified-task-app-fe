@@ -1,0 +1,14 @@
+<main class="flex items-center gap-2" [class.dark]="theme === 'dark'">
+  <div>
+    <checkbox
+      [checked]="fControl.value"
+      (checkedChange)="fControl.setValue($event)"
+    ></checkbox>
+  </div>
+
+  @if (props.label) {
+    <p class="inline-flex text-foreground text-xs">
+      {{ props.label }}
+    </p>
+  }
+</main>

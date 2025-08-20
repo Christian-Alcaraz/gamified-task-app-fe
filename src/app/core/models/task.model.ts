@@ -49,22 +49,29 @@ export const TaskType = {
 export const TaskTypes = Object.values(TaskType);
 export type TaskTyping = (typeof TaskType)[keyof typeof TaskType];
 
+interface Subtask {
+  _id: string;
+  name: string;
+  completed: boolean;
+}
+
 export class Task {
   _id?: string;
   name?: string;
   description?: string;
   type?: TaskTyping;
-  subtasks?: string[];
-  status?: TaskStatusTyping;
+  subtasks?: Subtask[];
+  completed?: boolean;
   userLimit?: number;
-  userIds?: string[];
   deadlineDate?: Date;
   difficulty?: TaskDifficultyTyping;
   frequency?: TaskFrequencyTyping;
   stat?: Record<TaskStatTyping, number>;
+  _userId?: string;
 
   createdAt?: Date;
   updatedAt?: Date;
+  __v?: number;
 
   constructor(model: Partial<Task> = {}) {
     Object.assign(this, model);

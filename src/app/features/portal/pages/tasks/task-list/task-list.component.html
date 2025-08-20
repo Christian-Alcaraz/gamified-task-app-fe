@@ -3,16 +3,6 @@
     <h3 class="inline-block flex-1 py-1 text-foreground">
       {{ props()?.header ?? "No Header Found" }}
     </h3>
-    <button
-      class="group cursor-pointer border transition-colors duration-100 ease-in-out bg-primary text-sm px-4 py-1 rounded-full inline-flex items-center gap-1 text-primary-foreground hover:text-primary-foreground/65 hover:bg-primary/85 active:bg-primary/75"
-      (click)="openTaskModal()"
-    >
-      <ng-icon
-        name="saxAddOutline"
-        class="[&>*]:fill-primary-foreground group-hover:[&>*]:fill-primary-foreground/65"
-      ></ng-icon>
-      Add {{ taskType() | titlecase }}
-    </button>
   </section>
   <section
     class="flex-1 border-t overflow-y-auto will-change-scroll min-h-[0] gap-2 px-4 pb-3 styled-scrollbars transition-all duration-[50ms] ease-burst-in-slow-out"
@@ -22,6 +12,7 @@
         [task]="task"
         [badgeConfig]="tempStatusBadgeConfig"
         (taskSelect)="openTaskModal($event)"
+        (taskCompletionChange)="updateTaskCompletion(task, $event, $index)"
       ></app-task-item>
     } @empty {
       <div

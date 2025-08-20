@@ -7,6 +7,8 @@ import {
 export interface StatBarProps {
   bgColorTailwindCss?: string;
   prefix?: string;
+  heightPx?: string | number;
+  showStatsNumber?: boolean;
 }
 
 @Component({
@@ -34,5 +36,12 @@ export class StatBarComponent implements OnInit {
   ngOnInit(): void {
     this.currentStr = this.statCursor() + 'Current';
     this.totalStr = this.statCursor() + 'Total';
+  }
+
+  getFontRatio(heightPx: string | number) {
+    if (typeof heightPx === 'string') {
+      heightPx = parseInt(heightPx);
+    }
+    return heightPx * 0.675;
   }
 }

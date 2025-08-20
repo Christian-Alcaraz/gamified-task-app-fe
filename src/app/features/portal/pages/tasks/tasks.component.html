@@ -1,50 +1,22 @@
 <main class="h-full bg-background" [class.dark]="theme() === 'dark'">
-  <section class="flex items-center px-4 pt-4">
-    <div class="w-[128px] h-[128px] border border-foreground text-foreground">
-      Character Pic
-    </div>
-    <div class="w-[calc(100vw*0.2)] flex flex-col justify-center ml-4 gap-2">
-      <app-stat-bar
-        statCursor="hp"
-        [props]="{ bgColorTailwindCss: 'bg-rose-500', prefix: 'HP' }"
-      ></app-stat-bar>
-      <app-stat-bar
-        statCursor="mana"
-        [props]="{ bgColorTailwindCss: 'bg-blue-500', prefix: 'MP' }"
-      ></app-stat-bar>
-    </div>
-    <div class="ml-8">
-      <button
-        class="bg-primary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-primary/85 mr-4"
-        (click)="increaseStat('hp', 10)"
-      >
-        HP +1
-      </button>
-      <button
-        class="bg-primary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-primary/85 mr-4"
-        (click)="decreaseStat('hp', 10)"
-      >
-        HP -1
-      </button>
-      <button
-        class="bg-primary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-primary/85 mr-4"
-        (click)="increaseStat('mana', 10)"
-      >
-        MP +1
-      </button>
-      <button
-        class="bg-primary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-primary/85 mr-4"
-        (click)="decreaseStat('mana', 10)"
-      >
-        MP -1
-      </button>
-      <button
-        class="bg-secondary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-secondary/85 mr-4"
-        (click)="toggleTheme()"
-      >
-        Toggle Theme
-      </button>
-    </div>
+  <section class="flex items-center justify-center gap-2 px-4 pt-4">
+    <section class="w-[calc(100vw*0.25)]" [formGroup]="searchTaskForm">
+      <app-text-field
+        fcName="text"
+        [props]="{ type: 'text', placeholder: 'Search Task' }"
+      ></app-text-field>
+    </section>
+    <button
+      class="self-start group cursor-pointer border transition-colors h-[34px] duration-100 ease-in-out bg-primary text-sm px-4 py-1 rounded-full inline-flex items-center gap-1 text-primary-foreground hover:text-primary-foreground/65 hover:bg-primary/85 active:bg-primary/75"
+      [ngpMenuTrigger]="menu"
+      ngpButton
+    >
+      <ng-icon
+        name="saxAddOutline"
+        class="[&>*]:fill-primary-foreground group-hover:[&>*]:fill-primary-foreground/65"
+      ></ng-icon>
+      Add Task
+    </button>
   </section>
 
   <section class="h-[calc(100vh-20%)] grid grid-cols-12 pt-5 px-4 gap-4">
@@ -67,3 +39,15 @@
     <main class="col-span-4 h-full overflow-y-hidden"></main>
   </section>
 </main>
+
+<!-- <ng-template #menu>
+  <div ngpMenu>
+    <button ngpMenuItem>Item 1</button>
+    <button ngpMenuItem>Item 2</button>
+    <button ngpMenuItem>Item 3</button>
+  </div>
+</ng-template> -->
+
+<ng-template #menu>
+  <app-menu [menuItems]="menuItems" (selectMenu)="promptAction($event)" />
+</ng-template>

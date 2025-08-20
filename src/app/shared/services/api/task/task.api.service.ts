@@ -20,6 +20,10 @@ export class TaskApiService {
   //   return this.httpService.start('delete', `/tasks/${taskId}`);
   // }
 
+  patchTaskCompletion(taskId: string, completed: boolean) {
+    return this.httpService.start('patch', `/tasks/${taskId}`, { completed });
+  }
+
   getTask(taskId: string) {
     return this.httpService.start<Task>('get', `/tasks/${taskId}`);
   }

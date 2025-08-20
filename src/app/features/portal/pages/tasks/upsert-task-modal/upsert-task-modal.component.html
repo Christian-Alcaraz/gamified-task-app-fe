@@ -1,6 +1,6 @@
 @let type = data.taskType;
 
-<section appDialogTitle>
+<section appDialogTitle class="border-b">
   <h1>
     {{ data.task ? "Update" : "Add" }}
     {{ (data.taskType | titlecase) ?? "[ERR: Type not Found]" }} Task
@@ -50,28 +50,22 @@
       [props]="{ label: 'Frequency', validators: { required: true } }"
     />
   }
-
-  @if (data.task) {
-    <app-select-field
-      fcName="status"
-      [options]="statuses"
-      [props]="{ label: 'Status', validators: { required: true } }"
-    />
-  }
 </main>
 
-<footer appDialogActions class="flex flex-col gap-2 border-t">
-  <button
-    class="group cursor-pointer transition-colors duration-100 ease-burst-in-slow-out text-primary-foreground border bg-primary rounded-xl px-4 py-2 w-full hover:bg-primary/55 disabled:bg-muted/25 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:pointer-events-none"
-    (click)="submit()"
-  >
-    <p class="group-hover:text-primary-foreground text-sm">Submit</p>
-  </button>
+<footer appDialogActions class="flex items-center justify-end border-t">
+  <section class="flex items-center gap-2">
+    <button
+      class="group cursor-pointer transition-colors duration-100 ease-burst-in-slow-out text-primary-foreground border bg-primary rounded-xl px-4 py-1.5 w-full hover:bg-primary/55 disabled:bg-muted/25 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:pointer-events-none"
+      (click)="submit()"
+    >
+      <p class="group-hover:text-primary-foreground text-sm">Submit</p>
+    </button>
 
-  <button
-    class="group cursor-pointer transition-colors duration-100 ease-burst-in-slow-out text-foreground border bg-card rounded-xl px-4 py-2 w-full hover:bg-accent"
-    (click)="closeDialog()"
-  >
-    <p class="group-hover:text-accent-foreground text-sm">Close</p>
-  </button>
+    <button
+      class="group cursor-pointer transition-colors duration-100 ease-burst-in-slow-out text-foreground border bg-card rounded-xl px-4 py-1.5 w-full hover:bg-accent"
+      (click)="closeDialog()"
+    >
+      <p class="group-hover:text-accent-foreground text-sm">Close</p>
+    </button>
+  </section>
 </footer>

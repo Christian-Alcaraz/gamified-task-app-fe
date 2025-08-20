@@ -1,7 +1,7 @@
 <section class="flex flex-col w-full gap-1.5" [class.dark]="theme === 'dark'">
   @if (props.label && props.labelLoc !== "hide") {
     <p
-      class="text-[11px] text-foreground mb-1"
+      class="text-xs text-foreground mb-1"
       [ngClass]="{
         '!text-destructive': fControl.errors && fControl.dirty,
       }"

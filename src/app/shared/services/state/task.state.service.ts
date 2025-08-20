@@ -51,6 +51,8 @@ export function TodoTaskStateFactory(): TaskStateService {
   providedIn: 'root',
 })
 export class TaskStateService {
+  // Todo: Replace retry$ to refresh$ and still explore this pattern
+
   private apiService = inject(TaskApiService);
   public filterControl = new FormControl('');
 
@@ -70,7 +72,7 @@ export class TaskStateService {
   );
 
   private filter$ = this.filterControl.valueChanges.pipe(
-    map((filter) => (filter === '' ? null : filter)),
+    map((filter) => filter || null),
   );
 
   // note

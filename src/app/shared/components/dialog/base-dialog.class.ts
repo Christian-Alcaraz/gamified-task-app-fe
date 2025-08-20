@@ -18,8 +18,7 @@ export interface BaseDialogData {
   disableOutsideClose?: boolean;
 }
 
-const DIALOG_DEFAULT_CSS =
-  'bg-card w-full gap-4 shadow-lg duration-100 sm:max-w-lg';
+const DIALOG_DEFAULT_CSS = 'bg-card w-full shadow-lg duration-100 sm:max-w-lg';
 const DIALOG_CENTER_CSS =
   'relative grid justify-self-end rounded-lg min-w-[calc(45vw-3rem)] max-w-[calc(100%-2rem)] border';
 const DIALOG_LEFT_CSS =

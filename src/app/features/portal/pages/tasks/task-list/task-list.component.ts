@@ -4,10 +4,10 @@ import { Component, inject, input, model, output } from '@angular/core';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
 import { DialogOptions } from '@core/constants';
 import { Task, TaskTyping } from '@core/models/task.model';
-import { NgIcon } from '@ng-icons/core';
 import { BaseDialogData } from '@shared/components/dialog';
 import { TaskApiService } from '@shared/services/api/task/task.api.service';
 import { TaskItemComponent } from '../task-item/task-item.component';
+import { formatTaskRequestBody } from '../tasks.util';
 import { UpsertTaskModalComponent } from '../upsert-task-modal/upsert-task-modal.component';
 
 export interface TaskListFilter {
@@ -22,7 +22,7 @@ export interface TaskListProps {
 
 @Component({
   selector: 'app-task-list',
-  imports: [TaskItemComponent, NgIcon, TitleCasePipe],
+  imports: [TaskItemComponent, TitleCasePipe],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
 })
@@ -30,7 +30,7 @@ export class TaskListComponent extends ThemeAwareComponent {
   private readonly _dialog = inject(Dialog);
   private readonly _taskApiService = inject(TaskApiService);
 
-  listChange = output();
+  readonly listChange = output();
 
   readonly tasks = model.required<Task[]>();
   readonly taskType = input.required<TaskTyping>();
@@ -61,8 +61,28 @@ export class TaskListComponent extends ThemeAwareComponent {
     dialog.closed.subscribe({
       next: (task) => {
         if (task) {
+          console.log('called api method so refresh the list');
           this.listChange.emit();
         }
+      },
+    });
+  }
+
+  updateTaskCompletion(task: Task, completed: boolean, index: number) {
+    console.assert(!!task._id, 'task._id must be provided');
+
+    const body = formatTaskRequestBody({ ...task, completed });
+    this._taskApiService.updateTask(body, task._id!).subscribe({
+      next: (updatedTask) => {
+        if (updatedTask) {
+          this.tasks.update((tasks) => {
+            tasks[index] = updatedTask;
+            return tasks;
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error updating task:', error);
       },
     });
   }
