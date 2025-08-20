@@ -16,6 +16,9 @@
   --accent-foreground: oklch(0 0 0);
   --destructive: oklch(0.6368 0.2078 25.3313);
   --destructive-foreground: oklch(1 0 0);
+  --checkbox: var(--accent);
+  --checkbox-hover: color-mix(in oklab, var(--accent) 60%, white 30%);
+  --checkbox-foreground: oklch(0 0 0);
   --border: oklch(0 0 0);
   --input: oklch(0.5555 0 0);
   --ring: oklch(0.7853 0.1041 274.7134);
@@ -35,7 +38,8 @@
   --statbar: oklch(55.1% 0.027 264.364);
   --font-sans: DM Sans, sans-serif;
   --font-serif: DM Sans, sans-serif;
-  --font-mono: Space Mono, monospace;
+  --font-outfit: Outfit, sans-serif;
+  --font-mono: Space Mono, DM Mono, monospace;
   --radius: 1rem;
   --shadow-2xs: 0px 0px 0px 0px hsl(0 0% 10.1961% / 0.03);
   --shadow-xs: 0px 0px 0px 0px hsl(0 0% 10.1961% / 0.03);
@@ -79,6 +83,9 @@
   --accent-foreground: oklch(0 0 0);
   --destructive: oklch(0.7106 0.1661 22.2162);
   --destructive-foreground: oklch(0 0 0);
+  --checkbox: var(--accent);
+  --checkbox-hover: color-mix(in oklab, var(--accent) 30%, black 10%);
+  --checkbox-foreground: oklch(0.2455 0.0217 257.2823);
   --border: oklch(0.4459 0 0);
   --input: oklch(1 0 0);
   --ring: oklch(0.6801 0.1583 276.9349);
@@ -98,6 +105,7 @@
   --statbar: oklch(37.3% 0.034 259.733);
   --font-sans: DM Sans, sans-serif;
   --font-serif: DM Sans, sans-serif;
+  --font-outfit: Outfit, sans-serif;
   --font-mono: Space Mono, monospace;
   --radius: 1rem;
   --shadow-2xs: 0px 0px 0px 0px hsl(0 0% 10.1961% / 0.03);
@@ -158,6 +166,7 @@
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
+  --font-outfit: var(--font-outfit);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
