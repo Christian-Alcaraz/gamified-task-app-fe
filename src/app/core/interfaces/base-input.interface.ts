@@ -4,6 +4,7 @@ export interface BaseInputProps {
   fcName?: string;
   hint?: string;
   validators?: ValidatorType;
+  hideError?: boolean;
 }
 
 export interface ValidatorType {

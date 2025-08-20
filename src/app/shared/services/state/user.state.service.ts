@@ -10,15 +10,21 @@ export const StatDictionary = {
     current: 'manaCurrent',
     total: 'manaTotal',
   },
+  exp: {
+    current: 'expCurrent',
+    total: 'expTotal',
+  },
 };
 
-export type StatKey = 'hp' | 'mana';
+export type StatKey = 'hp' | 'mana' | 'exp';
 
 export interface UserState {
   hpCurrent: number;
   hpTotal: number;
   manaCurrent: number;
   manaTotal: number;
+  expCurrent: number;
+  expTotal: number;
 }
 
 @Injectable({
