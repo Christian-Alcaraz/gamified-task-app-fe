@@ -3,7 +3,6 @@ import { TitleCasePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
@@ -12,7 +11,6 @@ import {
   Task,
   TaskDifficulties,
   TaskFrequencies,
-  TaskStatus,
   TaskStatuses,
   TaskType,
   TaskTypes,
@@ -36,6 +34,7 @@ import {
   TextFieldComponent,
 } from '@shared/components/inputs';
 import { TaskApiService } from '@shared/services/api/task/task.api.service';
+import { formatTaskRequestBody } from '../tasks.util';
 
 export interface TaskDialogData extends BaseDialogData {
   task?: Task;
@@ -83,14 +82,10 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
       name: ['', Validators.required],
       description: [''],
       type: [this.data.taskType ?? '', Validators.required],
-      status: [TaskStatus.Active],
       difficulty: ['', Validators.required],
+      completed: [false],
       deadlineDate: [''],
       frequency: [''],
-      // subtaskIds: [''],
-      // userLimit: [1],
-      // userIds: [''],
-      // stat: ['', Validators.required],
     });
 
     if (this.data.task?.type === TaskType.Dailies) {
@@ -99,8 +94,6 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
     }
 
     if (this.data.task) {
-      const statusControl = this.taskForm.get('status') as FormControl;
-      statusControl.setValidators(Validators.required);
       this.taskForm.patchValue(this.data.task, { emitEvent: false });
       this.taskForm.updateValueAndValidity();
     }
@@ -110,7 +103,12 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
     this._updateStateToDirty();
     if (this.taskForm.invalid) return;
 
-    const task = this._formatTaskRequestBody(this.taskForm.getRawValue());
+    if (this.data.task && !this._didTaskChanged()) {
+      this.closeDialog();
+      return;
+    }
+
+    const task = formatTaskRequestBody(this.taskForm.getRawValue());
 
     if (this.data.task) {
       this._updateTask(task);
@@ -119,23 +117,23 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
     }
   }
 
+  private _didTaskChanged() {
+    if (!this.data.task) return;
+    const task = formatTaskRequestBody(this.taskForm.getRawValue());
+    const injectedTask = formatTaskRequestBody(
+      JSON.parse(JSON.stringify(this.data.task)),
+    );
+
+    return Object.entries(task).every(([key, value]) => {
+      return injectedTask[key] !== value;
+    });
+  }
+
   private _updateStateToDirty() {
     this.taskForm.markAllAsTouched();
     this.taskForm.markAllAsDirty();
     this.taskForm.updateValueAndValidity();
     this.inputService.triggerManualValidation();
-  }
-
-  private _formatTaskRequestBody(task: Task) {
-    const body = task;
-
-    if (task.type === TaskType.Dailies) {
-      delete body.deadlineDate;
-    } else {
-      delete body.frequency;
-    }
-
-    return body;
   }
 
   private _createTask(task: Task) {
