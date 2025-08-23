@@ -24,16 +24,22 @@
       <app-task-list
         [tasks]="dailiesStateService.state.tasks()"
         [taskType]="taskType.Dailies"
-        [props]="{ header: 'Dailies' }"
-        (listChange)="refreshList(dailiesStateService)"
+        [state]="dailiesStateService.state"
+        [props]="{ header: 'Dailies', filters: dailiesFilters }"
+        (listChanged)="refreshList(dailiesStateService)"
+        (refreshRequested)="refreshList(dailiesStateService)"
+        (queryChanged)="changeQuery($event, dailiesStateService)"
       ></app-task-list>
     </main>
     <main class="col-span-4 h-full overflow-y-hidden">
       <app-task-list
         [tasks]="todoStateService.state.tasks()"
         [taskType]="taskType.Todo"
-        [props]="{ header: 'Todo' }"
-        (listChange)="refreshList(todoStateService)"
+        [state]="todoStateService.state"
+        [props]="{ header: 'Todo', filters: todoFilters }"
+        (listChanged)="refreshList(todoStateService)"
+        (refreshRequested)="refreshList(todoStateService)"
+        (queryChanged)="changeQuery($event, todoStateService)"
       ></app-task-list>
     </main>
     <main class="col-span-4 h-full overflow-y-hidden"></main>

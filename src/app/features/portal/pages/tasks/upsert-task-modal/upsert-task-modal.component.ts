@@ -94,7 +94,10 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
     }
 
     if (this.data.task) {
-      this.taskForm.patchValue(this.data.task, { emitEvent: false });
+      let task = JSON.parse(JSON.stringify(this.data.task));
+      task = { ...task, deadlineDate: new Date(task.deadlineDate) };
+
+      this.taskForm.patchValue(task, { emitEvent: false });
       this.taskForm.updateValueAndValidity();
     }
   }
@@ -103,7 +106,7 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
     this._updateStateToDirty();
     if (this.taskForm.invalid) return;
 
-    if (this.data.task && !this._didTaskChanged()) {
+    if (this.data.task && this._isTaskSame()) {
       this.closeDialog();
       return;
     }
@@ -117,16 +120,17 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
     }
   }
 
-  private _didTaskChanged() {
-    if (!this.data.task) return;
+  private _isTaskSame() {
+    if (!this.data.task) return false;
+
     const task = formatTaskRequestBody(this.taskForm.getRawValue());
     const injectedTask = formatTaskRequestBody(
       JSON.parse(JSON.stringify(this.data.task)),
     );
 
-    return Object.entries(task).every(([key, value]) => {
-      return injectedTask[key] !== value;
-    });
+    return Object.entries(task).every(
+      ([key, value]) => injectedTask[key] === value,
+    );
   }
 
   private _updateStateToDirty() {

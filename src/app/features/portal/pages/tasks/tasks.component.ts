@@ -1,4 +1,5 @@
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
+import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { Component, inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
@@ -21,7 +22,10 @@ import { UserStateService } from '@shared/services/state/user.state.service';
 import { NgpButton } from 'ng-primitives/button';
 import { NgpMenuTrigger } from 'ng-primitives/menu';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
-import { TaskListComponent } from './task-list/task-list.component';
+import {
+  TaskListComponent,
+  TaskListFilter,
+} from './task-list/task-list.component';
 import { UpsertTaskModalComponent } from './upsert-task-modal/upsert-task-modal.component';
 
 @Component({
@@ -52,6 +56,7 @@ import { UpsertTaskModalComponent } from './upsert-task-modal/upsert-task-modal.
 export class TasksComponent extends ThemeAwareComponent implements OnDestroy {
   private readonly _userStateService = inject(UserStateService);
   private readonly _dialog = inject(Dialog);
+  private readonly _scrollStrategy = inject(ScrollStrategyOptions);
 
   readonly dailiesStateService = inject(DailiesTaskStateInstance);
   readonly todoStateService = inject(TodoTaskStateInstance);
@@ -82,6 +87,36 @@ export class TasksComponent extends ThemeAwareComponent implements OnDestroy {
     },
   ];
 
+  todoFilters: TaskListFilter[] = [
+    {
+      label: 'Active',
+      query: { completed: false },
+    },
+    {
+      label: 'Scheduled',
+      query: { completed: false, deadlineDate: 'exists' },
+    },
+    {
+      label: 'Completed',
+      query: { completed: true },
+    },
+  ];
+
+  dailiesFilters: TaskListFilter[] = [
+    {
+      label: 'All',
+      query: null,
+    },
+    {
+      label: 'Pending',
+      query: { completed: false },
+    },
+    {
+      label: 'Completed',
+      query: { completed: true },
+    },
+  ];
+
   constructor() {
     super();
 
@@ -97,9 +132,16 @@ export class TasksComponent extends ThemeAwareComponent implements OnDestroy {
     service.retry$.next();
   }
 
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  changeQuery(query: Record<string, any>, service: TaskStateService) {
+    service.query$.next(query);
+  }
+
   promptAction(action: string) {
     const type = action === 'add_dailies' ? TaskType.Dailies : TaskType.Todo;
-    this._openUpsertTaskDialog(type);
+    setTimeout(() => {
+      this._openUpsertTaskDialog(type);
+    }, 100);
   }
 
   private _openUpsertTaskDialog(taskType: TaskTyping) {
@@ -110,6 +152,7 @@ export class TasksComponent extends ThemeAwareComponent implements OnDestroy {
 
     const dialogRef = this._dialog.open(UpsertTaskModalComponent, {
       ...DialogOptions,
+      scrollStrategy: this._scrollStrategy.block(),
       data: {
         taskType,
       },

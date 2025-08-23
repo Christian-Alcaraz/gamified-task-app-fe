@@ -1,12 +1,12 @@
-import { Component, computed, input, output } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { Component, input, output } from '@angular/core';
 import { Task } from '@core/models/task.model';
 import { NgIcon } from '@ng-icons/core';
-import { BadgeComponent } from '@shared/components/badge/badge.component';
 import { Checkbox } from '@shared/components/inputs/checkbox-field/checkbox';
 
 @Component({
   selector: 'app-task-item',
-  imports: [NgIcon, BadgeComponent, Checkbox],
+  imports: [NgIcon, Checkbox, DatePipe],
   template: `
     <div
       class="grid grid-cols-12 border rounded-xl mt-2 bg-card overflow-hidden"
@@ -33,7 +33,7 @@ import { Checkbox } from '@shared/components/inputs/checkbox-field/checkbox';
           </h4>
 
           <section class="inline-flex items-center gap-2">
-            <app-badge [badgeValue]="task().difficulty!"></app-badge>
+            <ng-content select="[badges]"></ng-content>
           </section>
           <button
             class="group/more transition-colors cursor-pointer duration-150 ease-out flex items-center justify-center min-w-[32px] min-h-[32px] h-[32px] w-[32px] ml-4 rounded-sm bg-transparent hover:bg-accent"
@@ -45,29 +45,39 @@ import { Checkbox } from '@shared/components/inputs/checkbox-field/checkbox';
             ></ng-icon>
           </button>
         </div>
-        @if (task().description) {
-          <div
-            data-actions
-            class="col-span-12 flex items-center bg-foreground/10 group-hover:bg-muted border-t px-4 pt-2 pb-3"
-          >
-            <p class="text-xs text-muted-foreground">
+        <div
+          data-actions
+          class="col-span-12 flex flex-col bg-foreground/10 group-hover:bg-muted border-t"
+          [class.hidden]="!task().description && !task().deadlineDate"
+        >
+          @if (task().description) {
+            <p class="inline-block text-sm text-muted-foreground px-4 py-2">
               {{ task().description }}
             </p>
-          </div>
-        }
+          }
+
+          @if (task().deadlineDate) {
+            <p
+              class="inline-flex items-center gap-2 text-xs text-muted-foreground px-4 pt-3 pb-3"
+            >
+              <ng-icon
+                name="saxCalendar1Outline"
+                class="[&>*]:fill-foreground"
+              ></ng-icon>
+              {{ task().deadlineDate | date: 'MM/dd/yyyy' }}
+            </p>
+          }
+        </div>
       </main>
     </div>
   `,
+  standalone: true,
   styles: ``,
 })
 export class TaskItemComponent {
   readonly task = input.required<Task>();
-  readonly badgeConfig = input();
-
-  readonly resolvedConfig = computed(() => this.badgeConfig() ?? null);
 
   taskSelect = output<Task>();
   taskCompletionChange = output<boolean>();
-  // Todo: Menu Trigger for right-most button
-  // menuSelect = output();
+  // Todo: Remove badgeConfig because we used content projection in task-list instead
 }
