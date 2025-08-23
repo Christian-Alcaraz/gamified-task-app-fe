@@ -27,12 +27,12 @@ export class TaskApiService {
   getTask(taskId: string) {
     return this.httpService.start<Task>('get', `/tasks/${taskId}`);
   }
-
-  getTasks(type?: TaskTyping) {
-    let query = {};
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getTasks(type?: TaskTyping, query?: Record<string, any>) {
+    query = query ?? {};
 
     if (type) {
-      query = { type };
+      query = { ...query, type };
     }
 
     return this.httpService.start<Task[]>('get', '/tasks', {}, query);
