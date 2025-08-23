@@ -14,6 +14,7 @@ import {
   map,
   merge,
   Observable,
+  retry,
   shareReplay,
   startWith,
   Subject,
@@ -21,11 +22,12 @@ import {
 } from 'rxjs';
 import { TaskApiService } from '../api/task/task.api.service';
 
+export type TaskStateStatus = 'loading' | 'success' | 'error';
 export interface TasksState {
   tasks: Signal<Task[]>;
   filter: Signal<string | null>;
   error: Signal<string | null>;
-  state: Signal<'loading' | 'success' | 'error'>;
+  status: Signal<TaskStateStatus>;
 }
 
 export const DailiesTaskStateInstance = new InjectionToken<TaskStateService>(
@@ -44,6 +46,7 @@ export function DailiesTaskStateFactory(): TaskStateService {
 export function TodoTaskStateFactory(): TaskStateService {
   const service = new TaskStateService();
   service.taskType$.next(TaskType.Todo);
+  service.query$.next({ completed: false });
   return service;
 }
 
@@ -59,17 +62,30 @@ export class TaskStateService {
   // sources
   public retry$ = new Subject<void>();
   public taskType$ = new Subject<string>();
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public query$ = new Subject<Record<string, any>>();
   private error$ = new Subject<Error>();
 
+  /* eslint-disable */
   private tasks$: Observable<Task[]> = combineLatest([
     this.taskType$,
+    this.query$.pipe(startWith({})),
     this.retry$.pipe(startWith(null)),
   ]).pipe(
-    switchMap(([taskType]) =>
-      this.apiService.getTasks(taskType as TaskTyping).pipe(startWith([])),
+    switchMap(([taskType, taskQuery]) =>
+      this.apiService.getTasks(taskType as TaskTyping, taskQuery as any).pipe(
+        retry({
+          delay: (error) => {
+            this.error$.next(error);
+            return this.retry$;
+          },
+        }),
+        startWith([]),
+      ),
     ),
     shareReplay({ bufferSize: 1, refCount: true }),
   );
+  /* eslint-enable */
 
   private filter$ = this.filterControl.valueChanges.pipe(
     map((filter) => filter || null),
@@ -97,11 +113,13 @@ export class TaskStateService {
   private filteredTasks = computed(() => {
     const filter = this.filter();
 
-    return filter
-      ? this.tasks().filter((task) =>
-          task.name!.toLowerCase().includes(filter.toLowerCase()),
-        )
-      : this.tasks();
+    if (!filter) {
+      return this.tasks();
+    }
+
+    return this.tasks().filter((task) =>
+      task.name!.toLowerCase().includes(filter.toLowerCase()),
+    );
   });
 
   // state
@@ -109,6 +127,6 @@ export class TaskStateService {
     tasks: this.filteredTasks,
     filter: this.filter,
     error: this.error,
-    state: this.status,
+    status: this.status,
   };
 }
