@@ -7,18 +7,18 @@ import { BaseApiService } from '../base-api.class';
   providedIn: 'root',
 })
 export class AuthService extends BaseApiService {
-  private readonly url = `/auth`;
+  private readonly url = `${this.baseUrl}/auth`;
   private readonly http = inject(HttpClient);
   /* eslint-disable */
   login(email: string, password: string) {
-    return this.http.post<any>(`${this.baseUrl}${this.url}/login`, {
+    return this.http.post<any>(`${this.url}/login`, {
       email,
       password,
     });
   }
 
   register(email: string, password: string) {
-    return this.http.post<any>(`${this.baseUrl}${this.url}/register`, {
+    return this.http.post<any>(`${this.url}/register`, {
       email,
       password,
     });

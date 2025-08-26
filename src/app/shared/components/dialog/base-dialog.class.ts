@@ -15,7 +15,7 @@ type DialogPositionType =
 export interface BaseDialogData {
   class?: string;
   position?: DialogPositionType; // 'center' | 'left' | 'right';
-  disableOutsideClose?: boolean;
+  disableBackdropClose?: boolean;
 }
 
 const DIALOG_DEFAULT_CSS = 'bg-card w-full shadow-lg duration-100 sm:max-w-lg';
@@ -71,8 +71,8 @@ export abstract class BaseDialog<T = any | BaseDialogData> {
   private backdropClickEffect = effect(() => {
     if (this.backdropClick()) {
       //eslint-disable-next-line
-      const disableOutsideClose = !!(this.data as any)?.disableOutsideClose;
-      if (disableOutsideClose) return;
+      const disableBackdropClose = !!(this.data as any)?.disableBackdropClose;
+      if (disableBackdropClose) return;
       this.closeDialog();
     }
   });

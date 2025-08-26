@@ -7,25 +7,28 @@ import { HttpService } from '@shared/services/http/http.service';
 })
 export class TaskApiService {
   private readonly httpService = inject(HttpService);
+  private readonly url = '/tasks';
 
   createTask(task: Task) {
-    return this.httpService.start<Task>('post', '/tasks', task);
+    return this.httpService.start<Task>('post', this.url, task);
   }
 
   updateTask(task: Task, taskId: string) {
-    return this.httpService.start<Task>('put', `/tasks/${taskId}`, task);
+    return this.httpService.start<Task>('put', `${this.url}/${taskId}`, task);
   }
 
   // deleteTask(taskId: string) {
-  //   return this.httpService.start('delete', `/tasks/${taskId}`);
+  //   return this.httpService.start('delete', `${this.url}/${taskId}`);
   // }
 
   patchTaskCompletion(taskId: string, completed: boolean) {
-    return this.httpService.start('patch', `/tasks/${taskId}`, { completed });
+    return this.httpService.start('patch', `${this.url}/${taskId}`, {
+      completed,
+    });
   }
 
   getTask(taskId: string) {
-    return this.httpService.start<Task>('get', `/tasks/${taskId}`);
+    return this.httpService.start<Task>('get', `${this.url}/${taskId}`);
   }
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
   getTasks(type?: TaskTyping, query?: Record<string, any>) {
@@ -35,6 +38,6 @@ export class TaskApiService {
       query = { ...query, type };
     }
 
-    return this.httpService.start<Task[]>('get', '/tasks', {}, query);
+    return this.httpService.start<Task[]>('get', this.url, {}, query);
   }
 }

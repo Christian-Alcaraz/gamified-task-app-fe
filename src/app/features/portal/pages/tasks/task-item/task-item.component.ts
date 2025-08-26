@@ -64,7 +64,7 @@ import { Checkbox } from '@shared/components/inputs/checkbox-field/checkbox';
                 name="saxCalendar1Outline"
                 class="[&>*]:fill-foreground"
               ></ng-icon>
-              {{ task().deadlineDate | date: 'MM/dd/yyyy' }}
+              {{ task().deadlineDate | date: 'MMMM dd, yyyy' }}
             </p>
           }
         </div>
