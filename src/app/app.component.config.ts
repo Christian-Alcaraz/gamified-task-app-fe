@@ -20,6 +20,7 @@ import * as heroIconsSolid from '@ng-icons/heroicons/solid';
 import * as iconSaxBold from '@ng-icons/iconsax/bold';
 import * as iconSaxBulk from '@ng-icons/iconsax/bulk';
 import * as iconSaxOutline from '@ng-icons/iconsax/outline';
+import { UserStateService } from '@shared/services/state/user.state.service';
 
 const compiledIcons = {
   ...iconSaxBold,
@@ -44,5 +45,6 @@ export const appConfig: ApplicationConfig = {
       },
       withContentSecurityPolicy(),
     ),
+    UserStateService,
   ],
 };

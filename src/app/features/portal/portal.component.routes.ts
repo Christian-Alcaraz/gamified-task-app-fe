@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
 import { PortalComponent } from './portal.component';
+import { portalGuard } from './portal.guard';
 
 export const routes: Routes = [
   {
     path: '',
     component: PortalComponent,
+    canActivate: [portalGuard],
     children: [
       {
         path: 'tasks',

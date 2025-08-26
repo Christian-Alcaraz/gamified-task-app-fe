@@ -11,6 +11,7 @@ import { Token } from '@core/constants';
 import { PasswordFieldComponent } from '@shared/components/inputs';
 import { TextFieldComponent } from '@shared/components/inputs/text-field/text-field.component';
 import { ApiService } from '@shared/services/api';
+import { UserStateService } from '@shared/services/state/user.state.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -23,6 +24,7 @@ export class LoginComponent extends ThemeAwareComponent {
   private readonly _formBuilder = inject(FormBuilder);
   private readonly _router = inject(Router);
   private readonly _authApi = inject(ApiService).auth;
+  private readonly _userStateService = inject(UserStateService);
   private readonly enviroment = environment.ENVIRONMENT_NAME;
   private readonly email = environment.EMAIL;
   private readonly password = environment.PASSWORD;
@@ -57,6 +59,8 @@ export class LoginComponent extends ThemeAwareComponent {
     this._authApi.login(email, password).subscribe({
       next: (user) => {
         localStorage.setItem(Token.Auth, user.token);
+        this._userStateService.setUserState(user);
+
         this._router.navigate(['hub']);
       },
       error: (err) => {
