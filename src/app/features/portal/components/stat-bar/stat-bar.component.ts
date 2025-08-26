@@ -1,14 +1,13 @@
-import { Component, inject, input, OnInit } from '@angular/core';
-import {
-  StatKey,
-  UserStateService,
-} from '@shared/services/state/user.state.service';
+import { Component, inject, input } from '@angular/core';
+import { UserStateService } from '@shared/services/state/user.state.service';
 
 export interface StatBarProps {
   bgColorTailwindCss?: string;
   prefix?: string;
   heightPx?: string | number;
   showStatsNumber?: boolean;
+  currentKey: string;
+  totalKey: string;
 }
 
 @Component({
@@ -17,8 +16,7 @@ export interface StatBarProps {
   templateUrl: './stat-bar.component.html',
   styleUrl: './stat-bar.component.scss',
 })
-export class StatBarComponent implements OnInit {
-  statCursor = input<StatKey>();
+export class StatBarComponent {
   props = input<StatBarProps>();
 
   /**
@@ -30,18 +28,18 @@ export class StatBarComponent implements OnInit {
   //eslint-disable-next-line
   readonly userState = inject(UserStateService).userState as any;
 
-  currentStr!: string;
-  totalStr!: string;
-
-  ngOnInit(): void {
-    this.currentStr = this.statCursor() + 'Current';
-    this.totalStr = this.statCursor() + 'Total';
-  }
-
   getFontRatio(heightPx: string | number) {
+    const FONT_RATIO = 0.675;
+    let height = 24;
+
     if (typeof heightPx === 'string') {
-      heightPx = parseInt(heightPx);
+      height = parseInt(heightPx);
+    } else if (typeof heightPx === 'number') {
+      height = heightPx;
+    } else {
+      console.error('heightPx must be a string or number. returned 24');
     }
-    return heightPx * 0.675;
+
+    return height * FONT_RATIO;
   }
 }
