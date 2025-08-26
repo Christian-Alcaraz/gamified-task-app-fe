@@ -11,8 +11,8 @@
         class="z-2 select-none"
         [style.font-size.px]="getFontRatio(props()?.heightPx ?? 24)"
       >
-        {{ userState()?.[currentStr]! ?? "???" }}/{{
-          userState()?.[totalStr] ?? "???"
+        {{ userState()?.[props()?.currentKey!] ?? "???" }}/{{
+          userState()?.[props()?.totalKey!] ?? "???"
         }}
       </p>
     }
@@ -20,7 +20,7 @@
     <div
       class="block absolute top-0 left-0 rounded-sm"
       [class]="props()!.bgColorTailwindCss ?? ''"
-      [style.width.%]="userState()?.[currentStr]! ?? 0"
+      [style.width.%]="userState()?.[props()?.currentKey!] ?? 0"
       [style.height.px]="props()?.heightPx ?? 24"
     ></div>
   </span>

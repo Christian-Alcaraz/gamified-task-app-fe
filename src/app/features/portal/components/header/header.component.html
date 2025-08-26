@@ -11,18 +11,32 @@
       </nav-item>
     }
   </nav>
-  <button
-    class="bg-secondary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-secondary/85 mr-4"
-    (click)="toggleTheme()"
-  >
-    Toggle Theme
-  </button>
+  <div class="flex items-center gap-1.5">
+    <button
+      class="bg-secondary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-secondary/85 mr-4"
+      (click)="openCharacterCreationDialog()"
+    >
+      Update Profile
+    </button>
+    <button
+      class="bg-secondary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-secondary/85 mr-4"
+      (click)="toggleTheme()"
+    >
+      Toggle Theme
+    </button>
+  </div>
 </main>
 
 <section class="flex items-center px-4 mt-4">
-  <div class="w-[128px] h-[128px] border border-foreground text-foreground">
-    Character Pic
-  </div>
+  <img
+    class="block border border-foreground text-foreground"
+    [src]="userState()?.character?.imageUrl"
+    height="128"
+    width="128"
+    alt="Character Pic"
+    placeholder="images/avatar_placeholder.png"
+    priority
+  />
   <div class="w-[calc(100vw*0.15)] flex flex-col justify-center ml-4 gap-2">
     <app-stat-bar
       statCursor="hp"
@@ -30,6 +44,8 @@
         bgColorTailwindCss: 'bg-rose-500',
         heightPx: 18,
         prefix: 'HP',
+        currentKey: 'hpCurrent',
+        totalKey: 'hpTotal',
       }"
     ></app-stat-bar>
     <app-stat-bar
@@ -38,6 +54,8 @@
         bgColorTailwindCss: 'bg-blue-500',
         heightPx: 18,
         prefix: 'MP',
+        currentKey: 'manaCurrent',
+        totalKey: 'manaTotal',
       }"
     ></app-stat-bar>
     <app-stat-bar
@@ -46,6 +64,8 @@
         bgColorTailwindCss: 'bg-emerald-500',
         heightPx: 18,
         prefix: 'EXP',
+        currentKey: 'expCurrent',
+        totalKey: 'expTotal',
       }"
     ></app-stat-bar>
   </div>
