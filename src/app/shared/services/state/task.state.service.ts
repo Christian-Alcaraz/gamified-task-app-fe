@@ -10,7 +10,6 @@ import { FormControl } from '@angular/forms';
 import { Task, TaskType, TaskTyping } from '@core/models/task.model';
 import {
   combineLatest,
-  filter,
   map,
   merge,
   Observable,
@@ -93,11 +92,10 @@ export class TaskStateService {
 
   // note
   private status$ = merge(
-    this.tasks$.pipe(
-      filter((task) => task.length > 0),
-      map(() => 'success' as const),
+    this.tasks$.pipe(map(() => 'success' as const)),
+    merge(this.taskType$, this.retry$, this.query$).pipe(
+      map(() => 'loading' as const),
     ),
-    merge(this.taskType$, this.retry$).pipe(map(() => 'loading' as const)),
     this.error$.pipe(map(() => 'error' as const)),
   );
 
