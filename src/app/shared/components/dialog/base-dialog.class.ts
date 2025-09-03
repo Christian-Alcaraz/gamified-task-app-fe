@@ -68,14 +68,17 @@ export abstract class BaseDialog<T = any | BaseDialogData> {
   });
 
   private readonly backdropClick = toSignal(this.dialogRef.backdropClick);
-  private backdropClickEffect = effect(() => {
-    if (this.backdropClick()) {
-      //eslint-disable-next-line
-      const disableBackdropClose = !!(this.data as any)?.disableBackdropClose;
-      if (disableBackdropClose) return;
-      this.closeDialog();
-    }
-  });
+
+  constructor() {
+    effect(() => {
+      if (this.backdropClick()) {
+        //eslint-disable-next-line
+        const disableBackdropClose = !!(this.data as any)?.disableBackdropClose;
+        if (disableBackdropClose) return;
+        this.closeDialog();
+      }
+    });
+  }
 
   get position() {
     //eslint-disable-next-line
