@@ -27,16 +27,19 @@
   </div>
 </main>
 
-<section class="flex items-center px-4 mt-4">
-  <img
-    class="block border border-foreground text-foreground"
-    [src]="userState()?.character?.imageUrl"
-    height="128"
-    width="128"
-    alt="Character Pic"
-    placeholder="images/avatar_placeholder.png"
-    priority
-  />
+<section class="flex items-center px-5 mt-4">
+  <div class="flex flex-col items-center gap-1">
+    <img
+      class="block border border-foreground text-foreground"
+      [src]="userState()?.character?.imageUrl"
+      height="128"
+      width="128"
+      alt="Character Pic"
+      placeholder="images/avatar_placeholder.png"
+      priority
+    />
+    <p class="text-foreground">{{ userState()?.character?.name }}</p>
+  </div>
   <div class="w-[calc(100vw*0.15)] flex flex-col justify-center ml-4 gap-2">
     <app-stat-bar
       statCursor="hp"
@@ -44,8 +47,8 @@
         bgColorTailwindCss: 'bg-rose-500',
         heightPx: 18,
         prefix: 'HP',
-        currentKey: 'hpCurrent',
-        totalKey: 'hpTotal',
+        currentKey: 'health',
+        totalKey: 'maxHealth',
       }"
     ></app-stat-bar>
     <app-stat-bar
@@ -54,8 +57,8 @@
         bgColorTailwindCss: 'bg-blue-500',
         heightPx: 18,
         prefix: 'MP',
-        currentKey: 'manaCurrent',
-        totalKey: 'manaTotal',
+        currentKey: 'mana',
+        totalKey: 'maxMana',
       }"
     ></app-stat-bar>
     <app-stat-bar
@@ -64,8 +67,8 @@
         bgColorTailwindCss: 'bg-emerald-500',
         heightPx: 18,
         prefix: 'EXP',
-        currentKey: 'expCurrent',
-        totalKey: 'expTotal',
+        currentKey: 'experience',
+        totalKey: 'toNextLevel',
       }"
     ></app-stat-bar>
   </div>
