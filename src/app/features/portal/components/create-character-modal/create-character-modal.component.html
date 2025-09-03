@@ -1,0 +1,105 @@
+<section appDialogTitle>
+  <h1>Create your character</h1>
+  <p>Your adventure awaits!</p>
+</section>
+
+<main
+  appDialogContent
+  class="flex flex-col max-h-[40vh] overflow-y-auto styled-scrollbars px-6 gap-6 pb-3"
+>
+  <section class="flex flex-col gap-2">
+    <h2 class="text-foreground mr-2">Select your Gender:</h2>
+    <div class="flex items-center gap-1.5">
+      @for (gender of genders; track $index) {
+        <button
+          class="cursor-pointer transition-colors duration-100 ease-burst-in-slow-out border px-4 py-1.5 rounded-xl hover:bg-accent hover:text-accent-foreground disabled:bg-muted/25 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:pointer-events-none active:bg-accent/75"
+          [ngClass]="{
+            'bg-primary text-primary-foreground': selectedGender() === gender,
+            'text-foreground': selectedGender() !== gender,
+          }"
+          (click)="selectedGender.set(gender)"
+        >
+          {{ gender | titlecase }}
+        </button>
+      }
+    </div>
+  </section>
+
+  <section>
+    <h2 class="text-foreground">Select your Class:</h2>
+    <div class="grid grid-cols-4 gap-2 mt-1.5">
+      @for (gender of genders; track $index) {
+        @for (class of heroClasses; track $index) {
+          <button
+            class="group cursor-pointer transition-colors duration-100 ease-burst-in-slow-out flex flex-col items-center justify-center gap-2.5 p-1 rounded hover:bg-accent active:bg-accent/75"
+            [hidden]="gender !== selectedGender()"
+            [ngClass]="{
+              'bg-primary ': selectedClass() === class,
+            }"
+            (click)="selectedClass.set(class)"
+          >
+            <img
+              ngSrc="images/{{ gender }}_{{ class }}.png"
+              width="256"
+              height="256"
+              loading="lazy"
+              alt="{{ gender }} {{ class }}"
+            />
+            <h2
+              class="text-foreground pb-1.5 select-none group-hover:text-accent-foreground"
+              [ngClass]="{
+                'text-primary-foreground': selectedClass() === class,
+                'text-foreground': selectedClass() !== class,
+              }"
+            >
+              {{ class | titlecase }}
+            </h2>
+          </button>
+        }
+      }
+    </div>
+  </section>
+
+  <section>
+    <h2 class="text-foreground">Enter your Character's Name:</h2>
+    <div class="flex gap-1.5 mt-2">
+      <div class="flex flex-col">
+        <input
+          type="text"
+          class="text-foreground min-w-[256px] text-xs placeholder:text-input py-2 px-3 transition-all duration-75 ease-[cubic-bezier(0.95,0.05,0.795,0.035)] rounded-xl w-full border outline-primary hover:outline-2 hover:outline-offset-2 focus:outline-2 focus:outline-offset-2"
+          [ngClass]="{
+            'border-destructive hover:outline-destructive focus:outline-destructive':
+              isNameTaken(),
+          }"
+          [(ngModel)]="characterName"
+        />
+        @if (isNameTaken()) {
+          <p class="text-xs text-destructive pt-0.5 pl-1">Name already taken</p>
+        }
+      </div>
+      <button
+        class="bg-secondary text-secondary-foreground h-[34px] rounded-xl text-sm py-2 px-4 cursor-pointer hover:bg-secondary/85 active:bg-secondary/75 disabled:bg-muted/25 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:pointer-events-none"
+        (click)="verifyCharacterName()"
+        [disabled]="!characterValue()"
+        [attr.aria-disabled]="!characterValue()"
+      >
+        Verify Name
+      </button>
+    </div>
+  </section>
+</main>
+
+<footer appDialogActions class="flex items-center justify-end border-t">
+  <section>
+    <button
+      class="group cursor-pointer transition-colors duration-100 ease-burst-in-slow-out text-primary-foreground border bg-primary rounded-xl px-8 py-2 w-full hover:bg-primary/55 disabled:bg-muted/25 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:pointer-events-none"
+      [disabled]="!enableSubmit()"
+      [attr.aria-disabled]="!enableSubmit()"
+      (click)="submit()"
+    >
+      <p class="group-hover:text-primary-foreground text-sm">
+        Create Character
+      </p>
+    </button>
+  </section>
+</footer>

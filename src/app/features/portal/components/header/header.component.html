@@ -1,0 +1,75 @@
+<main class="flex items-center justify-between bg-primary/80 py-2 px-16">
+  <nav class="flex items-center justify-around">
+    @for (nav of navItems; track $index) {
+      <nav-item
+        class="transition-colors duration-75 ease-delay-in-burst text-foreground text-lg select-none cursor-pointer px-3 py-1.5 font-medium rounded-md tracking-[0.048rem]"
+        [routerLink]="nav.route"
+        routerLinkActive="bg-primary "
+        (click)="selectNav(nav)"
+      >
+        {{ nav.label | titlecase }}
+      </nav-item>
+    }
+  </nav>
+  <div class="flex items-center gap-1.5">
+    <button
+      class="bg-secondary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-secondary/85 mr-4"
+      (click)="openCharacterCreationDialog()"
+    >
+      Update Profile
+    </button>
+    <button
+      class="bg-secondary h-[2.4rem] px-4 py-1 text-black ml-auto rounded-full cursor-pointer hover:bg-secondary/85 mr-4"
+      (click)="toggleTheme()"
+    >
+      Toggle Theme
+    </button>
+  </div>
+</main>
+
+<section class="flex items-center px-5 mt-4">
+  <div class="flex flex-col items-center gap-1">
+    <img
+      class="block border border-foreground text-foreground"
+      [src]="userState()?.character?.imageUrl"
+      height="128"
+      width="128"
+      alt="Character Pic"
+      placeholder="images/avatar_placeholder.png"
+      priority
+    />
+    <p class="text-foreground">{{ userState()?.character?.name }}</p>
+  </div>
+  <div class="w-[calc(100vw*0.15)] flex flex-col justify-center ml-4 gap-2">
+    <app-stat-bar
+      statCursor="hp"
+      [props]="{
+        bgColorTailwindCss: 'bg-rose-500',
+        heightPx: 18,
+        prefix: 'HP',
+        currentKey: 'health',
+        totalKey: 'maxHealth',
+      }"
+    ></app-stat-bar>
+    <app-stat-bar
+      statCursor="mana"
+      [props]="{
+        bgColorTailwindCss: 'bg-blue-500',
+        heightPx: 18,
+        prefix: 'MP',
+        currentKey: 'mana',
+        totalKey: 'maxMana',
+      }"
+    ></app-stat-bar>
+    <app-stat-bar
+      statCursor="exp"
+      [props]="{
+        bgColorTailwindCss: 'bg-emerald-500',
+        heightPx: 18,
+        prefix: 'EXP',
+        currentKey: 'experience',
+        totalKey: 'toNextLevel',
+      }"
+    ></app-stat-bar>
+  </div>
+</section>

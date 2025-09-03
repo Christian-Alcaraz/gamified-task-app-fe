@@ -1,0 +1,51 @@
+<main class="h-full bg-background" [class.dark]="theme() === 'dark'">
+  <section class="flex items-center justify-center gap-2 px-4 pt-4">
+    <section class="w-[calc(100vw*0.25)]" [formGroup]="searchTaskForm">
+      <app-text-field
+        fcName="text"
+        [props]="{ type: 'text', placeholder: 'Search Task' }"
+      ></app-text-field>
+    </section>
+    <button
+      class="self-start group cursor-pointer border transition-colors h-[34px] duration-100 ease-in-out bg-primary text-sm px-4 py-1 rounded-full inline-flex items-center gap-1 text-primary-foreground hover:text-primary-foreground/65 hover:bg-primary/85 active:bg-primary/75"
+      [ngpMenuTrigger]="menu"
+      ngpButton
+    >
+      <ng-icon
+        name="saxAddOutline"
+        class="[&>*]:fill-primary-foreground group-hover:[&>*]:fill-primary-foreground/65"
+      ></ng-icon>
+      Add Task
+    </button>
+  </section>
+
+  <section class="h-[calc(100vh-20%)] grid grid-cols-12 pt-5 px-4 gap-4">
+    <main class="col-span-4 h-full overflow-y-hidden">
+      <app-task-list
+        [tasks]="dailiesStateService.state.tasks()"
+        [taskType]="taskType.Dailies"
+        [state]="dailiesStateService.state"
+        [props]="{ header: 'Dailies', filters: dailiesFilters }"
+        (listChanged)="refreshList(dailiesStateService)"
+        (refreshRequested)="refreshList(dailiesStateService)"
+        (queryChanged)="changeQuery($event, dailiesStateService)"
+      ></app-task-list>
+    </main>
+    <main class="col-span-4 h-full overflow-y-hidden">
+      <app-task-list
+        [tasks]="todoStateService.state.tasks()"
+        [taskType]="taskType.Todo"
+        [state]="todoStateService.state"
+        [props]="{ header: 'Todo', filters: todoFilters }"
+        (listChanged)="refreshList(todoStateService)"
+        (refreshRequested)="refreshList(todoStateService)"
+        (queryChanged)="changeQuery($event, todoStateService)"
+      ></app-task-list>
+    </main>
+    <main class="col-span-4 h-full overflow-y-hidden"></main>
+  </section>
+</main>
+
+<ng-template #menu>
+  <app-menu [menuItems]="menuItems" (selectMenu)="promptAction($event)" />
+</ng-template>

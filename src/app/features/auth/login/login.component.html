@@ -1,0 +1,57 @@
+<main
+  class="min-w-[55vw] w-[55vw] lg:min-w-[25vw] lg:w-[25vw] bg-card border rounded-xl shadow-xs py-12 px-10"
+  [class.dark]="theme() === 'dark'"
+>
+  <section class="flex items-center gap-2.5 pb-4">
+    <section class="pr-10">
+      <h1
+        class="text-xl font-bold tracking-wide"
+        [class.text-primary]="theme() === 'dark'"
+        [class.text-black]="theme() !== 'dark'"
+      >
+        Welcome back, achiever!
+      </h1>
+      <small class="inline-block mt-2.5 text-muted-foreground"
+        >Ready to conquer your tasks and level up your day?
+      </small>
+    </section>
+
+    <section class="ml-auto">
+      <a
+        class="text-primary hover:underline cursor-pointer"
+        tabindex="0"
+        (keypress)="navigateToSignup()"
+        (click)="navigateToSignup()"
+        >Signup</a
+      >
+    </section>
+  </section>
+
+  <section
+    class="mt-4 flex flex-col justify-center gap-2.5"
+    [formGroup]="credentialForm"
+  >
+    <app-text-field
+      fcName="email"
+      [props]="{
+        type: 'text',
+        label: 'Email',
+        validators: emailPropsValidators,
+      }"
+    ></app-text-field>
+
+    <app-password-field
+      fcName="password"
+      [props]="{ label: 'Password', validators: passwordPropsValidators }"
+    ></app-password-field>
+  </section>
+
+  <button
+    class="block mt-4 bg-primary h-[2.4rem] px-4 py-1 text-sm text-primary-foreground ml-auto rounded-full border cursor-pointer hover:bg-primary/85 disabled:bg-muted/25 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:pointer-events-none"
+    [ariaDisabled]="credentialForm.invalid || credentialForm.pristine"
+    [disabled]="credentialForm.invalid || credentialForm.pristine"
+    (click)="submit()"
+  >
+    Login
+  </button>
+</main>

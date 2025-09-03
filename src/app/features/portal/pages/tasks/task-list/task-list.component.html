@@ -1,0 +1,70 @@
+<main class="flex flex-col border rounded-sm py-2 h-full overflow-y-hidden">
+  <section class="flex items-center justify-around px-4 pb-2">
+    <h3 class="inline-block flex-1 py-1 text-foreground">
+      {{ props()?.header ?? "No Header Found" }}
+    </h3>
+
+    <section class="flex items-center py-1 text-foreground text-sm gap-4">
+      @for (filter of filters(); track $index) {
+        <button
+          class="py-0.5 px-1.5 border-b-2 -mb-1 cursor-pointer transition-colors duration-100 ease-in-out hover:text-accent"
+          [ngClass]="{
+            'border-primary': selectedFilter === $index,
+            'border-transparent': selectedFilter !== $index,
+          }"
+          (click)="selectFilter(filter, $index)"
+        >
+          {{ filter.label }}
+        </button>
+      }
+    </section>
+  </section>
+
+  <section
+    class="flex-1 border-t overflow-y-auto will-change-scroll min-h-[0] gap-2 px-4 pb-3 styled-scrollbars transition-all duration-[50ms] ease-burst-in-slow-out"
+  >
+    @if (state().status() === "success" || state().status() === "loading") {
+      @for (task of tasks(); track task._id) {
+        <app-task-item
+          [task]="task"
+          (taskSelect)="openTaskModal($event)"
+          (taskCompletionChange)="updateTaskCompletion(task, $event)"
+        >
+          <div badges>
+            <app-badge
+              [badgeValue]="task.difficulty!"
+              [badgeClassificationConfig]="tempStatusBadgeConfig"
+            ></app-badge>
+          </div>
+        </app-task-item>
+      } @empty {
+        <div
+          class="flex flex-col items-center justify-center px-4 pt-[25%] pb-5 mt-2 select-none"
+        >
+          <h4 class="inline-block text-foreground text-center mt-8">
+            No {{ taskType() | titlecase }} Available
+          </h4>
+          <p class="inline-block text-sm text-muted-foreground/75">
+            Add a new {{ taskType() | titlecase }}
+          </p>
+        </div>
+      }
+    }
+
+    @if (state().status() === "error") {
+      <div
+        class="flex flex-col items-center justify-center px-4 pt-[25%] gap-2 pb-5 mt-2 select-none"
+      >
+        <h4 class="inline-block text-foreground text-center mt-8">
+          {{ state().error() ?? "Something went wrong..." }}
+        </h4>
+        <button
+          class="cursor pointer inline-block text-muted-foreground text-sm text-center hover:underline hover:text-accent active:text-accent/75"
+          (click)="refreshRequested.emit()"
+        >
+          Click here to refresh
+        </button>
+      </div>
+    }
+  </section>
+</main>

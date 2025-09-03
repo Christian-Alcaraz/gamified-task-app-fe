@@ -1,0 +1,25 @@
+<p class="grid grid-cols-12 items-center gap-2 text-foreground">
+  <span class="col-span-2 text-sm w-fit"
+    >{{ props()!.prefix ?? "Unknown Stat" }}:</span
+  >
+  <span
+    class="inline-flex relative col-span-10 border items-center justify-center bg-statbar text-foreground w-full rounded-sm shadow-sm overflow-hidden"
+    [style.height.px]="props()?.heightPx ?? 24"
+  >
+    @if (props()?.showStatsNumber ?? true) {
+      <p
+        class="z-2 select-none"
+        [style.font-size.px]="getFontRatio(props()?.heightPx ?? 24)"
+      >
+        {{ statCurrent() }}/{{ statMax() }}
+      </p>
+    }
+
+    <div
+      class="block absolute top-0 left-0 rounded-sm"
+      [class]="props()!.bgColorTailwindCss ?? ''"
+      [style.width.%]="(statCurrent() / statMax()) * 100"
+      [style.height.px]="props()?.heightPx ?? 24"
+    ></div>
+  </span>
+</p>
