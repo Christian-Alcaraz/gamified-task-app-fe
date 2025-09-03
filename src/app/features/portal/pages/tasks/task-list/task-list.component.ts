@@ -15,8 +15,8 @@ import { BadgeComponent } from '@shared/components/badge/badge.component';
 import { BaseDialogData } from '@shared/components/dialog';
 import { TaskApiService } from '@shared/services/api/task/task.api.service';
 import { TasksState } from '@shared/services/state/task.state.service';
+import { UserStateService } from '@shared/services/state/user.state.service';
 import { TaskItemComponent } from '../task-item/task-item.component';
-import { formatTaskRequestBody } from '../tasks.util';
 import { UpsertTaskModalComponent } from '../upsert-task-modal/upsert-task-modal.component';
 
 export interface TaskListQueryFilter {
@@ -43,6 +43,7 @@ export interface TaskListProps {
 })
 export class TaskListComponent extends ThemeAwareComponent {
   private readonly _dialog = inject(Dialog);
+  private readonly _userStateService = inject(UserStateService);
   private readonly _taskApiService = inject(TaskApiService);
 
   readonly listChanged = output();
@@ -97,11 +98,13 @@ export class TaskListComponent extends ThemeAwareComponent {
 
   updateTaskCompletion(task: Task, completed: boolean) {
     console.assert(!!task._id, 'task._id must be provided');
+    if (!task._id) return;
 
-    const body = formatTaskRequestBody({ ...task, completed });
-    this._taskApiService.updateTask(body, task._id!).subscribe({
-      next: (updatedTask) => {
-        if (updatedTask) {
+    const taskId = task._id;
+    this._taskApiService.putTaskCompletion(taskId, completed).subscribe({
+      next: (updatedUser) => {
+        if (updatedUser) {
+          this._userStateService.setUserState(updatedUser);
           this.listChanged.emit();
         }
       },
