@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { UserStateService } from '@shared/services/state/user.state.service';
 
 export interface StatBarProps {
@@ -26,7 +26,19 @@ export class StatBarComponent {
    */
 
   //eslint-disable-next-line
-  readonly userState = inject(UserStateService).userState as any;
+  private userState = inject(UserStateService).userState as any;
+
+  statCurrent = computed(() => {
+    const currentKey = this.props()?.currentKey ?? 'unknown';
+    const currentStats = this.userState()?.stats?.[currentKey] ?? 0;
+    return Math.floor(currentStats);
+  });
+
+  statMax = computed(() => {
+    const totalKey = this.props()?.totalKey ?? 'unknown';
+    const totalStats = this.userState()?.stats?.[totalKey] ?? 0;
+    return Math.floor(totalStats);
+  });
 
   getFontRatio(heightPx: string | number) {
     const FONT_RATIO = 0.675;
