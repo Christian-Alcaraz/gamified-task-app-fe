@@ -21,10 +21,13 @@ export class TaskApiService {
   //   return this.httpService.start('delete', `${this.url}/${taskId}`);
   // }
 
-  patchTaskCompletion(taskId: string, completed: boolean) {
-    return this.httpService.start('patch', `${this.url}/${taskId}`, {
-      completed,
-    });
+  putTaskCompletion(taskId: string, completed: boolean) {
+    const scoreState = completed ? 'up' : 'down';
+
+    return this.httpService.start(
+      'put',
+      `${this.url}/${taskId}/score/${scoreState}`,
+    );
   }
 
   getTask(taskId: string) {
