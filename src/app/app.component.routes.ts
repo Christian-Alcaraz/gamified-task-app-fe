@@ -12,6 +12,13 @@ export const routes: Routes = [
       import('./features/auth/auth.component.routes').then((m) => m.routes),
   },
   {
+    path: 'admin',
+    loadChildren: () =>
+      import('./features/admin-portal/admin-portal.routes').then(
+        (m) => m.routes,
+      ),
+  },
+  {
     path: 'hub',
     loadChildren: () =>
       import('./features/portal/portal.component.routes').then((m) => m.routes),

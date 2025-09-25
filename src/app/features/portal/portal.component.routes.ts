@@ -13,11 +13,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/tasks/tasks.component').then((m) => m.TasksComponent),
       },
-      {
-        path: 'party',
-        loadComponent: () =>
-          import('./pages/party/party.component').then((m) => m.PartyComponent),
-      },
+      // {
+      //   path: 'party',
+      //   loadComponent: () =>
+      //     import('./pages/party/party.component').then((m) => m.PartyComponent),
+      // },
       {
         path: '',
         redirectTo: 'tasks',

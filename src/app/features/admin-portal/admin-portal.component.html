@@ -1,0 +1,28 @@
+<main
+  class="flex h-full bg-background overflow-auto"
+  style="--sidebar-width: calc(100vw * 0.2)"
+  [class.dark]="theme() === 'dark'"
+>
+  <div
+    class="col-span-2 transition-[width] relative duration-200"
+    [ngClass]="{
+      'w-0 pointers-events-none -z-10 opacity-0': !showSidenav(),
+      'w-[var(--sidebar-width)] px-4 py-2': showSidenav(),
+    }"
+  >
+    <app-sidenav
+      class="block relative top-0 min-w-[calc(var(--sidebar-width)-2rem)] max-w-[calc(var(--sidebar-width)-2rem)] w-[calc(var(--sidebar-width)-2rem)] transition-[transform] duration-200"
+      [ngClass]="{
+        '-translate-x-100': !showSidenav(),
+      }"
+    ></app-sidenav>
+  </div>
+
+  <div class="w-full flex flex-col z-10 bg-background">
+    <app-header></app-header>
+
+    <section class="p-4">
+      <router-outlet></router-outlet>
+    </section>
+  </div>
+</main>

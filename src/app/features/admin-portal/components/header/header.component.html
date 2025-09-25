@@ -1,0 +1,14 @@
+<main class="flex items-center gap-4">
+  <button
+    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:stroke-foreground [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground hover:[&_svg]:stroke-accent-foreground h-7 w-7 -ml-1 cursor-pointer"
+    (click)="toggleSidenav()"
+  >
+    <ng-icon [name]="toggleIcon()"></ng-icon>
+  </button>
+
+  <div class="h-full border-r"></div>
+
+  <p class="text-foreground text-base font-medium">
+    {{ routeTitle() | titlecase }}
+  </p>
+</main>

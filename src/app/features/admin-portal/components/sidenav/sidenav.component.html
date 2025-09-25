@@ -1,0 +1,76 @@
+<main class="flex flex-col px-2">
+  <section class="pt-2 pb-10 flex flex-col text-center">
+    <p class="block text-foreground font-medium text-xl">Task Quest</p>
+    <p class="block text-muted-foreground -mt-1.5!">Admin Portal</p>
+  </section>
+
+  <section class="flex flex-col gap-2">
+    <h2 class="text-sm tracking-wide text-muted-foreground">Navigations</h2>
+
+    <div
+      class="flex flex-col gap-2 max-h-[calc(100vh*0.75)] w-full overflow-y-auto bg-background styled-scrollbars"
+    >
+      @for (nav of sidenavItems; track $index) {
+        <button
+          class="group grid grid-cols-6 py-2 w-full rounded-md cursor-pointer hover:bg-accent"
+          [class.bg-primary]="activeNav() === nav.route"
+          [class.text-primary-foreground]="activeNav() === nav.route"
+          (click)="selectRoute(nav)"
+        >
+          <ng-icon
+            [name]="nav.icon"
+            class="block col-span-1 w-6 h-6 justify-self-center [&>svg]:text-foreground group-hover:[&>svg]:text-accent-foreground"
+          ></ng-icon>
+          <p
+            class="block pl-1 justify-self-start place-self-center col-span-5 text-foreground text-sm font-medium group-hover:text-accent-foreground"
+          >
+            {{ nav.title }}
+          </p>
+        </button>
+      }
+    </div>
+
+    <div class="flex flex-col gap-2 pt-2 border-t">
+      <button
+        class="group grid grid-cols-6 py-2 w-full rounded-md cursor-pointer hover:bg-accent"
+        (click)="navigateToApp()"
+      >
+        <ng-icon
+          name="heroTv"
+          class="block col-span-1 w-6 h-6 justify-self-center [&>svg]:text-foreground group-hover:[&>svg]:text-accent-foreground"
+        ></ng-icon>
+        <p
+          class="block pl-1 justify-self-start place-self-center col-span-5 text-foreground text-sm font-medium group-hover:text-accent-foreground"
+        >
+          Return to Application
+        </p>
+      </button>
+      <button
+        class="group grid grid-cols-6 py-2 w-full rounded-md cursor-pointer hover:bg-accent"
+      >
+        <ng-icon
+          name="heroAdjustmentsHorizontal"
+          class="block col-span-1 w-6 h-6 justify-self-center [&>svg]:text-foreground group-hover:[&>svg]:text-accent-foreground"
+        ></ng-icon>
+        <p
+          class="block pl-1 justify-self-start place-self-center col-span-5 text-foreground text-sm font-medium group-hover:text-accent-foreground"
+        >
+          Settings
+        </p>
+      </button>
+      <button
+        class="group grid grid-cols-6 py-2 w-full rounded-md cursor-pointer hover:bg-accent"
+      >
+        <ng-icon
+          name="heroPower"
+          class="block col-span-1 w-6 h-6 justify-self-center [&>svg]:text-foreground group-hover:[&>svg]:text-accent-foreground"
+        ></ng-icon>
+        <p
+          class="block pl-1 justify-self-start place-self-center col-span-5 text-foreground text-sm font-medium group-hover:text-accent-foreground"
+        >
+          Logout
+        </p>
+      </button>
+    </div>
+  </section>
+</main>
