@@ -8,4 +8,4 @@ export const Color = {
 
 export const Colors = Object.keys(Color);
 
-export type ColorType = (typeof Color)[keyof typeof Color];
+export type ColorTyping = (typeof Color)[keyof typeof Color];

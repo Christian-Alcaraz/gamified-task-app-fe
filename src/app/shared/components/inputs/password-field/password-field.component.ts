@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SizeType } from '@core/constants';
+import { SizeTyping } from '@core/constants';
 import { BaseInputProps } from '@core/interfaces/base-input.interface';
 import { NgIcon } from '@ng-icons/core';
 import { ThemeService } from '@shared/services/theme/theme.service';
@@ -19,7 +19,7 @@ type LabelLocation = 'top' | 'hide';
 
 export interface PasswordFieldProps extends BaseInputProps {
   labelLoc?: LabelLocation;
-  size?: SizeType;
+  size?: SizeTyping;
   hideError?: boolean;
 }
 

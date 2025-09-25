@@ -4,7 +4,7 @@ import { CommonModule, TitleCasePipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
-import { DialogOptions } from '@core/constants';
+import { Const, DialogOptions } from '@core/constants';
 import { User } from '@core/models';
 import { UserStateService } from '@shared/services/state/user.state.service';
 import { CreateCharacterModalComponent } from '../create-character-modal/create-character-modal.component';
@@ -31,16 +31,7 @@ export class HeaderComponent extends ThemeAwareComponent {
   private readonly _scrollStrategy = inject(ScrollStrategyOptions);
   private readonly _userStateService = inject(UserStateService);
   readonly userState = this._userStateService.userState;
-  readonly navItems = [
-    {
-      label: 'Tasks',
-      route: '/hub/tasks',
-    },
-    {
-      label: 'Party',
-      route: '/hub/party',
-    },
-  ];
+  readonly navItems = Const.NavItems;
 
   selectedNavItem: Record<string, string> = this.navItems[0];
   imgUrl = signal('images/avatar_placeholder.png');

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SizeType } from '@core/constants';
+import { SizeTyping } from '@core/constants';
 import { BaseInputProps } from '@core/interfaces/base-input.interface';
 import { ThemeService } from '@shared/services/theme/theme.service';
 import { BaseInput } from '../base-input.class';
@@ -13,7 +13,7 @@ type TextFieldType = 'text' | 'number' | 'email';
 export interface TextFieldProps extends BaseInputProps {
   type: TextFieldType;
   labelLoc?: LabelLocation;
-  size?: SizeType;
+  size?: SizeTyping;
   hideError?: boolean;
 }
 

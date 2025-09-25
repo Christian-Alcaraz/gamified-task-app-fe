@@ -1,6 +1,4 @@
-import { StatusTyping } from '@core/constants/status.constant';
-
-export type UserTyping = 'User' | 'Admin';
+import { StatusTyping, UserTyping } from '@core/constants';
 
 export interface UserFlags {
   hasCreatedCharacter: boolean;
@@ -16,8 +14,12 @@ export interface UserEquipment {
   face?: string;
   body?: string;
   accessories?: string;
-  mainHand?: string;
-  offHand?: string;
+  mainhand?: string;
+  offhand?: string;
+  necklace?: string;
+  ring?: string;
+  bracelet?: string;
+  amulet?: string;
 }
 
 export interface UserStats {
@@ -65,7 +67,7 @@ export interface UserCharacter {
 export class User {
   _id?: string;
   email?: string;
-  userType?: UserTyping;
+  UserTyping?: UserTyping;
   status?: StatusTyping;
   createdAt?: Date;
   updatedAt?: Date;

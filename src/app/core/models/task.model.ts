@@ -72,7 +72,6 @@ export class Task {
 
   createdAt?: Date;
   updatedAt?: Date;
-  __v?: number;
 
   constructor(model: Partial<Task> = {}) {
     Object.assign(this, model);

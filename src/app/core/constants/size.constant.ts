@@ -7,5 +7,4 @@ export const Size = {
 };
 
 export const Sizes = Object.keys(Size);
-
-export type SizeType = (typeof Size)[keyof typeof Size];
+export type SizeTyping = (typeof Size)[keyof typeof Size];

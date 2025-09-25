@@ -38,7 +38,12 @@
       placeholder="images/avatar_placeholder.png"
       priority
     />
-    <p class="text-foreground">{{ userState()?.character?.name }}</p>
+    <p class="text-foreground text-center">
+      {{ userState()?.character?.name }}
+    </p>
+    <p class="text-muted-foreground text-center text-sm inline-block -mt-1.5!">
+      Lvl: {{ userState()?.stats?.level }}
+    </p>
   </div>
   <div class="w-[calc(100vw*0.15)] flex flex-col justify-center ml-4 gap-2">
     <app-stat-bar
