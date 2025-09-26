@@ -1,0 +1,111 @@
+<section class="mb-4 grid grid-cols-12">
+  <div class="col-span-6">
+    <div class="border rounded">
+      <input
+        type="text"
+        placeholder="Search in table..."
+        class="w-full bg-transparent px-4 py-2 text-sm outline-none placeholder:text-foreground/50"
+      />
+    </div>
+  </div>
+  <div class="col-span-6 flex justify-end gap-2">
+    <button
+      class="flex items-center [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 gap-2 rounded border bg-foreground/5 px-4 py-1 text-sm font-medium text-foreground hover:bg-primary/90 cursor-pointer"
+      [ngpMenuTrigger]="viewMenu"
+      ngpButton
+    >
+      <span class="inline-flex items-center justify-center"
+        ><ng-icon name="saxSetting4Bold"></ng-icon
+      ></span>
+      <p class="inline-block">View</p>
+    </button>
+
+    <button
+      class="rounded bg-primary px-4 py-1 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+    >
+      Add Item
+    </button>
+  </div>
+</section>
+
+<section class="border text-foreground rounded">
+  <table class="w-full">
+    <thead class="border-b text-base font-medium">
+      @for (headerGroup of table.getHeaderGroups(); track headerGroup.id) {
+        <tr>
+          @for (header of headerGroup.headers; track header.id) {
+            @if (!header.isPlaceholder) {
+              <th class="px-4 py-2 text-left text-sm font-medium">
+                <button
+                  class="flex items-center justify-center gap-1 rounded px-2 py-1 text-sm -ml-2.5 font-medium text-foreground select-none"
+                  [ngClass]="{
+                    'cursor-pointer select-none hover:bg-primary/90 active:bg-primary/75':
+                      header.column.getCanSort(),
+                    'pointers-event-none': !header.column.getCanSort(),
+                  }"
+                  (click)="sortColumnByHeader(header.column)"
+                >
+                  <ng-container
+                    *flexRender="
+                      header.column.columnDef.header;
+                      props: header.getContext();
+                      let headerContext
+                    "
+                  >
+                    <p>{{ headerContext }}</p>
+                    <span class="inline-flex items-center justify-center">
+                      @if (header.column.getCanSort()) {
+                        <ng-icon name="heroChevronUpDown"></ng-icon>
+                      }
+                    </span>
+                  </ng-container>
+                </button>
+              </th>
+            }
+          }
+        </tr>
+      }
+    </thead>
+
+    @if (table.getRowModel().rows.length > 0) {
+      <tbody class="divide-y divide-border">
+        @for (row of table.getRowModel().rows; track row.id) {
+          <tr>
+            @for (cell of row.getVisibleCells(); track cell.id) {
+              <td class="px-4 py-2 align-middle">
+                <ng-container
+                  *flexRender="
+                    cell.column.columnDef.cell;
+                    props: cell.getContext();
+                    let cell
+                  "
+                >
+                  <span class="inline-flex">{{ cell | titlecase }}</span>
+                </ng-container>
+              </td>
+            }
+          </tr>
+        } @empty {
+          <td class="px-4 py-2"></td>
+        }
+      </tbody>
+    } @else {
+      <tbody>
+        <tr>
+          <td class="px-4 py-2 text-center" colspan="100%">No data found.</td>
+        </tr>
+      </tbody>
+    }
+
+    <tfoot></tfoot>
+  </table>
+
+  <div class="h-1"></div>
+</section>
+
+<ng-template #viewMenu>
+  <app-table-drop-menu
+    [menuItems]="viewMenuItems"
+    (selectMenu)="viewMenuItemSelected($event)"
+  ></app-table-drop-menu>
+</ng-template>
