@@ -1,10 +1,11 @@
 import { Component, HostBinding, inject, input, output } from '@angular/core';
 import { ThemeService } from '@shared/services/theme/theme.service';
+import { Column } from '@tanstack/angular-table';
 import { NgpMenu, NgpMenuItem } from 'ng-primitives/menu';
 
 export interface MenuItem {
   label: string;
-  action: string;
+  action: string | Column<unknown>;
   icon?: string;
   iconPlacement?: 'prefix' | 'suffix';
 }
@@ -18,7 +19,7 @@ export interface MenuItem {
         <button
           ngpMenuItem
           class="inline-flex px-2 py-1 text-sm rounded-sm transition-colors duration-75 ease-in-out items-center cursor-pointer justify-start text-card-foreground hover:bg-accent hover:text-accent-foreground"
-          (click)="selectMenu.emit(item.action)"
+          (click)="menuSelected(item)"
         >
           {{ item.label }}
         </button>
@@ -61,7 +62,8 @@ export interface MenuItem {
 export class MenuComponent {
   readonly theme = inject(ThemeService).theme();
   menuItems = input.required<MenuItem[]>();
-  selectMenu = output<string>();
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  selectMenu = output<any>();
 
   @HostBinding('class')
   readonly class = this.getCss();
@@ -70,5 +72,15 @@ export class MenuComponent {
     const theme = this.theme === 'dark' ? ' dark' : '';
 
     return `fixed flex flex-col w-max bg-card border shadow rounded-md p-1${theme}`;
+  }
+
+  menuSelected(item: MenuItem) {
+    const { action } = item;
+
+    if (typeof action === 'string') {
+      this.selectMenu.emit(action);
+    } else {
+      this.selectMenu.emit(action as Column<unknown>);
+    }
   }
 }
