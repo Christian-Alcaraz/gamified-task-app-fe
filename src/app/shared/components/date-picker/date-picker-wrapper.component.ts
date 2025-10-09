@@ -72,18 +72,11 @@ export class DatePickerComponent extends BaseInput implements OnInit {
 
   displayControl = new FormControl('');
 
-  get showError(): boolean {
-    return this.props?.hideError
-      ? false
-      : !!this.fControl.errors &&
-          (this.fControl.dirty || this.fControl.touched);
+  override get hideErrorProps(): boolean {
+    return !!this.props?.hideError;
   }
-
-  get showHint(): boolean {
-    return (
-      !!this.props?.hint &&
-      (this.fControl.pristine ? true : !this.fControl.errors)
-    );
+  override get hintProps(): boolean {
+    return !!this.props?.hint;
   }
 
   ngOnInit(): void {

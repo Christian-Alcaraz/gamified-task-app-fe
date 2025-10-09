@@ -4,24 +4,32 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SizeTyping } from '@core/constants';
 import { BaseInputProps } from '@core/interfaces/base-input.interface';
 import { ThemeService } from '@shared/services/theme/theme.service';
+import { provideNgxMask } from 'ngx-mask';
 import { BaseInput } from '../base-input.class';
 import { InputErrorComponent } from '../input-error/input-error.component';
+import { NumberInputDirective } from './number-input.directive';
 
 type LabelLocation = 'top' | 'hide';
-type TextFieldType = 'text' | 'number' | 'email';
+type TextFieldType = 'text' | 'number' | 'email' | 'currency';
 
 export interface TextFieldProps extends BaseInputProps {
   type: TextFieldType;
   labelLoc?: LabelLocation;
   size?: SizeTyping;
   hideError?: boolean;
+  // mask?: string; //Todo: ngx-mask is finicky as hell
 }
 
-// Todo: Enhancement Show Error after user is done typing or onBlur
-
+const NUMBER_MAX_VALUE = 999999999999;
 @Component({
   selector: 'app-text-field',
-  imports: [CommonModule, ReactiveFormsModule, InputErrorComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    InputErrorComponent,
+    NumberInputDirective,
+  ],
+  providers: [provideNgxMask()],
   standalone: true,
   templateUrl: './text-field.component.html',
   styleUrl: './text-field.component.scss',
@@ -33,31 +41,44 @@ export class TextFieldComponent extends BaseInput implements OnInit {
 
   readonly theme = inject(ThemeService).theme();
 
+  inputType = 'text';
+
   ngOnInit(): void {
-    this.fcName = this.fcName ?? this.props.fcName;
+    this.fcName = this.fcName ?? this.props?.fcName;
     this.initFormControl(this.fcName, this.props?.validators);
 
-    if (this.props.type === 'number' && this.fControl) {
+    this.evaluateInputType();
+
+    if (this.props?.type === 'number' && this.fControl) {
       this.fControl.valueChanges.subscribe((value) => {
         if (value === '') {
           this.fControl.setValue(null, { emitEvent: false });
         } else if (!isNaN(value)) {
-          this.fControl.setValue(Number(value), { emitEvent: false });
+          // ! Error: Number has max value in js
+          // * Bandaid fix number input max with 999999999999
+          this.fControl.setValue(
+            Number(value) > NUMBER_MAX_VALUE ? NUMBER_MAX_VALUE : Number(value),
+            { emitEvent: false },
+          );
         }
       });
     }
   }
 
-  get showError(): boolean {
-    return this.props?.hideError
-      ? false
-      : !!this.fControl.errors &&
-          (this.fControl.dirty || this.fControl.touched);
+  override get hideErrorProps(): boolean {
+    return !!this.props?.hideError;
+  }
+  override get hintProps(): boolean {
+    return !!this.props?.hint;
   }
 
-  get showHint() {
-    return (
-      this.props.hint && (this.fControl.pristine ? true : !this.fControl.errors)
-    );
+  private evaluateInputType() {
+    if (this.props.type === 'number' || this.props.type === 'text') {
+      this.inputType = 'text';
+    }
+
+    if (this.props.type === 'email') {
+      this.inputType = 'email';
+    }
   }
 }

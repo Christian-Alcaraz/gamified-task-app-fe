@@ -18,6 +18,13 @@ export class CheckboxComponent extends BaseInput implements OnInit {
 
   readonly theme = inject(ThemeService).theme();
 
+  override get hideErrorProps(): boolean {
+    return !!this.props?.hideError;
+  }
+  override get hintProps(): boolean {
+    return !!this.props?.hint;
+  }
+
   ngOnInit(): void {
     this.fcName = this.fcName ?? this.props.fcName;
     console.assert(!!this.fcName, 'fcName must be provided');

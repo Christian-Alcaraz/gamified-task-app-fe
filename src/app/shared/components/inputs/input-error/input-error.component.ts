@@ -40,9 +40,9 @@ export class InputErrorComponent implements OnInit, OnDestroy {
     const errorList: any = {
       required: 'is required',
       email: 'is invalid format',
-      max: 'has exceeded max number',
+      max: 'has exceeded max value (max: {value})',
       maxlength: 'has exceeded max length',
-      min: 'has exceeded min number',
+      min: 'has exceeded min value (min: {value})',
       minlength: 'has exceeded min length',
       invalidenumvalue: 'must be valid',
       nan: 'must be a number',
@@ -54,6 +54,7 @@ export class InputErrorComponent implements OnInit, OnDestroy {
       hasUppercase: 'must have atleast 1 uppercase letter',
       hasLowercase: 'must have atleast 1 lowercase letter',
       hasNumeric: 'must have atleast 1 number',
+      mask: 'is invalid format',
     };
 
     if (this.fControl?.errors) {
@@ -63,10 +64,15 @@ export class InputErrorComponent implements OnInit, OnDestroy {
       let firstErrorMessage = errorList[firstErrorKey];
 
       if (firstErrorMessage?.includes('{value}')) {
+        const { value, options } = this._getReplacementValueOpts(
+          firstErrorKey,
+          firstErrorValue,
+        );
+
         firstErrorMessage = this._utilService.string.replacePlaceholders(
           firstErrorMessage,
-          { value: firstErrorValue },
-          { toCapitalize: true },
+          { value },
+          options,
         );
       }
 
@@ -78,6 +84,31 @@ export class InputErrorComponent implements OnInit, OnDestroy {
       );
     }
   }
+
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  private _getReplacementValueOpts(
+    errorKey: string,
+    errorValue: any,
+  ): { value: any; options?: any } {
+    const opts = {} as any;
+
+    switch (errorKey) {
+      case 'mustMatchWithControl': {
+        opts['value'] = errorValue;
+        opts['options'] = { toCapitalize: true };
+        break;
+      }
+    }
+
+    if (typeof errorValue === 'object') {
+      opts['value'] = errorValue[errorKey];
+    } else {
+      opts['value'] = errorValue;
+    }
+
+    return opts;
+  }
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   ngOnDestroy(): void {
     this.destroy$.next();

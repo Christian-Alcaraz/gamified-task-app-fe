@@ -19,12 +19,21 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { BaseInputProps } from '@core/interfaces/base-input.interface';
 import { NgIcon } from '@ng-icons/core';
 import { ThemeService } from '@shared/services/theme/theme.service';
-import { UtilService } from '@shared/services/util/util.service';
 import { startWith, Subject, takeUntil } from 'rxjs';
 import { BaseInput } from '../base-input.class';
 import { InputErrorComponent } from '../input-error/input-error.component';
+
+export type OptionItem<T> = string | T;
+export interface SelectFieldProps extends BaseInputProps {
+  labelLoc?: 'hide' | 'top';
+  labelKey?: string;
+  searchPlaceholder?: string;
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  searchFn?: <T = any>(item: OptionItem<T>) => OptionItem<T>;
+}
 @Component({
   selector: 'app-select-field',
   imports: [CommonModule, ReactiveFormsModule, InputErrorComponent, NgIcon],
@@ -40,7 +49,7 @@ export class SelectFieldComponent
   triggerInput!: ElementRef<HTMLInputElement>;
 
   /* eslint-disable */
-  @Input() props!: any;
+  @Input() props!: SelectFieldProps;
   @Input() fcName!: string;
   @Input() options!: any[];
   @Input() disabled = false;
@@ -50,7 +59,6 @@ export class SelectFieldComponent
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly focusTrapFactory = inject(FocusTrapFactory);
-  private readonly utilString = inject(UtilService).string;
 
   private destroyed$ = new Subject<void>();
   private resizeObserver?: ResizeObserver;
@@ -65,21 +73,13 @@ export class SelectFieldComponent
 
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
   filteredOptions!: any[];
-
   isDropdownOpen = signal(false);
 
-  get showError(): boolean {
-    return this.props?.hideError
-      ? false
-      : !!this.fControl.errors &&
-          (this.fControl.dirty || this.fControl.touched);
+  override get hideErrorProps(): boolean {
+    return !!this.props?.hideError;
   }
-
-  get showHint(): boolean {
-    return (
-      this.props?.hint &&
-      (this.fControl.pristine ? true : !this.fControl.errors)
-    );
+  override get hintProps(): boolean {
+    return !!this.props?.hint;
   }
 
   openDropdown() {
@@ -162,6 +162,12 @@ export class SelectFieldComponent
     this.fcName = this.fcName ?? this.props.fcName;
     this.initFormControl(this.fcName as string, this.props.validators);
 
+    if (this.disabled) {
+      this.fControl.disable();
+    } else {
+      this.fControl.enable();
+    }
+
     this.setDisplayValue();
 
     this.fControl.valueChanges
@@ -177,14 +183,14 @@ export class SelectFieldComponent
       });
   }
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
-  displayWith(option: any) {
+  displayWith(option: any): string {
     let displayStr = option;
 
     if (typeof option === 'object') {
-      const key = this.props.displayKey ?? 'label';
+      const key = this.props.labelKey ?? 'label';
       displayStr = option[key];
     }
-    return displayStr ? this.utilString.toTitleCase(displayStr) : '';
+    return displayStr ?? '';
   }
 
   private setDisplayValue() {
@@ -195,10 +201,6 @@ export class SelectFieldComponent
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _searchFn(value: any) {
     if (this.props.searchFn) {
-      console.assert(
-        typeof this.props.searchFn === 'function',
-        'searchFn must be a function',
-      );
       this.filteredOptions = this.props.searchFn(value);
     } else {
       this.filteredOptions = this.options.filter((opt) =>
@@ -213,8 +215,7 @@ export class SelectFieldComponent
     if (!this.overlayRef) return;
     const parentWidth =
       this.triggerInput.nativeElement.parentElement?.offsetWidth || 0;
-    const overlayPane = this.overlayRef.overlayElement;
-    overlayPane.style.width = `${parentWidth}px`;
+    this.overlayRef.overlayElement.style.width = `${parentWidth}px`;
   }
 
   private startResizeTracking() {

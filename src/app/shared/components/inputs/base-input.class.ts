@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import {
   ControlContainer,
+  FormArray,
   FormControl,
   FormGroup,
   Validators,
@@ -13,14 +14,20 @@ import {
   valueMustMatchWithControlName,
 } from '@shared/validators/custom-validators';
 
-export class BaseInput {
-  protected fControl!: FormControl;
+type FormType = FormControl | FormArray;
+
+export abstract class BaseInput {
+  protected fControl!: FormType;
   protected fGroup!: FormGroup;
+  //Todo: Try to make a shadow property for this; create private getter function so we lessen the boilerplate of overrides
+  abstract get hideErrorProps(): boolean;
+  abstract get hintProps(): boolean;
   private readonly _controlContainer = inject(ControlContainer);
+  private _props: any; //eslint-disable-line @typescript-eslint/no-explicit-any
 
   protected initFormControl(fcName: string, validators?: Validators) {
     this.fGroup = this._controlContainer.control as FormGroup;
-    this.fControl = this.fGroup.get(fcName) as FormControl;
+    this.fControl = this.fGroup.get(fcName) as FormType;
 
     if (!this.fControl) {
       throw new Error(`${fcName} is not a valid form control`);
@@ -29,6 +36,29 @@ export class BaseInput {
     if (validators) {
       this._setFormValidators(validators);
     }
+  }
+
+  get fControlAsFA(): FormArray | null {
+    if (this.fControl instanceof FormArray) return this.fControl;
+    return null;
+  }
+
+  get fControlAsFC(): FormControl | null {
+    if (this.fControl instanceof FormControl) return this.fControl;
+    return null;
+  }
+
+  get showError(): boolean {
+    return this.hideErrorProps
+      ? false
+      : !!this.fControl.errors &&
+          (this.fControl.dirty || this.fControl.touched);
+  }
+
+  get showHint(): boolean {
+    return (
+      this.hintProps && (this.fControl.pristine ? true : !this.fControl.errors)
+    );
   }
 
   private _setFormValidators(validators: ValidatorType): void {
@@ -55,8 +85,7 @@ export class BaseInput {
         case 'email':
           requirements.push(Validators.email);
           break;
-        case 'mustMatchWithControl':
-          //eslint-disable-next-line no-case-declarations
+        case 'mustMatchWithControl': {
           const matchingFormControl = this.fGroup.get(
             value as string,
           ) as FormControl;
@@ -64,7 +93,8 @@ export class BaseInput {
           requirements.push(
             valueMustMatchWithControlName(matchingFormControl, value as string),
           );
-          break;
+          return;
+        }
         case 'atleastHasOneUppercase':
           requirements.push(atleastHasOneUppercase);
           break;

@@ -41,14 +41,16 @@
     </button>
   </div>
   <div class="flex items-center pb-1">
-    <app-input-error
-      [ngClass]="{ visible: showError, invisible: !showError }"
-      [fControl]="fControl"
-      [labelProps]="props.label"
-    ></app-input-error>
+    @if (fControlAsFC) {
+      <app-input-error
+        [ngClass]="{ visible: showError, invisible: !showError }"
+        [fControl]="fControlAsFC"
+        [labelProps]="props.label"
+      />
+    }
 
     @if (showHint) {
-      <small class="text-xs text-muted-foreground">{{ props?.hint }}</small>
+      <small class="text-xs text-muted-foreground">{{ props.hint }}</small>
     }
   </div>
 </section>
@@ -82,34 +84,36 @@
         </button>
       }
     </div>
-    <ul
-      #listRef
-      class="px-1.5 py-2 max-h-[200px] min-h-[0] overflow-y-auto styled-scrollbars"
-      [ngClass]="{
-        'animate-drop-menu-in': isDropdownOpen(),
-        'animate-drop-menu-out': !isDropdownOpen(),
-      }"
-      tabindex="-1"
-    >
-      @for (option of filteredOptions; track $index) {
-        <button
-          [attr.tabindex]="0"
-          class="w-full text-left text-xs px-2 py-1 hover:bg-accent hover:text-accent-foreground rounded-xl"
-          [ngClass]="{
-            'bg-secondary text-secondary-foreground':
-              isSameWithDisplayValue(option),
-          }"
-          (click)="selectOption(option)"
-        >
-          {{ displayWith(option) }}
-        </button>
-      } @empty {
-        <button class="w-full text-center text-xs px-2 py-1 rounded-xl">
-          No results found
-        </button>
-      }
+    <div class="pb-3 px-1">
+      <ul
+        #listRef
+        class="px-1.5 py-2 max-h-[200px] min-h-[0] overflow-y-auto styled-scrollbars"
+        [ngClass]="{
+          'animate-drop-menu-in': isDropdownOpen(),
+          'animate-drop-menu-out': !isDropdownOpen(),
+        }"
+        tabindex="-1"
+      >
+        @for (option of filteredOptions; track $index) {
+          <button
+            [attr.tabindex]="0"
+            class="w-full text-left text-xs px-2 py-1 hover:bg-accent hover:text-accent-foreground rounded-xl"
+            [ngClass]="{
+              'bg-secondary text-secondary-foreground':
+                isSameWithDisplayValue(option),
+            }"
+            (click)="selectOption(option)"
+          >
+            {{ displayWith(option) | titlecase }}
+          </button>
+        } @empty {
+          <button class="w-full text-center text-xs px-2 py-1 rounded-xl">
+            No results found
+          </button>
+        }
 
-      <li *ngFor="let option of filteredOptions"></li>
-    </ul>
+        <li *ngFor="let option of filteredOptions"></li>
+      </ul>
+    </div>
   </section>
 </ng-template>

@@ -41,21 +41,15 @@ export class PasswordFieldComponent extends BaseInput implements OnInit {
     this.showPassword() ? 'saxEyeSlashOutline' : 'saxEyeOutline',
   );
 
+  override get hideErrorProps(): boolean {
+    return !!this.props?.hideError;
+  }
+  override get hintProps(): boolean {
+    return !!this.props?.hint;
+  }
+
   ngOnInit(): void {
     this.fcName = this.fcName ?? this.props.fcName;
     this.initFormControl(this.fcName, this.props?.validators);
-  }
-
-  get showError(): boolean {
-    return this.props?.hideError
-      ? false
-      : !!this.fControl.errors &&
-          (this.fControl.dirty || this.fControl.touched);
-  }
-
-  get showHint() {
-    return (
-      this.props.hint && (this.fControl.pristine ? true : !this.fControl.errors)
-    );
   }
 }
