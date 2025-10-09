@@ -2,7 +2,7 @@
 
 <section appDialogTitle class="border-b">
   <h1>
-    {{ data.task ? "Update" : "Add" }}
+    {{ !!data.task ? "Update" : "Add" }}
     {{ (data.taskType | titlecase) ?? "[ERR: Type not Found]" }} Task
   </h1>
   <p>
@@ -46,7 +46,7 @@
   @if (type === taskType.Dailies) {
     <app-select-field
       fcName="frequency"
-      [options]="frequncies"
+      [options]="frequencies"
       [props]="{ label: 'Frequency', validators: { required: true } }"
     />
   }

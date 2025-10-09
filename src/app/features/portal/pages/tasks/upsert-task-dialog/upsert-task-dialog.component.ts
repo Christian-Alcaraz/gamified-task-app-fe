@@ -16,6 +16,7 @@ import {
   TaskTypes,
   TaskTyping,
 } from '@core/models/task.model';
+import { formatTaskRequestBody } from '@features/portal/pages/tasks/tasks.util';
 import { DatePickerComponent } from '@shared/components/date-picker/date-picker-wrapper.component';
 import {
   DialogActionsDirective,
@@ -34,7 +35,6 @@ import {
   TextFieldComponent,
 } from '@shared/components/inputs';
 import { TaskApiService } from '@shared/services/api/task/task.api.service';
-import { formatTaskRequestBody } from '../tasks.util';
 
 export interface TaskDialogData extends BaseDialogData {
   task?: Task;
@@ -42,7 +42,7 @@ export interface TaskDialogData extends BaseDialogData {
 }
 
 @Component({
-  selector: 'app-upsert-task-modal',
+  selector: 'app-upsert-task-dialog',
   imports: [
     DialogTitleDirective,
     DialogContentDirective,
@@ -55,11 +55,11 @@ export interface TaskDialogData extends BaseDialogData {
     TitleCasePipe,
     ScrollingModule,
   ],
-  providers: [provideBaseDialogToken(UpsertTaskModalComponent)],
-  templateUrl: './upsert-task-modal.component.html',
-  styleUrl: './upsert-task-modal.component.scss',
+  providers: [provideBaseDialogToken(UpsertTaskDialogComponent)],
+  templateUrl: './upsert-task-dialog.component.html',
+  styleUrl: './upsert-task-dialog.component.scss',
 })
-export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
+export class UpsertTaskDialogComponent extends BaseDialog<TaskDialogData> {
   private readonly formBuilder = inject(FormBuilder);
   private readonly inputService = inject(InputService);
   private readonly taskApiService = inject(TaskApiService);
@@ -69,7 +69,7 @@ export class UpsertTaskModalComponent extends BaseDialog<TaskDialogData> {
   types = TaskTypes;
   statuses = TaskStatuses;
   difficulties = TaskDifficulties;
-  frequncies = TaskFrequencies;
+  frequencies = TaskFrequencies;
 
   /**
    * Todo: Add Number +- for User Limit; with Max Limit | Min Limit
