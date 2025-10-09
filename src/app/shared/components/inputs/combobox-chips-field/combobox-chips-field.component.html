@@ -1,0 +1,125 @@
+<div class="flex flex-col w-full gap-1.5" [class.dark]="theme === 'dark'">
+  @if (props().label && props().labelLoc !== "hide") {
+    <p
+      class="text-xs text-foreground mb-1"
+      [ngClass]="{
+        '!text-destructive': fControl.errors && fControl.dirty,
+      }"
+    >
+      {{ props().label }}
+    </p>
+  }
+  <section
+    #comboboxHost
+    #ngpComboboxRef="ngpCombobox"
+    [(ngpComboboxValue)]="value"
+    (ngpComboboxValueChange)="updateFormControlValue()"
+    (ngpComboboxOpenChange)="resetOnClose($event)"
+    ngpComboboxMultiple
+    ngpCombobox
+    [class.error]="fControl.errors && fControl.dirty"
+  >
+    @if (value().length > 0) {
+      <div class="chips-container">
+        @for (selectedOption of value(); track selectedOption; let i = $index) {
+          <div
+            class="chip"
+            #chipElement
+            [class.chip-focused]="focusedChipIndex() === i"
+          >
+            <span class="chip-text">{{
+              isObject(selectedOption)
+                ? ($any(selectedOption)[resolvedLabelKey()] | titlecase)
+                : (selectedOption | titlecase)
+            }}</span>
+            <button
+              class="chip-remove"
+              [attr.aria-label]="'Remove ' + selectedOption"
+              (click)="removeOption(selectedOption)"
+              type="button"
+            >
+              <ng-icon name="heroXMark" class="[&_svg]:size-2" />
+            </button>
+          </div>
+        }
+      </div>
+    }
+
+    <div
+      class="input-wrapper flex justify-between items-center border rounded-xl"
+    >
+      <div class="input-container">
+        <input
+          #inputElement
+          class="text-xs placeholder:text-muted-foreground py-2! px-3 outline-primary hover:outline-2 hover:outline-offset-2 focus:outline-2 focus:outline-offset-2"
+          [class.chips]="value().length > 0"
+          [value]="filter()"
+          (input)="onFilterChange($event)"
+          (keydown)="onInputKeyDown($event)"
+          (focus)="onInputFocus()"
+          [placeholder]="props().placeholder ?? 'Select an option'"
+          ngpComboboxInput
+        />
+      </div>
+      <button
+        ngpComboboxButton
+        #button="ngpComboboxButton"
+        aria-label="Toggle dropdown"
+      >
+        <ng-icon
+          name="saxArrowDown1Outline"
+          class="!flex items-center justify-center transition-transform duration-100 ease-delay-in-burst [&>svg]:fill-foreground [&>svg]:!h-4 [&>svg]:!w-4"
+        ></ng-icon>
+      </button>
+    </div>
+
+    <div
+      *ngpComboboxPortal
+      ngpComboboxDropdown
+      [class.dark]="theme === 'dark'"
+      class="rounded-xl overflow-hidden"
+    >
+      <div
+        class="flex flex-col gap-1 px-1.5 py-2 max-h-[200px] min-h-[0] overflow-y-auto styled-scrollbars"
+      >
+        @for (option of filteredOptions(); track option) {
+          <div
+            [ngpComboboxOptionValue]="option"
+            ngpComboboxOption
+            class="rounded-xl px-2 py-1"
+          >
+            <p class="text-xs">
+              {{
+                isObject(option)
+                  ? ($any(option)[resolvedLabelKey()] | titlecase)
+                  : (option | titlecase)
+              }}
+            </p>
+            @if (isSelected(option)) {
+              <ng-icon
+                name="heroCheckSolid"
+                class="flex items-center justify-center [&_svg]:size-4! h-4! w-4!"
+              />
+            }
+          </div>
+        } @empty {
+          <div class="empty-message">No options found</div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <div class="flex items-center pb-1">
+    @if (fControlAsFC) {
+      <app-input-error
+        [ngClass]="{ visible: showError, invisible: !showError }"
+        [fControl]="fControlAsFC"
+        [labelProps]="props().label"
+      ></app-input-error>
+    }
+    <!-- 
+    @if (showHint) {
+      <small class="text-xs text-muted-foreground">{{ props().hint }}</small>
+    } -->
+  </div>
+</div>

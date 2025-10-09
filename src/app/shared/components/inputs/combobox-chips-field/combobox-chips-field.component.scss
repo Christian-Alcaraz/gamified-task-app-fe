@@ -1,0 +1,217 @@
+.input-wrapper {
+  transition: all 0.15s var(--burst-in-slow-out);
+}
+
+[ngpCombobox] {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 36px;
+  background-color: transparent;
+  box-shadow: var(--shadow);
+  box-sizing: border-box;
+  outline: transparent;
+  contain: layout;
+
+  &:hover .input-wrapper {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  &.error .input-wrapper {
+    border: 1px solid var(--destructive);
+    outline: transparent !important;
+  }
+}
+
+[ngpCombobox][data-focus] .input-wrapper {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.input-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+}
+
+[ngpComboboxInput] {
+  border: none;
+  background-color: transparent;
+  color: var(--foreground);
+  font-family: inherit;
+  outline: none;
+  height: 100%;
+  width: inherit;
+}
+
+[ngpComboboxInput].chips {
+  padding-left: 16px;
+  padding-block: 8px;
+}
+
+[ngpComboboxInput]::placeholder {
+  color: var(--muted-foreground);
+}
+
+[ngpComboboxButton] {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 36px;
+  background-color: transparent;
+  border: none;
+  color: var(--foreground);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+[ngpComboboxDropdown] {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  padding: 0.25rem;
+  padding-bottom: 0.4rem;
+  margin-right: 0.25rem;
+  outline: none;
+  position: absolute;
+  animation: popover-show 0.1s ease-out;
+  width: var(--ngp-combobox-width);
+  box-shadow: var(--shadow-lg);
+  box-sizing: border-box;
+  margin-top: 4px;
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 1001;
+}
+
+[ngpComboboxDropdown][data-enter] {
+  animation: drop-menu-in 0.1s ease-out;
+}
+
+[ngpComboboxDropdown][data-exit] {
+  animation: drop-menu-out 0.1s ease-out;
+}
+
+[ngpComboboxOption] {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: var(--foreground);
+  box-sizing: border-box;
+
+  &:has(ng-icon) {
+    color: var(--secondary);
+    font-weight: bold;
+  }
+}
+
+[ngpComboboxOption][data-hover] {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+[ngpComboboxOption][data-press] {
+  background-color: var(--accent);
+}
+
+[ngpComboboxOption][data-active] {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+[ngpComboboxOption] ng-icon {
+  font-weight: bold;
+  margin-left: auto;
+}
+
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 4px 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--primary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2px 6px 2px 8px;
+  margin-bottom: 2px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--primary-foreground);
+  max-width: 200px;
+  transition: all 75ms var(--burst-in-slow-out);
+
+  &:has(.chip-remove:hover) {
+    border: 1px solid var(--destructive);
+    background: var(--muted);
+    color: var(--destructive);
+  }
+}
+
+// .chip:hover {
+//   // background-color: var(--accent);
+// }
+
+.chip-focused .chip-remove {
+  color: white;
+  background-color: var(--destructive);
+  opacity: 1;
+}
+
+.chip-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 4px;
+  user-select: none;
+}
+
+.chip-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border: none;
+  background: transparent;
+  color: var(--primary-foreground);
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+  transition: all 0.15s ease;
+  opacity: 0.6;
+}
+
+.chip-remove:hover {
+  opacity: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 16px;
+  width: 16px;
+  color: var(--destructive);
+}
+
+// .chip-remove:focus {
+//   outline: 2px solid var(--ring);
+//   outline-offset: 1px;
+// }
+
+.empty-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  text-align: center;
+}
