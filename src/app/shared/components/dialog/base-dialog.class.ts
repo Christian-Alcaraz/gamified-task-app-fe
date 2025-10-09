@@ -1,5 +1,15 @@
-import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { computed, Directive, effect, inject, signal } from '@angular/core';
+import { FocusTrap, FocusTrapFactory } from '@angular/cdk/a11y';
+import { DIALOG_DATA, DialogConfig, DialogRef } from '@angular/cdk/dialog';
+import {
+  AfterViewInit,
+  computed,
+  Directive,
+  effect,
+  ElementRef,
+  inject,
+  OnDestroy,
+  signal,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ThemeService } from '@shared/services/theme/theme.service';
 
@@ -12,34 +22,36 @@ export const BaseDialogPosition = {
 type DialogPositionType =
   (typeof BaseDialogPosition)[keyof typeof BaseDialogPosition];
 
-export interface BaseDialogData {
+export interface BaseDialogData extends DialogConfig {
   class?: string;
   position?: DialogPositionType; // 'center' | 'left' | 'right';
   disableBackdropClose?: boolean;
 }
 
-const DIALOG_DEFAULT_CSS = 'bg-card w-full shadow-lg duration-100 sm:max-w-lg';
-const DIALOG_CENTER_CSS =
-  'relative grid justify-self-end rounded-lg min-w-[calc(45vw-3rem)] max-w-[calc(100%-2rem)] border';
-const DIALOG_LEFT_CSS =
-  'absolute top-0 left-0 flex flex-col h-full max-w-[calc(100%-2rem)] border-r';
-const DIALOG_RIGHT_CSS =
-  'absolute top-0 right-0 flex flex-col h-full max-w-[calc(100%-2rem)] border-l';
+const DIALOG_DEFAULT_CSS =
+  'bg-card w-full shadow-lg duration-100 sm:max-w-lg min-w-full max-w-[calc(100%-2rem)]';
+const DIALOG_CENTER_CSS = 'relative grid justify-self-end rounded-lg border';
+const DIALOG_LEFT_CSS = 'absolute top-0 left-0 flex flex-col h-full border-r';
+const DIALOG_RIGHT_CSS = 'absolute top-0 right-0 flex flex-col h-full border-l';
 
 @Directive({
   host: {
     '[class]': 'hostCss()',
   },
 })
-//eslint-disable-next-line
-export abstract class BaseDialog<T = any | BaseDialogData> {
+export abstract class BaseDialog<T extends BaseDialogData>
+  implements AfterViewInit, OnDestroy
+{
   protected readonly dialogRef = inject(DialogRef);
-  protected readonly data = inject(DIALOG_DATA) as T;
+  protected readonly data = inject<T>(DIALOG_DATA);
   protected readonly theme = inject(ThemeService).theme();
+  private readonly focusTrapFactory = inject(FocusTrapFactory);
+  private readonly elementRef = inject(ElementRef);
+  private focusTrap!: FocusTrap;
 
   protected isClosing = signal(false);
   protected hostCss = computed(() => {
-    let css = `${this.theme === 'dark' ? 'dark ' : ''}${DIALOG_DEFAULT_CSS} `;
+    let css = `${this.theme === 'dark' ? 'dark ' : ''} ${DIALOG_DEFAULT_CSS} `;
     let openAnimationCss, closeAnimationCss;
 
     switch (this.position) {
@@ -80,14 +92,25 @@ export abstract class BaseDialog<T = any | BaseDialogData> {
     });
   }
 
+  ngAfterViewInit(): void {
+    this.focusTrap = this.focusTrapFactory.create(
+      this.elementRef.nativeElement,
+    );
+    this.focusTrap.focusInitialElement();
+  }
+
   get position() {
     //eslint-disable-next-line
     return (this.data as any)?.position ?? 'center';
   }
 
   //eslint-disable-next-line
-  closeDialog(data?: any) {
+  protected closeDialog(data?: any) {
     this.isClosing.set(true);
     setTimeout(() => this.dialogRef.close(data ?? false), 200);
+  }
+
+  ngOnDestroy(): void {
+    this.focusTrap.destroy();
   }
 }
