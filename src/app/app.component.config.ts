@@ -21,6 +21,7 @@ import * as iconSaxBold from '@ng-icons/iconsax/bold';
 import * as iconSaxBulk from '@ng-icons/iconsax/bulk';
 import * as iconSaxOutline from '@ng-icons/iconsax/outline';
 import { UserStateService } from '@shared/services/state/user.state.service';
+import { NgxMaskOptions, provideEnvironmentNgxMask } from 'ngx-mask';
 
 const compiledIcons = {
   ...iconSaxBold,
@@ -32,10 +33,12 @@ const compiledIcons = {
   ...heroIconsSolid,
 };
 
+const maskConfig: NgxMaskOptions = { validation: false };
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(),
     provideBrowserGlobalErrorListeners(),
+    provideEnvironmentNgxMask(maskConfig),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideIcons(compiledIcons),
