@@ -53,7 +53,7 @@ export function TodoTaskStateFactory(): TaskStateService {
   providedIn: 'root',
 })
 export class TaskStateService {
-  // Todo: Replace retry$ to refresh$ and still explore this pattern
+  //Todo: Replace retry$ to refresh$ and still explore this pattern
 
   private apiService = inject(TaskApiService);
   public filterControl = new FormControl('');

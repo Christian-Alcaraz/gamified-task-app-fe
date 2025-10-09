@@ -26,7 +26,7 @@ import {
   TaskListComponent,
   TaskListFilter,
 } from './task-list/task-list.component';
-import { UpsertTaskModalComponent } from './upsert-task-modal/upsert-task-modal.component';
+import { UpsertTaskDialogComponent } from './upsert-task-dialog/upsert-task-dialog.component';
 
 @Component({
   selector: 'app-tasks',
@@ -150,7 +150,7 @@ export class TasksComponent extends ThemeAwareComponent implements OnDestroy {
         ? this.dailiesStateService
         : this.todoStateService;
 
-    const dialogRef = this._dialog.open(UpsertTaskModalComponent, {
+    const dialogRef = this._dialog.open(UpsertTaskDialogComponent, {
       ...DialogOptions,
       scrollStrategy: this._scrollStrategy.block(),
       data: {

@@ -17,7 +17,7 @@ import { TaskApiService } from '@shared/services/api/task/task.api.service';
 import { TasksState } from '@shared/services/state/task.state.service';
 import { UserStateService } from '@shared/services/state/user.state.service';
 import { TaskItemComponent } from '../task-item/task-item.component';
-import { UpsertTaskModalComponent } from '../upsert-task-modal/upsert-task-modal.component';
+import { UpsertTaskDialogComponent } from '@features/portal/pages/tasks/upsert-task-dialog/upsert-task-dialog.component';
 
 export interface TaskListQueryFilter {
   completed?: boolean;
@@ -78,7 +78,7 @@ export class TaskListComponent extends ThemeAwareComponent {
 
   openTaskModal(task?: Task) {
     const dialogProps = this.props()?.dialogProps ?? {};
-    const dialog = this._dialog.open(UpsertTaskModalComponent, {
+    const dialog = this._dialog.open(UpsertTaskDialogComponent, {
       ...DialogOptions,
       data: {
         task,

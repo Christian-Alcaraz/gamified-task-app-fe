@@ -79,5 +79,4 @@ export class TaskItemComponent {
 
   taskSelect = output<Task>();
   taskCompletionChange = output<boolean>();
-  // Todo: Remove badgeConfig because we used content projection in task-list instead
 }
