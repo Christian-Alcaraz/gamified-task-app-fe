@@ -45,8 +45,6 @@ const BaseStat = {
   Dexterity: 'dexterity',
   Intelligence: 'intelligence',
   Constitution: 'constitution',
-  ...EquipmentBaseStat,
-  ...ConsumableBaseStat,
 } as const;
 
 const Type = {
@@ -89,8 +87,15 @@ const Attributes = Object.values(Attribute);
 const UsageAttributes = Object.values(UsageAttribute);
 const Types = Object.values(Type);
 const BaseStats = Object.values(BaseStat);
+const ConsumableBaseStats = Object.values(ConsumableBaseStat);
+const EquipmentBaseStats = Object.values(EquipmentBaseStat);
 const Rarities = Object.values(Rarity);
 const Sources = Object.values(Source);
+const AllBaseStats = [
+  ...BaseStats,
+  ...ConsumableBaseStats,
+  ...EquipmentBaseStats,
+];
 
 // Typings
 
@@ -111,6 +116,7 @@ export const Item = {
   Rarities,
   BaseStat,
   BaseStats,
+  AllBaseStats,
   Type,
   Types,
   TypeIndex,

@@ -16,6 +16,7 @@ const Const = {
 
 export * from './base.constant';
 export * from './color.constant';
+export * from './item.constant';
 export * from './size.constant';
 export * from './status.constant';
 export * from './token.constant';
