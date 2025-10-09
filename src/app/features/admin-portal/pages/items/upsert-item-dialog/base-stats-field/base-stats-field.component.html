@@ -1,0 +1,125 @@
+<p class="text-foreground text-xs">Base Stats</p>
+
+<section
+  #comboboxHost
+  #ngpComboboxRef="ngpCombobox"
+  [(ngpComboboxValue)]="selectedStats"
+  (ngpComboboxValueChange)="closeDropdown()"
+  (ngpComboboxOpenChange)="resetOnClose($event)"
+  ngpComboboxMultiple
+  ngpCombobox
+  [class.error]="false"
+>
+  <div
+    class="input-wrapper flex justify-between items-center border rounded-xl"
+  >
+    <div class="input-container">
+      <input
+        #inputElement
+        class="text-xs placeholder:text-muted-foreground py-2! px-3 outline-primary hover:outline-2 hover:outline-offset-2 focus:outline-2 focus:outline-offset-2 disabled:pointers-events-none"
+        [value]="filter()"
+        (input)="onFilterChange($event)"
+        (focus)="onInputFocus()"
+        [placeholder]="
+          isOptionEmpty ? 'All stats have been selected' : 'Select stat'
+        "
+        [disabled]="disabled()"
+        [attr.disabled]="disabled()"
+        ngpComboboxInput
+      />
+    </div>
+    <button
+      ngpComboboxButton
+      aria-label="Toggle dropdown"
+      [disabled]="isOptionEmpty || disabled()"
+      [ariaDisabled]="isOptionEmpty || disabled()"
+    >
+      <ng-icon
+        name="saxArrowDown1Outline"
+        class="!flex items-center justify-center transition-transform duration-100 ease-delay-in-burst [&>svg]:fill-foreground [&>svg]:!h-4 [&>svg]:!w-4"
+      ></ng-icon>
+    </button>
+  </div>
+
+  <div
+    *ngpComboboxPortal
+    ngpComboboxDropdown
+    [class.dark]="theme === 'dark'"
+    class="styled-scrollbars rounded-xl"
+  >
+    @for (option of filteredOptions(); track option) {
+      <button
+        ngpComboboxOption
+        [ngpComboboxOptionValue]="option"
+        (click)="onStatOptionSelect($event)"
+        class="w-full rounded-xl"
+      >
+        <p class="text-xs">
+          {{ option | titlecase }}
+        </p>
+        @if (isSelected(option)) {
+          <ng-icon name="heroCheckSolid" />
+        }
+      </button>
+    } @empty {
+      <div class="empty-message">No options found</div>
+    }
+  </div>
+</section>
+
+<!-- Selected Stats -->
+@if (fControlAsFA) {
+  <section
+    class="flex flex-col gap-1 px-4"
+    [class.opacity-0]="fControlAsFA.controls.length === 0"
+  >
+    @for (
+      formGroup of fControlAsFA.controls;
+      track $index;
+      let controlIndex = $index
+    ) {
+      @for (statObj of formGroup.value | keyvalue; track statObj.key) {
+        @let fcName = $any(statObj.key);
+        @let statControl = $any(formGroup.get(fcName));
+        @let showStatErrors = statControl.errors && statControl.dirty;
+        <div
+          class="grid grid-cols-12 items-center w-full rounded-xl py-2"
+          [formGroup]="$any(formGroup)"
+        >
+          <p class="col-span-2 inline-block text-xs text-foreground">
+            {{ fcName | titlecase }}
+          </p>
+          <input
+            type="text"
+            [formControlName]="fcName"
+            class="col-span-9 text-foreground text-xs placeholder:text-input py-2 px-3 transition-all duration-75 ease-[cubic-bezier(0.95,0.05,0.795,0.035)] rounded-xl w-full border outline-primary hover:outline-2 hover:outline-offset-2 focus:outline-2 focus:outline-offset-2"
+            appNumberInput
+            appNumberInputType="number"
+          />
+
+          <section class="col-span-1 flex items-center justify-center">
+            <button
+              class="flex h-5 w-5 justify-center items-center chip-remove"
+              (click)="removeStatFormGroupAt(controlIndex)"
+            >
+              <ng-icon
+                name="heroXMark"
+                class="flex items-center justify-center h-5! w-5! [&_svg]:size-5!"
+              />
+            </button>
+          </section>
+
+          <app-input-error
+            class="col-start-3 col-span-9 pt-2 [&_small]:block [&_small]:w-full"
+            [class.visible]="showStatErrors"
+            [class.h-[16px]]="showStatErrors"
+            [class.invisible]="!showStatErrors"
+            [class.h-0]="!showStatErrors"
+            [fControl]="statControl"
+            [labelProps]="fcName"
+          ></app-input-error>
+        </div>
+      }
+    }
+  </section>
+}

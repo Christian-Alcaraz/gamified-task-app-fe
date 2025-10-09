@@ -1,0 +1,80 @@
+<section appDialogTitle class="border-b select-none">
+  <h1>{{ !!data.item ? "Update" : "Add" }} Item</h1>
+  <p>You can add new items or edit your existing items here.</p>
+  <app-dialog-close-button (willClose)="closeDialog()" />
+</section>
+
+<main
+  appDialogContent
+  class="flex flex-col max-h-[35vh] overflow-y-auto styled-scrollbars px-6 pb-2.5 gap-3 antialiased"
+  [formGroup]="itemForm"
+>
+  <!-- <app-text-field fcName="name" [props]="{ label: 'Name', type: 'text' }" />
+
+  <app-text-field
+    fcName="description"
+    [props]="{ label: 'Description', type: 'text' }"
+  />
+
+  <app-select-field
+    fcName="type"
+    [options]="types"
+    [props]="{ label: 'Type' }"
+  />
+
+  <app-combobox-chips-field
+    fcName="attributes"
+    [options]="attributes"
+    [props]="{ label: 'Attributes' }"
+  ></app-combobox-chips-field>
+
+  <app-combobox-chips-field
+    fcName="usageAttributes"
+    [options]="usageAttributes"
+    [props]="{ label: 'Usage Attributes' }"
+  ></app-combobox-chips-field>
+
+  <app-combobox-chips-field
+    fcName="sources"
+    [options]="sources"
+    [props]="{ label: 'Sources', validators: { required: true } }"
+  ></app-combobox-chips-field> -->
+
+  <!-- <app-combobox-chips-field
+    fcName="baseStats"
+    [options]="allBaseStats"
+    [props]="{ label: 'Base Stats' }"
+  ></app-combobox-chips-field> -->
+
+  <app-base-stats-field
+    fcName="baseStats"
+    [baseStatsValue]="testBaseStats"
+  ></app-base-stats-field>
+
+  <!-- <app-text-field fcName="cost" [props]="{ label: 'Cost', type: 'number' }" />
+  <app-text-field
+    fcName="maxStackSize"
+    [props]="{ label: 'Max Stack Size', type: 'number' }"
+  /> -->
+  <!-- 
+  <p>Max Stack Size</p>
+  <p>Roll Ranges</p> -->
+</main>
+
+<footer appDialogActions class="flex items-center justify-end border-t">
+  <section class="flex items-center gap-2">
+    <button
+      class="group cursor-pointer transition-colors duration-100 ease-burst-in-slow-out text-primary-foreground border bg-primary rounded-xl px-4 py-1.5 w-full hover:bg-primary/55 disabled:bg-muted/25 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:pointer-events-none"
+      (click)="submit()"
+    >
+      <p class="group-hover:text-primary-foreground text-sm">Submit</p>
+    </button>
+
+    <button
+      class="group cursor-pointer transition-colors duration-100 ease-burst-in-slow-out text-foreground border bg-card rounded-xl px-4 py-1.5 w-full hover:bg-accent"
+      (click)="closeDialog()"
+    >
+      <p class="group-hover:text-accent-foreground text-sm">Close</p>
+    </button>
+  </section>
+</footer>
