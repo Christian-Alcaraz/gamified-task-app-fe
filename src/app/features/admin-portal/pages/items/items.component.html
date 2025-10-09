@@ -1,1 +1,7 @@
-<app-table class="text-foreground"></app-table>
+<app-table
+  class="text-foreground"
+  title="Items"
+  [data]="defaultData"
+  [columns]="defaultColumns"
+  (addItem)="openItemUpsertModal()"
+></app-table>
