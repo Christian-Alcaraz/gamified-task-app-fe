@@ -11,6 +11,7 @@ import {
   viewChild,
 } from '@angular/core';
 import {
+  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -23,7 +24,6 @@ import { NgIcon } from '@ng-icons/core';
 import { BaseInput, InputErrorComponent } from '@shared/components/inputs';
 import { NumberInputDirective } from '@shared/components/inputs/text-field/number-input.directive';
 import { ThemeService } from '@shared/services/theme/theme.service';
-import { UtilService } from '@shared/services/util/util.service';
 import {
   NgpCombobox,
   NgpComboboxButton,
@@ -64,10 +64,7 @@ export class BaseStatsFieldComponent
   extends BaseInput
   implements OnInit, OnDestroy
 {
-  /* eslint-disable */
-
   // ** Services
-  private readonly util = inject(UtilService);
   private readonly formBuilder = inject(FormBuilder);
   readonly theme = inject(ThemeService).theme();
   readonly hostCss = `flex flex-col w-full gap-1.5 ${this.theme === 'dark' ? 'dark ' : ''}`;
@@ -84,17 +81,15 @@ export class BaseStatsFieldComponent
 
   // * States
   private readonly destroyed$ = new Subject<void>();
-  readonly selectedStats = signal<any[]>([]);
+  readonly selectedStats = signal<string[]>([]);
   readonly filter = signal<string>('');
 
   readonly filteredOptions = computed(() => {
-    const nonSelectedStats = BASE_STATS.filter(
+    const remainingStats = BASE_STATS.filter(
       (option) => !this.selectedStats().includes(option),
     );
-
-    if (!this.filter()) return nonSelectedStats;
-
-    return nonSelectedStats.filter((option) => option.includes(this.filter()));
+    if (!this.filter()) return remainingStats;
+    return remainingStats.filter((option) => option.includes(this.filter()));
   });
 
   get isOptionEmpty(): boolean {
@@ -120,12 +115,11 @@ export class BaseStatsFieldComponent
     this.initFormControl(fcName, this.props()?.validators);
 
     const getStatFilters = [];
-    if (this.baseStatsValue()) {
+    if (this.fControlAsFA && this.baseStatsValue()) {
       for (const stat of this.baseStatsValue()) {
         const statName = Object.keys(stat)[0] as string;
-        const formGroup = this.setupStatFormGroup(stat);
-        this.fControlAsFA?.push(formGroup);
         getStatFilters.push(statName);
+        this.addNewStatFormGroup(stat, this.fControlAsFA);
       }
 
       if (getStatFilters.length > 0) {
@@ -139,7 +133,7 @@ export class BaseStatsFieldComponent
     this.destroyed$.complete();
   }
 
-  isSelected(option: any): boolean {
+  isSelected(option: string): boolean {
     return this.selectedStats().includes(option);
   }
 
@@ -148,25 +142,9 @@ export class BaseStatsFieldComponent
     this.filter.set(input.value);
   }
 
-  onStatOptionSelect(event: MouseEvent) {
-    if (!event || !event.target || !this.fControlAsFA) return;
-
-    const button = event.target as HTMLButtonElement;
-    const statName = button.textContent?.trim().toLowerCase() as string;
-    const statObj = { [statName]: null } as unknown as Record<string, number>;
-    const formGroup = this.setupStatFormGroup(statObj);
-
-    this.fControlAsFA.push(formGroup, { emitEvent: false });
-    this.fControlAsFA.updateValueAndValidity({ emitEvent: false });
-
-    // this.baseStatsfControlAsFA.push(formGroup, { emitEvent: false });
-    // this.baseStatsfControlAsFA.updateValueAndValidity({ emitEvent: false });
-  }
-
   removeStatFormGroupAt(controlIndex: number): void {
     if (!this.fControlAsFA) return;
 
-    // const statObj = this.baseStatsfControlAsFA.at(controlIndex).getRawValue();
     const statObj = this.fControlAsFA.at(controlIndex).getRawValue();
     const statName = Object.keys(statObj)[0];
     this.selectedStats.set(
@@ -174,10 +152,33 @@ export class BaseStatsFieldComponent
     );
 
     this.fControlAsFA.removeAt(controlIndex);
-    // this.baseStatsfControlAsFA.removeAt(controlIndex);
   }
 
-  protected closeDropdown(): void {
+  private addNewStatFormGroup(
+    statObj: Record<string, number>,
+    formArray: FormArray,
+  ): void {
+    const formGroup = this.setupStatFormGroup(statObj);
+    formArray.push(formGroup, { emitEvent: false });
+    formArray.updateValueAndValidity({ emitEvent: false });
+  }
+
+  protected handleValueChange(newValue: string[]) {
+    this.closeDropdown();
+    if (!this.fControlAsFA) return;
+    const combobox = this.comboboxRef();
+
+    const prevValue = combobox.value() as string[];
+    const addedStat = newValue.filter((option) => !prevValue.includes(option));
+    const statObj = { [addedStat[0]]: null } as unknown as Record<
+      string,
+      number
+    >;
+
+    this.addNewStatFormGroup(statObj, this.fControlAsFA);
+  }
+
+  private closeDropdown(): void {
     const combobox = this.comboboxRef();
     combobox.closeDropdown();
     this.filter.set('');
@@ -225,6 +226,4 @@ export class BaseStatsFieldComponent
       });
     return formGroup;
   }
-
-  /* eslint-enable */
 }

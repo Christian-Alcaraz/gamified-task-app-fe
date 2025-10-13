@@ -4,7 +4,7 @@
   #comboboxHost
   #ngpComboboxRef="ngpCombobox"
   [(ngpComboboxValue)]="selectedStats"
-  (ngpComboboxValueChange)="closeDropdown()"
+  (ngpComboboxValueChange)="handleValueChange($event)"
   (ngpComboboxOpenChange)="resetOnClose($event)"
   ngpComboboxMultiple
   ngpCombobox
@@ -51,7 +51,6 @@
       <button
         ngpComboboxOption
         [ngpComboboxOptionValue]="option"
-        (click)="onStatOptionSelect($event)"
         class="w-full rounded-xl"
       >
         <p class="text-xs">
