@@ -20,7 +20,7 @@ export class Item {
   cost?: string;
   maxStackSize?: number;
   sources?: Array<ItemSourceTyping>;
-  baseStats?: Record<ItemBaseStatTyping, number>;
+  baseStats?: Record<ItemBaseStatTyping, number>[];
   rollRanges?: Record<string, number>;
 
   createdAt?: Date;
