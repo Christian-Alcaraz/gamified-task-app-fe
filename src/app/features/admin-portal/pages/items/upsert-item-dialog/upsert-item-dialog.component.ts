@@ -1,5 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Item as ItemConst } from '@core/constants/item.constant';
 import { Item } from '@core/models/item.model';
 import {
@@ -10,7 +15,14 @@ import {
   DialogTitleDirective,
 } from '@shared/components/dialog';
 import { DialogCloseButtonComponent } from '@shared/components/dialog/dialog-close-button.component';
-import { InputService } from '@shared/components/inputs';
+import {
+  InputService,
+  SelectFieldComponent,
+  TextFieldComponent,
+} from '@shared/components/inputs';
+import ComboboxChipsFieldComponent from '@shared/components/inputs/combobox-chips-field/combobox-chips-field.component';
+import { ItemApiService } from '@shared/services/api/item/item.api.service';
+import { Observable } from 'rxjs';
 import { BaseStatsFieldComponent } from './base-stats-field/base-stats-field.component';
 
 interface ItemDialogData extends BaseDialogData {
@@ -25,9 +37,9 @@ interface ItemDialogData extends BaseDialogData {
     DialogActionsDirective,
     ReactiveFormsModule,
     DialogCloseButtonComponent,
-    // TextFieldComponent,
-    // SelectFieldComponent,
-    // ComboboxChipsFieldComponent,
+    TextFieldComponent,
+    SelectFieldComponent,
+    ComboboxChipsFieldComponent,
     BaseStatsFieldComponent,
   ],
   templateUrl: './upsert-item-dialog.component.html',
@@ -36,22 +48,18 @@ interface ItemDialogData extends BaseDialogData {
 export class UpsertItemDialogComponent extends BaseDialog<ItemDialogData> {
   private readonly formBuilder = inject(FormBuilder);
   private readonly inputService = inject(InputService);
+  private readonly apiService = inject(ItemApiService);
 
   itemForm!: FormGroup;
   readonly sources = ItemConst.Sources;
   readonly attributes = ItemConst.Attributes;
   readonly usageAttributes = ItemConst.UsageAttributes;
-  readonly itemTypeIndex = ItemConst.TypeIndex;
   readonly types = ItemConst.Types;
   readonly baseStats = ItemConst.BaseStats;
   readonly rarities = ItemConst.Rarities;
   readonly allBaseStats = ItemConst.AllBaseStats;
 
-  readonly testBaseStats: Record<string, number>[] = [
-    { strength: 25 },
-    { dexterity: 60 },
-    { constitution: 30 },
-  ];
+  baseStatsValue!: Record<string, number>[];
 
   //Todo: Dynamic validations:
   //* maxStackSize -> required/only appears if [attributes] includes 'stackable'.
@@ -62,20 +70,61 @@ export class UpsertItemDialogComponent extends BaseDialog<ItemDialogData> {
   constructor() {
     super();
 
+    const { item } = this.data;
+
     this.itemForm = this.formBuilder.group({
-      // name: ['', Validators.required],
-      // description: [''],
-      // type: ['', Validators.required],
+      name: ['', Validators.required],
+      description: [''],
+      type: ['', Validators.required],
       // attributes: [''],
       // usageAttributes: [''],
-      // sources: ['', Validators.required],
+      sources: ['', Validators.required],
       // cost: [0],
       // maxStackSize: [0],
       baseStats: this.formBuilder.array([]),
     });
+
+    if (item) {
+      this.itemForm.patchValue(item);
+
+      if (item.baseStats) {
+        this.baseStatsValue = item.baseStats;
+      }
+    }
   }
 
   submit() {
     console.log(this.itemForm.valid, this.itemForm.getRawValue());
+
+    if (this.data.item) {
+      this._updateItem().subscribe({
+        next: (item) => {
+          this.closeDialog(item);
+        },
+        error: (error) => {
+          console.error('Error updating item:', error);
+        },
+      });
+    } else {
+      this._createItem().subscribe({
+        next: (item) => {
+          this.closeDialog(item);
+        },
+        error: (error) => {
+          console.error('Error creating item:', error);
+        },
+      });
+    }
+  }
+
+  private _createItem(): Observable<Item> {
+    const item = this.itemForm.getRawValue();
+    return this.apiService.createItem(item);
+  }
+
+  private _updateItem(): Observable<Item> {
+    const item = this.data.item;
+    const form = this.itemForm.getRawValue();
+    return this.apiService.updateItem(form, item!._id as string);
   }
 }

@@ -1,18 +1,17 @@
-<section class="mb-4 grid grid-cols-12">
-  <div class="col-span-6">
-    <div class="border rounded max-w-[calc(100vw*0.23)]">
+<section class="mb-4 grid grid-cols-12 gap-2">
+  <section class="col-span-12 md:col-span-6">
+    <div class="flex items-center gap-2.5">
       <input
         type="text"
-        placeholder="Search in table..."
-        class="w-full bg-transparent px-4 py-2 text-sm outline-none placeholder:text-foreground/50"
+        [formControl]="searchControl"
+        [placeholder]="searchPlaceholder()"
+        class="border rounded bg-transparent flex-1 h-8 md:flex-none md:w-[20vw] px-4 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-primary"
       />
-
-      <!-- Filtering -->
     </div>
-  </div>
-  <div class="col-span-6 flex justify-end gap-2">
+  </section>
+  <section class="col-span-12 h-8 md:col-span-6 flex md:justify-end gap-2">
     <button
-      class="flex items-center [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 gap-2 rounded border bg-foreground/5 px-4 py-1 text-sm font-medium text-foreground hover:bg-primary/90 cursor-pointer"
+      class="flex items-center [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 gap-2 rounded border bg-muted/25 px-4 py-1 text-sm font-medium text-foreground hover:bg-muted cursor-pointer"
       [ngpMenuTrigger]="viewMenu"
       ngpButton
     >
@@ -22,31 +21,37 @@
       <p class="inline-block">View</p>
     </button>
 
-    <button
-      class="rounded bg-primary px-4 py-1 text-sm font-medium text-primary-foreground hover:bg-accent hover:text-accent-foreground cursor-pointer"
-      (click)="addItem.emit()"
-    >
-      Add {{ title() | titlecase }}
-    </button>
-  </div>
+    @if (canAddNewItem()) {
+      <button
+        class="rounded bg-primary px-4 py-1 text-sm font-medium text-primary-foreground hover:bg-accent hover:text-accent-foreground cursor-pointer"
+        (click)="addItem.emit()"
+      >
+        Add {{ title() | titlecase }}
+      </button>
+    }
+  </section>
 </section>
 
-<section class="border text-foreground rounded">
+<section
+  class="border text-foreground rounded overflow-x-scroll styled-scrollbars"
+>
   <table class="w-full">
     <thead class="border-b text-base font-medium">
       @for (headerGroup of table.getHeaderGroups(); track headerGroup.id) {
         <tr>
           @for (header of headerGroup.headers; track header.id) {
             @if (!header.isPlaceholder) {
+              @let sortState = header.column.getIsSorted();
+              @let sortIcon = getSortIcon(header.column);
               <th class="px-4 py-2 text-left text-sm font-medium">
                 <button
                   class="flex items-center justify-center gap-1 rounded px-2 py-1 text-sm -ml-2.5 font-medium text-foreground select-none"
                   [ngClass]="{
                     'cursor-pointer select-none hover:bg-primary/90 active:bg-primary/75':
                       header.column.getCanSort(),
-                    'pointers-event-none': !header.column.getCanSort(),
+                    'pointer-events-none': !header.column.getCanSort(),
                   }"
-                  (click)="sortColumnByHeader(header.column)"
+                  (click)="toggleColumnSorting(header.column)"
                 >
                   <ng-container
                     *flexRender="
@@ -58,7 +63,14 @@
                     <p>{{ headerContext }}</p>
                     <span class="inline-flex items-center justify-center">
                       @if (header.column.getCanSort()) {
-                        <ng-icon name="heroChevronUpDown"></ng-icon>
+                        <ng-icon
+                          class="transition-transform duration-100 ease-burst-in-slow-out"
+                          [name]="sortIcon"
+                          [ngClass]="{
+                            'rotate-0': sortState === 'asc',
+                            'rotate-180': sortState === 'desc',
+                          }"
+                        ></ng-icon>
                       }
                     </span>
                   </ng-container>
@@ -73,7 +85,7 @@
     @if (table.getRowModel().rows.length > 0) {
       <tbody class="divide-y divide-border">
         @for (row of table.getRowModel().rows; track row.id) {
-          <tr>
+          <tr (click)="rowClick(row)">
             @for (cell of row.getVisibleCells(); track cell.id) {
               <td class="px-4 py-2 align-middle text-sm tracking-[0.03rem]">
                 <ng-container
@@ -83,7 +95,9 @@
                     let cell
                   "
                 >
-                  <span class="inline-flex">{{ cell | titlecase }}</span>
+                  <span class="inline-flex text-xs">{{
+                    cell | titlecase
+                  }}</span>
                 </ng-container>
               </td>
             }
@@ -106,9 +120,68 @@
   <div class="h-1"></div>
 </section>
 
+<section class="flex items-center justify-between mt-2">
+  <div class="flex items-center gap-2 select-none">
+    <button
+      class="inline-flex transition-all duration-100 ease-out items-center justify-center border rounded text-center px-4 py-2 text-sm font-medium size-8 bg-muted/25 text-foreground shrink-0 hover:bg-muted active:bg-accent/75 cursor-pointer"
+      [ngClass]="{
+        'pointer-events-none opacity-50': !table.getCanPreviousPage(),
+      }"
+      (click)="table.firstPage()"
+    >
+      <<
+    </button>
+    <button
+      class="inline-flex transition-all duration-100 ease-out items-center justify-center border rounded text-center px-4 py-2 text-sm font-medium size-8 bg-muted/25 text-foreground shrink-0 hover:bg-muted active:bg-accent/75 cursor-pointer"
+      [ngClass]="{
+        'pointer-events-none opacity-50': !table.getCanPreviousPage(),
+      }"
+      (click)="table.previousPage()"
+    >
+      <
+    </button>
+    <button
+      class="inline-flex transition-all duration-100 ease-out items-center justify-center border rounded text-center px-4 py-2 text-sm font-medium size-8 bg-muted/25 text-foreground shrink-0 hover:bg-muted active:bg-accent/75 cursor-pointer"
+      (click)="table.nextPage()"
+      [ngClass]="{ 'pointer-events-none opacity-50': !table.getCanNextPage() }"
+    >
+      >
+    </button>
+    <button
+      class="inline-flex transition-all duration-100 ease-in items-center justify-center border rounded text-center px-4 py-2 text-sm font-medium size-8 bg-muted/25 text-foreground shrink-0 hover:bg-muted active:bg-accent/75 cursor-pointer"
+      [ngClass]="{ 'pointer-events-none opacity-50': !table.getCanNextPage() }"
+      (click)="table.lastPage()"
+    >
+      >>
+    </button>
+  </div>
+  <div class="inline-flex items-center space-x-2 order-first">
+    <p
+      class="whitespace-nowrap font-medium text-sm text-muted-foreground mr-4!"
+    >
+      Rows per page
+    </p>
+    <button
+      class="flex items-center gap-1.5 border rounded bg-muted/25 hover:bg-muted pl-4 py-2 h-8 min-w-[4.5rem] cursor-pointer"
+      ngpButton
+      [ngpMenuTrigger]="pageSizeMenu"
+      ngpButton
+    >
+      <p class="text-sm whitespace-nowrap text-medium">
+        {{ table.getState().pagination.pageSize }}
+      </p>
+      <ng-icon name="heroChevronDown" class="size-4! [&_svg]:size-4!"></ng-icon>
+    </button>
+  </div>
+</section>
+
+<ng-template #pageSizeMenu>
+  <app-menu [menuItems]="pageSizes" (selectMenu)="changePageSize($event)" />
+</ng-template>
+
 <ng-template #viewMenu>
   <app-table-drop-menu
     [menuItems]="viewMenuItems"
-    (selectMenu)="viewMenuItemSelected($event)"
+    (selectMenu)="toggleColumnVisibility($event)"
   ></app-table-drop-menu>
 </ng-template>

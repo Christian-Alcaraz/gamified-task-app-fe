@@ -21,7 +21,7 @@ export interface MenuItem {
           class="inline-flex px-2 py-1 text-sm rounded-sm transition-colors duration-75 ease-in-out items-center cursor-pointer justify-start text-card-foreground hover:bg-accent hover:text-accent-foreground"
           (click)="menuSelected(item)"
         >
-          {{ item.label }}
+          {{ getLabel(item) }}
         </button>
       }
     </main>
@@ -61,7 +61,7 @@ export interface MenuItem {
 })
 export class MenuComponent {
   readonly theme = inject(ThemeService).theme();
-  menuItems = input.required<MenuItem[]>();
+  menuItems = input.required<MenuItem[] | string[] | number[]>();
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
   selectMenu = output<any>();
 
@@ -71,16 +71,27 @@ export class MenuComponent {
   getCss() {
     const theme = this.theme === 'dark' ? ' dark' : '';
 
-    return `fixed flex flex-col w-max bg-card border shadow rounded-md p-1${theme}`;
+    return `fixed flex flex-col w-max bg-card border shadow rounded-md p-1${theme} z-[9999]`;
   }
 
-  menuSelected(item: MenuItem) {
-    const { action } = item;
+  getLabel(item: MenuItem | string | number) {
+    if (typeof item === 'string' || typeof item === 'number') {
+      return item;
+    }
+    return item.label;
+  }
 
-    if (typeof action === 'string') {
-      this.selectMenu.emit(action);
+  menuSelected(item: MenuItem | string | number) {
+    if (typeof item === 'string' || typeof item === 'number') {
+      this.selectMenu.emit(item);
     } else {
-      this.selectMenu.emit(action as Column<unknown>);
+      const { action } = item;
+
+      if (typeof action === 'string') {
+        this.selectMenu.emit(action);
+      } else {
+        this.selectMenu.emit(action as Column<unknown>);
+      }
     }
   }
 }

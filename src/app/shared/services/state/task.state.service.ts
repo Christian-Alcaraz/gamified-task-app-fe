@@ -53,8 +53,15 @@ export function TodoTaskStateFactory(): TaskStateService {
   providedIn: 'root',
 })
 export class TaskStateService {
-  //Todo: Replace retry$ to refresh$ and still explore this pattern
-
+  //Todo: have a method that initializes the service with a task type and optional query
+  /**
+   * init(taskType: TaskTyping, query?: Record<string, any>) {
+   *  this.taskType$.next(taskType);
+   *  if (query) {
+   *    this.query$.next(query);
+   * }
+   * }
+   */
   private apiService = inject(TaskApiService);
   public filterControl = new FormControl('');
 
@@ -90,7 +97,6 @@ export class TaskStateService {
     map((filter) => filter || null),
   );
 
-  // note
   private status$ = merge(
     this.tasks$.pipe(map(() => 'success' as const)),
     merge(this.taskType$, this.retry$, this.query$).pipe(

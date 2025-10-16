@@ -1,7 +1,12 @@
 <app-table
   class="text-foreground"
-  title="Items"
-  [data]="defaultData"
-  [columns]="defaultColumns"
+  title="Item"
+  searchPlaceholder="Search items..."
+  [data]="state.items().records"
+  [pageCount]="state.items().total / state.query().pageSize"
+  [query]="state.query()"
+  [columns]="itemColumns"
   (addItem)="openItemUpsertModal()"
+  (selectedRow)="openItemUpsertModal($event)"
+  (tableQueryChange)="handleQueryChange($event)"
 ></app-table>

@@ -46,11 +46,6 @@
   width: inherit;
 }
 
-[ngpComboboxInput].chips {
-  padding-left: 16px;
-  padding-block: 8px;
-}
-
 [ngpComboboxInput]::placeholder {
   color: var(--muted-foreground);
 }

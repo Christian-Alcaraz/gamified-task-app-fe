@@ -11,13 +11,13 @@ import {
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
 import { DialogOptions } from '@core/constants';
 import { Task, TaskTyping } from '@core/models/task.model';
+import { UpsertTaskDialogComponent } from '@features/portal/pages/tasks/upsert-task-dialog/upsert-task-dialog.component';
 import { BadgeComponent } from '@shared/components/badge/badge.component';
 import { BaseDialogData } from '@shared/components/dialog';
 import { TaskApiService } from '@shared/services/api/task/task.api.service';
 import { TasksState } from '@shared/services/state/task.state.service';
 import { UserStateService } from '@shared/services/state/user.state.service';
 import { TaskItemComponent } from '../task-item/task-item.component';
-import { UpsertTaskDialogComponent } from '@features/portal/pages/tasks/upsert-task-dialog/upsert-task-dialog.component';
 
 export interface TaskListQueryFilter {
   completed?: boolean;
@@ -42,6 +42,7 @@ export interface TaskListProps {
   styleUrl: './task-list.component.scss',
 })
 export class TaskListComponent extends ThemeAwareComponent {
+  //Todo: Instead of tasks.component handles the taskStateService, make state service DI component level
   private readonly _dialog = inject(Dialog);
   private readonly _userStateService = inject(UserStateService);
   private readonly _taskApiService = inject(TaskApiService);

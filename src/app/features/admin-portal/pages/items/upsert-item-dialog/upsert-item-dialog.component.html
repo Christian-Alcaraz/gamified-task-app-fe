@@ -9,7 +9,7 @@
   class="flex flex-col max-h-[35vh] overflow-y-auto styled-scrollbars px-6 pb-2.5 gap-3 antialiased"
   [formGroup]="itemForm"
 >
-  <!-- <app-text-field fcName="name" [props]="{ label: 'Name', type: 'text' }" />
+  <app-text-field fcName="name" [props]="{ label: 'Name', type: 'text' }" />
 
   <app-text-field
     fcName="description"
@@ -22,33 +22,27 @@
     [props]="{ label: 'Type' }"
   />
 
-  <app-combobox-chips-field
+  <!-- <app-combobox-chips-field
     fcName="attributes"
     [options]="attributes"
     [props]="{ label: 'Attributes' }"
-  ></app-combobox-chips-field>
+  ></app-combobox-chips-field> -->
 
-  <app-combobox-chips-field
+  <!-- <app-combobox-chips-field
     fcName="usageAttributes"
     [options]="usageAttributes"
     [props]="{ label: 'Usage Attributes' }"
-  ></app-combobox-chips-field>
+  ></app-combobox-chips-field> -->
 
   <app-combobox-chips-field
     fcName="sources"
     [options]="sources"
     [props]="{ label: 'Sources', validators: { required: true } }"
-  ></app-combobox-chips-field> -->
-
-  <!-- <app-combobox-chips-field
-    fcName="baseStats"
-    [options]="allBaseStats"
-    [props]="{ label: 'Base Stats' }"
-  ></app-combobox-chips-field> -->
+  ></app-combobox-chips-field>
 
   <app-base-stats-field
     fcName="baseStats"
-    [baseStatsValue]="testBaseStats"
+    [baseStatsValue]="baseStatsValue"
   ></app-base-stats-field>
 
   <!-- <app-text-field fcName="cost" [props]="{ label: 'Cost', type: 'number' }" />

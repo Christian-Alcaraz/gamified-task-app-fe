@@ -1,17 +1,28 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
-import { DialogOptions } from '@core/constants';
-import { TableComponent } from '@shared/components/table/table.component';
+import { DialogOptions, StatusTyping } from '@core/constants';
+import { ItemTyping } from '@core/constants/item.constant';
+import { Item } from '@core/models/item.model';
+import { BaseDialogData } from '@shared/components/dialog';
+import {
+  TableComponent,
+  TableQuery,
+} from '@shared/components/table/table.component';
+import { ApiService } from '@shared/services/api';
 import { ColumnDef } from '@tanstack/angular-table';
+import { ItemsComponentService } from './items-component.service';
 import { UpsertItemDialogComponent } from './upsert-item-dialog/upsert-item-dialog.component';
 
-export interface Person {
-  firstName: string;
-  lastName: string;
-  age: number;
-  visits: number;
-  status?: string;
-  progress: number;
+export interface ItemTableQuery extends TableQuery {
+  name?: string | null;
+  description?: string | null;
+  type?: ItemTyping | null;
+  tags?: string[] | null;
+  status?: StatusTyping;
+}
+
+export interface ItemDialogData extends BaseDialogData {
+  item?: Item;
 }
 
 @Component({
@@ -22,62 +33,42 @@ export interface Person {
 })
 export class ItemsComponent {
   private readonly dialog = inject(Dialog);
-  defaultData: Person[] = [
-    {
-      firstName: 'tanner',
-      lastName: 'linsley',
-      age: 24,
-      visits: 100,
-      status: 'In Relationship',
-      progress: 50,
-    },
-    {
-      firstName: 'tandy',
-      lastName: 'miller',
-      age: 40,
-      visits: 40,
-      progress: 80,
-    },
-    {
-      firstName: 'joe',
-      lastName: 'dirte',
-      age: 45,
-      visits: 20,
-      status: 'Complicated',
-      progress: 10,
-    },
-  ];
+  private readonly apiService = inject(ApiService).item;
 
-  defaultColumns: ColumnDef<Person>[] = [
+  itemColumns: ColumnDef<Item>[] = [
     {
-      accessorKey: 'firstName',
-      header: 'First Name',
+      id: 'name',
+      accessorKey: 'name',
+      header: 'Name',
       sortingFn: 'alphanumeric',
     },
     {
-      accessorKey: 'lastName',
-      header: `Last Name`,
+      id: 'description',
+      accessorKey: 'description',
+      header: `Description`,
       sortingFn: 'alphanumeric',
     },
     {
-      accessorKey: 'age',
-      header: 'Age',
+      id: 'type',
+      accessorKey: 'type',
+      header: 'Type',
       sortingFn: 'alphanumeric',
     },
     {
-      accessorKey: 'visits',
-      header: `Visits`,
+      id: 'sources',
+      accessorKey: 'sources',
+      header: `Sources`,
       sortingFn: 'alphanumeric',
+      cell: ({ row }) => {
+        const sources = row.getValue('sources') as string[];
+        return sources.join(', ');
+      },
     },
     {
+      id: 'status',
       accessorKey: 'status',
       header: 'Status',
       sortingFn: 'alphanumeric',
-    },
-    {
-      accessorKey: 'progress',
-      header: 'Profile Progress',
-      enableSorting: false,
     },
     // {
     //   id: 'actions',
@@ -86,22 +77,51 @@ export class ItemsComponent {
     // },
   ];
 
-  openItemUpsertModal() {
+  readonly state = inject(ItemsComponentService).state;
+
+  constructor() {
+    this.getItems(this.state.query());
+  }
+
+  openItemUpsertModal(item?: Item) {
+    const data: ItemDialogData = {
+      disableBackdropClose: true,
+    };
+    if (item) {
+      data.item = item;
+    }
+
     const dialogRef = this.dialog.open(UpsertItemDialogComponent, {
       ...DialogOptions,
       width: '75vw',
-      data: {
-        disableBackdropClose: true,
-      },
+      data,
     });
 
     dialogRef.closed.subscribe({
       next: (result) => {
-        console.log('Dialog closed', result);
+        if (!result) return;
+        this.getItems(this.state.query());
       },
       error: (error) => {
         console.error('Error closing dialog:', error);
       },
     });
+  }
+
+  handleQueryChange(query: ItemTableQuery) {
+    this.state.query.set(query);
+    this.getItems(query);
+  }
+
+  private getItems(state: ItemTableQuery) {
+    this.apiService.getItems(state).subscribe({
+      next: (response) => {
+        this.state.items.set(response);
+      },
+      error: (error) => {
+        console.error('Error getting items:', error);
+      },
+    });
+    // this.itemStateService.query$.next(state);
   }
 }
