@@ -152,6 +152,7 @@ export class TasksComponent extends ThemeAwareComponent implements OnDestroy {
 
     const dialogRef = this._dialog.open(UpsertTaskDialogComponent, {
       ...DialogOptions,
+      width: '55vw',
       scrollStrategy: this._scrollStrategy.block(),
       data: {
         taskType,

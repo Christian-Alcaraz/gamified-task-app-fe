@@ -203,7 +203,7 @@ import { ChangeFn, provideValueAccessor, TouchedFn } from 'ng-primitives/utils';
 })
 export class DatePicker implements ControlValueAccessor {
   readonly theme = inject(ThemeService).theme();
-  readonly hostCss = `my-1 inline-block bg-card rounded-md p-4 shadow-md border ${this.theme === 'dark' ? 'dark ' : ''}`;
+  readonly hostCss = `my-1 bg-card rounded-md p-4 shadow-md border ${this.theme === 'dark' ? 'dark ' : ''}`;
 
   /** Access the date picker host directive */
   private readonly state = injectDatePickerState<Date>();

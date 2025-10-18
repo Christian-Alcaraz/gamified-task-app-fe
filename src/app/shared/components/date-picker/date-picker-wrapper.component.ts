@@ -3,6 +3,7 @@ import {
   Overlay,
   OverlayPositionBuilder,
   OverlayRef,
+  ScrollStrategyOptions,
 } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
@@ -44,7 +45,7 @@ export interface DatePickerProps extends BaseInputProps {
 })
 export class DatePickerComponent extends BaseInput implements OnInit {
   @ViewChild('triggerInput', { read: ElementRef })
-  triggerInput!: ElementRef<HTMLInputElement>;
+  triggerInput!: ElementRef<HTMLElement>;
   @ViewChild('datePicker')
   datePicker!: TemplateRef<unknown>;
 
@@ -57,11 +58,10 @@ export class DatePickerComponent extends BaseInput implements OnInit {
 
   private readonly overlay = inject(Overlay);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
+  private readonly scrollStrategy = inject(ScrollStrategyOptions);
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly focusTrapFactory = inject(FocusTrapFactory);
   private readonly utilDate = inject(UtilService).date;
-
-  // private readonly utilString = inject(UtilService).string;
 
   readonly theme = inject(ThemeService).theme();
 
@@ -113,28 +113,27 @@ export class DatePickerComponent extends BaseInput implements OnInit {
           overlayX: 'start',
           overlayY: 'bottom',
         },
-      ]);
+      ])
+      .withPush(true);
 
     this.overlayRef = this.overlay.create({
       positionStrategy,
       hasBackdrop: true,
       backdropClass: 'cdk-overlay-transparent-backdrop',
-      scrollStrategy: this.overlay.scrollStrategies.reposition(),
-      minWidth: 0,
-      maxWidth: 0,
+      scrollStrategy: this.scrollStrategy.block(),
     });
+
+    this.overlayRef.attach(
+      new TemplatePortal(this.datePicker, this.viewContainerRef),
+    );
+    this.updateOverlayWidth();
+    this.startResizeTracking();
+    this.overlayRef.updatePosition();
 
     this.overlayRef
       .backdropClick()
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => this.closeDropdown());
-
-    this.overlayRef.attach(
-      new TemplatePortal(this.datePicker, this.viewContainerRef),
-    );
-
-    this.updateOverlayWidth();
-    this.startResizeTracking();
 
     const dropdownElement = this.overlayRef.overlayElement;
     this.focusTrap = this.focusTrapFactory.create(dropdownElement);
