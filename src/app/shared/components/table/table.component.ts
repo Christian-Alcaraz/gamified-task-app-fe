@@ -62,11 +62,11 @@ export class TableComponent<TData, TQueryState extends TableQuery>
   readonly pageSizes = [10, 25, 50, 100];
   readonly searchControl = new FormControl('');
   table!: Table<TData> & Signal<Table<TData>>;
-  columnCount!: number;
   viewMenuItems!: Record<string, string | Column<TData>>[];
 
   //** Inputs
   canAddNewItem = input<boolean>(true);
+  enableRowSelection = input<boolean>(false);
   searchPlaceholder = input<string>('Search in table...'); //Todo: Maybe use props????
   title = input<string>('Data');
   data = input.required<TData[]>();
@@ -111,14 +111,13 @@ export class TableComponent<TData, TQueryState extends TableQuery>
     this.table = createAngularTable(() => ({
       data: this.data(),
       columns: this.columns(),
-      enableRowSelection: true,
       getCoreRowModel: getCoreRowModel(),
       manualSorting: true,
       manualPagination: true,
       sortDescFirst: true,
       enableSortingRemoval: false,
       autoResetPageIndex: false,
-      pageCount: this.pageCount(), //Todo: this is total pages from server
+      pageCount: this.pageCount(),
       debugTable: !environment.PRODUCTION,
       state: {
         pagination: {
@@ -131,7 +130,6 @@ export class TableComponent<TData, TQueryState extends TableQuery>
       onPaginationChange: this.onPaginationChange,
     }));
 
-    this.columnCount = this.table.getAllColumns().length;
     this.viewMenuItems = this.table.getAllLeafColumns().map((column) => ({
       label: column.columnDef.header as string,
       column,
@@ -157,6 +155,7 @@ export class TableComponent<TData, TQueryState extends TableQuery>
   }
 
   rowClick(row: Row<TData>) {
+    if (!this.enableRowSelection()) return;
     this.selectedRow.emit(row.original);
   }
 
@@ -170,7 +169,7 @@ export class TableComponent<TData, TQueryState extends TableQuery>
   }
 
   changePageSize(size: number) {
-    this.table.setPageSize(Number(size));
+    this.table.setPageSize(size);
   }
 
   getSortIcon(column: Column<TData>) {
@@ -192,7 +191,11 @@ export class TableComponent<TData, TQueryState extends TableQuery>
 
   private _toSortingState(sortStr: string): SortingState {
     if (!sortStr) return [];
-    const [id, descStr] = sortStr.split(':');
-    return [{ id, desc: descStr === 'desc' }];
+    try {
+      const [id, descStr] = sortStr.split(':');
+      return [{ id, desc: descStr === 'desc' }];
+    } catch {
+      return [];
+    }
   }
 }

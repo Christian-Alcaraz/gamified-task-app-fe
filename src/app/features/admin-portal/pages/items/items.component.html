@@ -6,6 +6,7 @@
   [pageCount]="state.items().total / state.query().pageSize"
   [query]="state.query()"
   [columns]="itemColumns"
+  [enableRowSelection]="true"
   (addItem)="openItemUpsertModal()"
   (selectedRow)="openItemUpsertModal($event)"
   (tableQueryChange)="handleQueryChange($event)"

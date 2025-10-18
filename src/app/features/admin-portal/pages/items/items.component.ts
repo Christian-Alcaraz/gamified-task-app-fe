@@ -86,14 +86,12 @@ export class ItemsComponent {
   openItemUpsertModal(item?: Item) {
     const data: ItemDialogData = {
       disableBackdropClose: true,
+      ...(item ? { item } : {}),
     };
-    if (item) {
-      data.item = item;
-    }
-
     const dialogRef = this.dialog.open(UpsertItemDialogComponent, {
       ...DialogOptions,
       width: '75vw',
+      ...(item ? { autoFocus: false } : {}),
       data,
     });
 
