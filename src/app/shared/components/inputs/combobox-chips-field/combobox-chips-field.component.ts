@@ -116,6 +116,10 @@ export default class ComboboxChipsFieldComponent<
     const fcName = this.fcName() ?? this.props()?.fcName;
     this.initFormControl(fcName as string, this.props()?.validators);
 
+    if (this.fControl.value) {
+      this.value.set(this.fControl.value);
+    }
+
     if (this.disabled()) {
       this.fControl.disable();
     } else {
