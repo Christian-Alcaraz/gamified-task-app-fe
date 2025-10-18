@@ -72,6 +72,8 @@ export class UpsertItemDialogComponent extends BaseDialog<ItemDialogData> {
 
     const { item } = this.data;
 
+    console.log('UpsertItem Init', item);
+
     this.itemForm = this.formBuilder.group({
       name: ['', Validators.required],
       description: [''],
@@ -94,7 +96,9 @@ export class UpsertItemDialogComponent extends BaseDialog<ItemDialogData> {
   }
 
   submit() {
-    console.log(this.itemForm.valid, this.itemForm.getRawValue());
+    if (!this.itemForm.valid) {
+      return; //Todo: Show popover
+    }
 
     if (this.data.item) {
       this._updateItem().subscribe({

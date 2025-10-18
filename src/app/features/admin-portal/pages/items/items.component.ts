@@ -8,6 +8,7 @@ import {
   TableComponent,
   TableQuery,
 } from '@shared/components/table/table.component';
+import { ToastService } from '@shared/components/toast/toast.service';
 import { ApiService } from '@shared/services/api';
 import { ColumnDef } from '@tanstack/angular-table';
 import { ItemsComponentService } from './items-component.service';
@@ -34,6 +35,7 @@ export interface ItemDialogData extends BaseDialogData {
 export class ItemsComponent {
   private readonly dialog = inject(Dialog);
   private readonly apiService = inject(ApiService).item;
+  private readonly toastService = inject(ToastService);
 
   itemColumns: ColumnDef<Item>[] = [
     {
@@ -61,6 +63,8 @@ export class ItemsComponent {
       sortingFn: 'alphanumeric',
       cell: ({ row }) => {
         const sources = row.getValue('sources') as string[];
+
+        if (!sources.length) return '';
         return sources.join(', ');
       },
     },
@@ -109,6 +113,10 @@ export class ItemsComponent {
   handleQueryChange(query: ItemTableQuery) {
     this.state.query.set(query);
     this.getItems(query);
+  }
+
+  showToast() {
+    this.toastService.showToast('This is header Test', 'This is description');
   }
 
   private getItems(state: ItemTableQuery) {
