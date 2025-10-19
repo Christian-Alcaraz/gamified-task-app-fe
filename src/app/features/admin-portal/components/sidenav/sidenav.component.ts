@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { NavItem } from '@core/interfaces/nav-item.interface';
 import { AdminPortalService } from '@features/admin-portal/admin-portal.service';
 import { NgIcon } from '@ng-icons/core';
+import { ThemeService } from '@shared/services/theme/theme.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -12,6 +13,7 @@ import { NgIcon } from '@ng-icons/core';
   styleUrl: './sidenav.component.scss',
 })
 export class SidenavComponent {
+  private readonly themeService = inject(ThemeService);
   readonly #router = inject(Router);
   readonly #adminPortalService = inject(AdminPortalService);
 
@@ -44,5 +46,10 @@ export class SidenavComponent {
 
   navigateToApp() {
     this.#router.navigateByUrl('/hub');
+  }
+
+  toggleTheme() {
+    const newTheme = this.themeService.theme() === 'dark' ? 'light' : 'dark';
+    this.themeService.setTheme(newTheme);
   }
 }

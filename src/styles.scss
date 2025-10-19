@@ -1,5 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-
 * {
   box-sizing: border-box;
 }
@@ -39,8 +38,7 @@ p {
   font-size: calc(1rem * 0.75);
 }
 
-// SCROLLBARS
-
+/* SCROLLBARS */
 .styled-scrollbars {
   scrollbar-color: transparent transparent;
   scrollbar-width: thin;
@@ -68,7 +66,7 @@ p {
   border-radius: 5px;
 }
 
-// ========================
+/* ====================== */
 .white-styled-scrollbars {
   scrollbar-color: transparent transparent;
   scrollbar-width: thin;

@@ -114,11 +114,6 @@ export class ItemsComponent {
     this.state.query.set(query);
     this.getItems(query);
   }
-
-  showToast() {
-    this.toastService.showToast('This is header Test', 'This is description');
-  }
-
   private getItems(state: ItemTableQuery) {
     this.apiService.getItems(state).subscribe({
       next: (response) => {
