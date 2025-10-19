@@ -10,7 +10,8 @@
     "strings": "on"
   },
   "files.associations": {
-    "*.css": "tailwindcss"
+    "*.css": "tailwindcss",
+    "*.scss": "tailwindcss"
   },
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
