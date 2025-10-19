@@ -5,7 +5,6 @@ import {
   NgpToast,
   NgpToastManager,
 } from 'ng-primitives/toast';
-import { ToastContext } from './base-toast.class';
 
 @Component({
   selector: 'app-toast',
@@ -35,3 +34,11 @@ export class ToastComponent {
     this.toastManager.dismiss(this.toast);
   }
 }
+
+export interface ToastContext {
+  header: string;
+  description: string;
+  type: ToastTyping;
+}
+
+export type ToastTyping = 'info' | 'success' | 'warning' | 'error';

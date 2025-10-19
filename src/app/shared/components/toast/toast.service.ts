@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { NgpToastManager } from 'ng-primitives/toast';
 import { NgpToastOptions } from 'node_modules/ng-primitives/toast/toast/toast-manager';
-import { ToastContext, ToastTyping } from './base-toast.class';
-import { ToastComponent } from './toast.component';
+import { ToastComponent, ToastContext, ToastTyping } from './toast.component';
 
 @Injectable({
   providedIn: 'root',
