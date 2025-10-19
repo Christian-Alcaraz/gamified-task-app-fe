@@ -1,28 +1,34 @@
 import { inject, Injectable } from '@angular/core';
 import { NgpToastManager } from 'ng-primitives/toast';
 import { NgpToastOptions } from 'node_modules/ng-primitives/toast/toast/toast-manager';
-import { ToastComponent, ToastContext } from './toast.component';
+import { ToastContext, ToastTyping } from './base-toast.class';
+import { ToastComponent } from './toast.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ToastService {
   private readonly toastManager = inject(NgpToastManager);
+  private readonly defaults: Partial<NgpToastOptions> = {
+    placement: 'top-end',
+    duration: 3000,
+  };
 
   showToast(
     header = '',
     message: string,
     type: ToastTyping = 'info',
-    options?: Partial<NgpToastOptions<ToastContext>>,
+    options?: NgpToastOptions,
   ) {
     const context: ToastContext = {
       header,
       description: message,
+      type,
     };
 
-    const toastOptions: NgpToastOptions<ToastContext> = {
-      placement: 'top-end',
-      duration: 3000,
+    const toastOptions: NgpToastOptions = {
+      placement: this.defaults.placement,
+      duration: this.defaults.duration,
       context: context as ToastContext,
       ...(options ?? {}),
     };
@@ -30,5 +36,3 @@ export class ToastService {
     this.toastManager.show(ToastComponent, toastOptions);
   }
 }
-
-export type ToastTyping = 'success' | 'error' | 'warning' | 'info';
