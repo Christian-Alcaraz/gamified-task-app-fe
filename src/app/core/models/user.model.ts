@@ -29,8 +29,9 @@ export interface UserStats {
   dexterity: number;
   intelligence: number;
   constitution: number;
-  experience: number;
+  gold: number;
   level: number;
+  experience: number;
   statPoints: number;
   toNextLevel: number;
 }
