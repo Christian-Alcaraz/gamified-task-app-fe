@@ -11,6 +11,7 @@ import {
   MenuComponent,
   MenuItem,
 } from '@shared/components/menu/menu.component';
+import { ToastService } from '@shared/components/toast/toast.service';
 import {
   DailiesTaskStateFactory,
   DailiesTaskStateInstance,
@@ -19,6 +20,7 @@ import {
   TodoTaskStateInstance,
 } from '@shared/services/state/task.state.service';
 import { UserStateService } from '@shared/services/state/user.state.service';
+import { UtilService } from '@shared/services/util/util.service';
 import { NgpButton } from 'ng-primitives/button';
 import { NgpMenuTrigger } from 'ng-primitives/menu';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
@@ -54,14 +56,16 @@ import { UpsertTaskDialogComponent } from './upsert-task-dialog/upsert-task-dial
   ],
 })
 export class TasksComponent extends ThemeAwareComponent implements OnDestroy {
-  private readonly _userStateService = inject(UserStateService);
-  private readonly _dialog = inject(Dialog);
-  private readonly _scrollStrategy = inject(ScrollStrategyOptions);
+  private readonly userStateService = inject(UserStateService);
+  private readonly dialog = inject(Dialog);
+  private readonly scrollStrategy = inject(ScrollStrategyOptions);
+  private readonly toast = inject(ToastService);
+  private readonly stringUtil = inject(UtilService).string;
 
   readonly dailiesStateService = inject(DailiesTaskStateInstance);
   readonly todoStateService = inject(TodoTaskStateInstance);
 
-  readonly user = this._userStateService.userState();
+  readonly user = this.userStateService.userState();
   readonly taskType = TaskType;
 
   readonly searchTaskForm = new FormGroup({
@@ -150,10 +154,10 @@ export class TasksComponent extends ThemeAwareComponent implements OnDestroy {
         ? this.dailiesStateService
         : this.todoStateService;
 
-    const dialogRef = this._dialog.open(UpsertTaskDialogComponent, {
+    const dialogRef = this.dialog.open(UpsertTaskDialogComponent, {
       ...DialogOptions,
       width: '55vw',
-      scrollStrategy: this._scrollStrategy.block(),
+      scrollStrategy: this.scrollStrategy.block(),
       data: {
         taskType,
       },
@@ -162,8 +166,16 @@ export class TasksComponent extends ThemeAwareComponent implements OnDestroy {
     dialogRef.closed.subscribe({
       next: (task) => {
         if (task) {
+          this.toast.showToast(
+            'Success',
+            `${this.stringUtil.toTitleCase(taskType)} Task has been created`,
+            'success',
+          );
           service.retry$.next();
         }
+      },
+      error: ({ error }) => {
+        this.toast.showToast('Error: ' + error.code, error.message, 'error');
       },
     });
   }

@@ -35,7 +35,7 @@ export interface ItemDialogData extends BaseDialogData {
 export class ItemsComponent {
   private readonly dialog = inject(Dialog);
   private readonly apiService = inject(ApiService).item;
-  private readonly toastService = inject(ToastService);
+  private readonly toast = inject(ToastService);
 
   itemColumns: ColumnDef<Item>[] = [
     {
@@ -102,10 +102,16 @@ export class ItemsComponent {
     dialogRef.closed.subscribe({
       next: (result) => {
         if (!result) return;
+        const header = item ? 'Updated' : 'Created';
+        const message = item
+          ? `Item has been updated.`
+          : `Item has been created.`;
+
+        this.toast.showToast(header, message, 'success');
         this.getItems(this.state.query());
       },
-      error: (error) => {
-        console.error('Error closing dialog:', error);
+      error: ({ error }) => {
+        this.toast.showToast('Error', error.message, 'error');
       },
     });
   }
@@ -114,15 +120,15 @@ export class ItemsComponent {
     this.state.query.set(query);
     this.getItems(query);
   }
-  private getItems(state: ItemTableQuery) {
-    this.apiService.getItems(state).subscribe({
+
+  private getItems(query: ItemTableQuery) {
+    this.apiService.getItems(query).subscribe({
       next: (response) => {
         this.state.items.set(response);
       },
-      error: (error) => {
-        console.error('Error getting items:', error);
+      error: ({ error }) => {
+        console.error('Error getting items:', error.message);
       },
     });
-    // this.itemStateService.query$.next(state);
   }
 }

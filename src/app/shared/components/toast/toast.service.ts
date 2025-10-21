@@ -10,7 +10,7 @@ export class ToastService {
   private readonly toastManager = inject(NgpToastManager);
   private readonly defaults: Partial<NgpToastOptions> = {
     placement: 'top-end',
-    duration: 3000,
+    duration: 4500, // * 4.5 seconds
   };
 
   showToast(

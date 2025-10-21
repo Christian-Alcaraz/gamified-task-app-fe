@@ -9,7 +9,8 @@ import {
   untracked,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { UserCharacter } from '@core/models';
+import { User, UserCharacter } from '@core/models';
+import { NgIcon } from '@ng-icons/core';
 import {
   BaseDialog,
   BaseDialogData,
@@ -17,8 +18,10 @@ import {
   DialogContentDirective,
   DialogTitleDirective,
 } from '@shared/components/dialog';
+import { ToastService } from '@shared/components/toast/toast.service';
 import { UserApiService } from '@shared/services/api/user/user.api.service';
 import { UserStateService } from '@shared/services/state/user.state.service';
+import { finalize, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-create-character-modal',
@@ -30,6 +33,7 @@ import { UserStateService } from '@shared/services/state/user.state.service';
     NgOptimizedImage,
     TitleCasePipe,
     FormsModule,
+    NgIcon,
   ],
   templateUrl: './create-character-modal.component.html',
   styleUrl: './create-character-modal.component.scss',
@@ -37,12 +41,15 @@ import { UserStateService } from '@shared/services/state/user.state.service';
 export class CreateCharacterModalComponent extends BaseDialog<BaseDialogData> {
   private readonly _userApi = inject(UserApiService);
   private readonly userState = inject(UserStateService).userState();
+  private readonly toast = inject(ToastService);
+
   genders = ['male', 'female'];
   heroClasses = ['warrior', 'mage', 'archer', 'assassin'];
 
   selectedGender = signal(this.genders[0]);
   selectedClass = signal<string | null>(null);
   characterName = model<string>('');
+  loading = signal(false);
 
   isNameTaken = signal<boolean | null>(null);
   isVerified = linkedSignal({
@@ -63,23 +70,34 @@ export class CreateCharacterModalComponent extends BaseDialog<BaseDialogData> {
     computed(() => `images/${gender}_${heroClass}.png`);
 
   characterValue = computed(() => !!this.characterName());
-  enableSubmit = computed(
+  canSubmit = computed(
     () =>
       this.isVerified() &&
       this.characterValue() &&
       this.selectedGender() &&
-      this.selectedClass(),
+      this.selectedClass() &&
+      !this.loading(),
   );
 
   verifyCharacterName() {
     this._userApi.isCharacterNameTaken(this.characterName()).subscribe({
       next: (isTaken) => {
-        if (typeof isTaken === 'boolean') {
-          this.isNameTaken.set(isTaken);
+        if (typeof isTaken !== 'boolean') {
+          console.error(
+            'Something really went wrong, this api should return a boolean',
+          );
+          return;
         }
+        const header = isTaken ? 'Name Taken' : 'Name Available';
+        const message = isTaken
+          ? 'Character name is already taken.'
+          : 'Character name is available.';
+        const type = isTaken ? 'warning' : 'success';
+        this.toast.showToast(header, message, type);
+        this.isNameTaken.set(isTaken);
       },
-      error: (err) => {
-        console.error(err);
+      error: ({ error }) => {
+        console.error(error.message);
       },
     });
   }
@@ -95,32 +113,39 @@ export class CreateCharacterModalComponent extends BaseDialog<BaseDialogData> {
       )(),
     };
 
-    if (this.userState?.flags?.hasCreatedCharacter) {
-      this._updateUserCharacter(character);
-    } else {
-      this._patchCreateUserCharacter(character);
-    }
+    const hasCreatedCharacter = this.userState?.flags?.hasCreatedCharacter;
+    const apiService = hasCreatedCharacter
+      ? this._updateUserCharacter(character)
+      : this._patchCreateUserCharacter(character);
+
+    this.loading.update(() => true);
+    apiService
+      .pipe(finalize(() => this.loading.update(() => false)))
+      .subscribe({
+        next: (user) => {
+          this.loading.update(() => false);
+          const header = hasCreatedCharacter
+            ? 'Character Updated'
+            : 'Character Created';
+          const message = hasCreatedCharacter
+            ? 'Character has been updated.'
+            : 'Character has been created.';
+          this.toast.showToast(header, message, 'success');
+          this.closeDialog(user);
+        },
+        error: ({ error }) => {
+          this.toast.showToast('Error', error.message, 'error');
+        },
+      });
   }
 
-  private _patchCreateUserCharacter(character: UserCharacter) {
-    this._userApi.patchCreateCharacter(character).subscribe({
-      next: (user) => {
-        this.closeDialog(user);
-      },
-      error: (err) => {
-        console.error(err);
-      },
-    });
+  private _patchCreateUserCharacter(
+    character: UserCharacter,
+  ): Observable<User> {
+    return this._userApi.patchCreateCharacter(character);
   }
 
-  private _updateUserCharacter(character: UserCharacter) {
-    this._userApi.updateUserCharacter(character).subscribe({
-      next: (user) => {
-        this.closeDialog(user);
-      },
-      error: (err) => {
-        console.error(err);
-      },
-    });
+  private _updateUserCharacter(character: UserCharacter): Observable<User> {
+    return this._userApi.updateUserCharacter(character);
   }
 }

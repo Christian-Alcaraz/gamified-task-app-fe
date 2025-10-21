@@ -93,10 +93,16 @@
   <section>
     <button
       class="group cursor-pointer transition-colors duration-100 ease-burst-in-slow-out text-primary-foreground border bg-primary rounded-xl px-8 py-2 w-full hover:bg-primary/55 disabled:bg-muted/25 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:pointer-events-none"
-      [disabled]="!enableSubmit()"
-      [attr.aria-disabled]="!enableSubmit()"
+      [disabled]="!canSubmit()"
+      [attr.aria-disabled]="!canSubmit()"
       (click)="submit()"
     >
+      @if (loading()) {
+        <ng-icon
+          name="heroArrowPath"
+          class="inline-flex! items-center justify-center animate-spin size-4! [&_svg]:size-4!"
+        ></ng-icon>
+      }
       <p class="group-hover:text-primary-foreground text-sm">
         Create Character
       </p>

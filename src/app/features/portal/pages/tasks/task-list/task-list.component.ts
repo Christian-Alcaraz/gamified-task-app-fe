@@ -10,13 +10,16 @@ import {
 } from '@angular/core';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
 import { DialogOptions } from '@core/constants';
+import { User } from '@core/models';
 import { Task, TaskTyping } from '@core/models/task.model';
 import { UpsertTaskDialogComponent } from '@features/portal/pages/tasks/upsert-task-dialog/upsert-task-dialog.component';
 import { BadgeComponent } from '@shared/components/badge/badge.component';
 import { BaseDialogData } from '@shared/components/dialog';
+import { ToastService } from '@shared/components/toast/toast.service';
 import { TaskApiService } from '@shared/services/api/task/task.api.service';
 import { TasksState } from '@shared/services/state/task.state.service';
 import { UserStateService } from '@shared/services/state/user.state.service';
+import { UtilService } from '@shared/services/util/util.service';
 import { TaskItemComponent } from '../task-item/task-item.component';
 
 export interface TaskListQueryFilter {
@@ -43,9 +46,11 @@ export interface TaskListProps {
 })
 export class TaskListComponent extends ThemeAwareComponent {
   //Todo: Instead of tasks.component handles the taskStateService, make state service DI component level
-  private readonly _dialog = inject(Dialog);
-  private readonly _userStateService = inject(UserStateService);
-  private readonly _taskApiService = inject(TaskApiService);
+  private readonly dialog = inject(Dialog);
+  private readonly userStateService = inject(UserStateService);
+  private readonly taskApiService = inject(TaskApiService);
+  private readonly characterUtil = inject(UtilService).character;
+  private readonly toast = inject(ToastService);
 
   readonly listChanged = output();
   readonly refreshRequested = output();
@@ -79,7 +84,7 @@ export class TaskListComponent extends ThemeAwareComponent {
 
   openTaskModal(task?: Task) {
     const dialogProps = this.props()?.dialogProps ?? {};
-    const dialog = this._dialog.open(UpsertTaskDialogComponent, {
+    const dialog = this.dialog.open(UpsertTaskDialogComponent, {
       ...DialogOptions,
       data: {
         task,
@@ -88,29 +93,51 @@ export class TaskListComponent extends ThemeAwareComponent {
       },
     });
 
+    const header = task ? 'Updated' : 'Created';
+    const message = task ? 'Task has been updated.' : 'Task has been created.';
+
     dialog.closed.subscribe({
       next: (task) => {
-        if (task) {
-          this.listChanged.emit();
-        }
+        if (!task) return;
+        this.toast.showToast(header, message, 'success');
+        this.listChanged.emit();
       },
     });
   }
 
   updateTaskCompletion(task: Task, completed: boolean) {
     console.assert(!!task._id, 'task._id must be provided');
-    if (!task._id) return;
+    if (!task._id) {
+      this.toast.showToast(
+        'Error',
+        'Task ID is required to update task completion',
+        'error',
+      );
+      return;
+    }
 
     const taskId = task._id;
-    this._taskApiService.putTaskCompletion(taskId, completed).subscribe({
+    this.taskApiService.putTaskCompletion(taskId, completed).subscribe({
       next: (updatedUser) => {
-        if (updatedUser) {
-          this._userStateService.setUserState(updatedUser);
-          this.listChanged.emit();
-        }
+        if (!updatedUser) return;
+
+        const reward = this.characterUtil.getGoldExpDifference(
+          this.userStateService.userState() as User,
+          updatedUser,
+        );
+
+        const header = completed ? 'Well Done!' : "It's okay.";
+        const message = completed
+          ? `+${reward.gold} Gold +${reward.experience} Exp`
+          : `${reward.gold} Gold ${reward.experience} Exp`;
+        const type = completed ? 'success' : 'error';
+
+        this.toast.showToast(header, message, type);
+        this.userStateService.setUserState(updatedUser);
+        this.listChanged.emit();
       },
-      error: (error) => {
-        console.error('Error updating task:', error);
+      error: ({ error }) => {
+        this.toast.showToast('Error: ' + error.code, error.message, 'error');
       },
     });
   }

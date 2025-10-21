@@ -10,6 +10,7 @@ import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
 import { Token } from '@core/constants';
 import { PasswordFieldComponent } from '@shared/components/inputs';
 import { TextFieldComponent } from '@shared/components/inputs/text-field/text-field.component';
+import { ToastService } from '@shared/components/toast/toast.service';
 import { ApiService } from '@shared/services/api';
 import { UserStateService } from '@shared/services/state/user.state.service';
 import { environment } from 'src/environments/environment';
@@ -24,6 +25,7 @@ export class LoginComponent extends ThemeAwareComponent {
   private readonly _formBuilder = inject(FormBuilder);
   private readonly _router = inject(Router);
   private readonly _authApi = inject(ApiService).auth;
+  private readonly toast = inject(ToastService);
   private readonly _userStateService = inject(UserStateService);
   private readonly enviroment = environment.ENVIRONMENT_NAME;
   private readonly email = environment.EMAIL;
@@ -59,12 +61,12 @@ export class LoginComponent extends ThemeAwareComponent {
     this._authApi.login(email, password).subscribe({
       next: (user) => {
         localStorage.setItem(Token.Auth, user.token);
+        this.toast.showToast('Welcome!', 'Login Successful', 'success');
         this._userStateService.setUserState(user);
-
         this._router.navigate(['hub']);
       },
-      error: (err) => {
-        console.error(err);
+      error: ({ error }) => {
+        this.toast.showToast('Error', error.message, 'error');
       },
     });
   }
