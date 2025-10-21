@@ -55,6 +55,11 @@ interface Subtask {
   completed: boolean;
 }
 
+export interface TaskReward {
+  gold: number;
+  experience: number;
+}
+
 export class Task {
   _id?: string;
   name?: string;
@@ -69,6 +74,7 @@ export class Task {
   streak?: number;
   stat?: Record<TaskStatTyping, number>;
   _userId?: string;
+  rewardGranted?: TaskReward;
 
   createdAt?: Date;
   updatedAt?: Date;
