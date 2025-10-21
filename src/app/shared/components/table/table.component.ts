@@ -107,6 +107,8 @@ export class TableComponent<TData, TQueryState extends TableQuery>
     }
   };
 
+  //Todo: Action Columns with Menu Options
+
   ngOnInit(): void {
     this.table = createAngularTable(() => ({
       data: this.data(),
@@ -115,7 +117,7 @@ export class TableComponent<TData, TQueryState extends TableQuery>
       manualSorting: true,
       manualPagination: true,
       sortDescFirst: true,
-      enableSortingRemoval: false,
+      enableSortingRemoval: false, //Todo: This needs to be true so that loop is false -> desc -> asc -> false;
       autoResetPageIndex: false,
       pageCount: this.pageCount(),
       debugTable: !environment.PRODUCTION,
