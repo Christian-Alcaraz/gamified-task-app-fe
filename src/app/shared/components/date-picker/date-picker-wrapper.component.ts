@@ -126,8 +126,8 @@ export class DatePickerComponent extends BaseInput implements OnInit {
     this.overlayRef.attach(
       new TemplatePortal(this.datePicker, this.viewContainerRef),
     );
-    this.updateOverlayWidth();
-    this.startResizeTracking();
+    // this.updateOverlayWidth();
+    // this.startResizeTracking();
     this.overlayRef.updatePosition();
 
     this.overlayRef
