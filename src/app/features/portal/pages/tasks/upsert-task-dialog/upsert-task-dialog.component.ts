@@ -7,6 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { UIState } from '@core/constants';
 import {
   Task,
   TaskDifficulties,
@@ -119,7 +120,7 @@ export class UpsertTaskDialogComponent extends BaseDialog<TaskDialogData> {
       this.toast.showToast(
         'Error',
         'Please fill out all required fields.',
-        'error',
+        UIState.Error,
       );
       return;
     }
@@ -147,7 +148,7 @@ export class UpsertTaskDialogComponent extends BaseDialog<TaskDialogData> {
             this.toast.showToast(
               'Error: ' + error.code,
               error.message,
-              'error',
+              UIState.Error,
             );
           },
         });
@@ -156,7 +157,7 @@ export class UpsertTaskDialogComponent extends BaseDialog<TaskDialogData> {
       this.toast.showToast(
         'Error',
         'Check console for details. And contact your system administrator.',
-        'error',
+        UIState.Error,
       );
     }
   }

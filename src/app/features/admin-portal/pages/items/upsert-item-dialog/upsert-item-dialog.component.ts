@@ -6,6 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { UIState } from '@core/constants';
 import { Item as ItemConst } from '@core/constants/item.constant';
 import { Item } from '@core/models/item.model';
 import { NgIcon } from '@ng-icons/core';
@@ -110,7 +111,7 @@ export class UpsertItemDialogComponent extends BaseDialog<ItemDialogData> {
       this.toastService.showToast(
         'Error',
         'Please fill out all required fields.',
-        'error',
+        UIState.Error,
       );
       return;
     }
@@ -132,7 +133,7 @@ export class UpsertItemDialogComponent extends BaseDialog<ItemDialogData> {
           this.toastService.showToast(
             `Error ${error.code}`,
             error.message,
-            'error',
+            UIState.Error,
           );
         },
       });

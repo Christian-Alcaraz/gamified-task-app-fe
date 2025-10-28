@@ -20,5 +20,6 @@ export * from './item.constant';
 export * from './size.constant';
 export * from './status.constant';
 export * from './token.constant';
+export * from './ui-state.constant';
 export * from './userType.constant';
 export { Const };

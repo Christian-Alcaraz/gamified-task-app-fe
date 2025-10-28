@@ -1,6 +1,6 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
-import { DialogOptions, StatusTyping } from '@core/constants';
+import { DialogOptions, StatusTyping, UIState } from '@core/constants';
 import { ItemTyping } from '@core/constants/item.constant';
 import { Item } from '@core/models/item.model';
 import { BaseDialogData } from '@shared/components/dialog';
@@ -107,11 +107,11 @@ export class ItemsComponent {
           ? `Item has been updated.`
           : `Item has been created.`;
 
-        this.toast.showToast(header, message, 'success');
+        this.toast.showToast(header, message, UIState.Success);
         this.getItems(this.state.query());
       },
       error: ({ error }) => {
-        this.toast.showToast('Error', error.message, 'error');
+        this.toast.showToast('Error', error.message, UIState.Error);
       },
     });
   }

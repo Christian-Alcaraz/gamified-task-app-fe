@@ -9,6 +9,7 @@ import {
   untracked,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { UIState } from '@core/constants';
 import { User, UserCharacter } from '@core/models';
 import { NgIcon } from '@ng-icons/core';
 import {
@@ -86,13 +87,18 @@ export class CreateCharacterModalComponent extends BaseDialog<BaseDialogData> {
           console.error(
             'Something really went wrong, this api should return a boolean',
           );
+          this.toast.showToast(
+            'Error',
+            'Something went really wrong. Check console',
+            UIState.Error,
+          );
           return;
         }
         const header = isTaken ? 'Name Taken' : 'Name Available';
         const message = isTaken
           ? 'Character name is already taken.'
           : 'Character name is available.';
-        const type = isTaken ? 'warning' : 'success';
+        const type = isTaken ? UIState.Warning : UIState.Success;
         this.toast.showToast(header, message, type);
         this.isNameTaken.set(isTaken);
       },
@@ -130,11 +136,11 @@ export class CreateCharacterModalComponent extends BaseDialog<BaseDialogData> {
           const message = hasCreatedCharacter
             ? 'Character has been updated.'
             : 'Character has been created.';
-          this.toast.showToast(header, message, 'success');
+          this.toast.showToast(header, message, UIState.Success);
           this.closeDialog(user);
         },
         error: ({ error }) => {
-          this.toast.showToast('Error', error.message, 'error');
+          this.toast.showToast('Error', error.message, UIState.Error);
         },
       });
   }

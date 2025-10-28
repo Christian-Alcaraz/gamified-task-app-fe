@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
-import { Token } from '@core/constants';
+import { Token, UIState } from '@core/constants';
 import { PasswordFieldComponent } from '@shared/components/inputs';
 import { TextFieldComponent } from '@shared/components/inputs/text-field/text-field.component';
 import { ToastService } from '@shared/components/toast/toast.service';
@@ -61,12 +61,12 @@ export class LoginComponent extends ThemeAwareComponent {
     this._authApi.login(email, password).subscribe({
       next: (user) => {
         localStorage.setItem(Token.Auth, user.token);
-        this.toast.showToast('Welcome!', 'Login Successful', 'success');
+        this.toast.showToast('Welcome!', 'Login Successful', UIState.Success);
         this._userStateService.setUserState(user);
         this._router.navigate(['hub']);
       },
       error: ({ error }) => {
-        this.toast.showToast('Error', error.message, 'error');
+        this.toast.showToast('Error', error.message, UIState.Error);
       },
     });
   }

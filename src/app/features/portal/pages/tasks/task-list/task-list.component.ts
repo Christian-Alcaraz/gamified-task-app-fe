@@ -9,7 +9,7 @@ import {
   output,
 } from '@angular/core';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
-import { DialogOptions } from '@core/constants';
+import { DialogOptions, UIState } from '@core/constants';
 import { User } from '@core/models';
 import { Task, TaskTyping } from '@core/models/task.model';
 import { UpsertTaskDialogComponent } from '@features/portal/pages/tasks/upsert-task-dialog/upsert-task-dialog.component';
@@ -99,7 +99,7 @@ export class TaskListComponent extends ThemeAwareComponent {
     dialog.closed.subscribe({
       next: (task) => {
         if (!task) return;
-        this.toast.showToast(header, message, 'success');
+        this.toast.showToast(header, message, UIState.Success);
         this.listChanged.emit();
       },
     });
@@ -111,7 +111,7 @@ export class TaskListComponent extends ThemeAwareComponent {
       this.toast.showToast(
         'Error',
         'Task ID is required to update task completion',
-        'error',
+        UIState.Error,
       );
       return;
     }
@@ -130,14 +130,17 @@ export class TaskListComponent extends ThemeAwareComponent {
         const message = completed
           ? `+${reward.gold} Gold +${reward.experience} Exp`
           : `${reward.gold} Gold ${reward.experience} Exp`;
-        const type = completed ? 'success' : 'error';
-
+        const type = completed ? UIState.Success : UIState.Error;
         this.toast.showToast(header, message, type);
         this.userStateService.setUserState(updatedUser);
         this.listChanged.emit();
       },
       error: ({ error }) => {
-        this.toast.showToast('Error: ' + error.code, error.message, 'error');
+        this.toast.showToast(
+          'Error: ' + error.code,
+          error.message,
+          UIState.Error,
+        );
       },
     });
   }

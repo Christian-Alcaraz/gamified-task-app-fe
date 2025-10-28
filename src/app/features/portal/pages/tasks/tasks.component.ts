@@ -3,7 +3,7 @@ import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { Component, inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
-import { DialogOptions } from '@core/constants';
+import { DialogOptions, UIState } from '@core/constants';
 import { TaskType, TaskTyping } from '@core/models/task.model';
 import { NgIcon } from '@ng-icons/core';
 import { TextFieldComponent } from '@shared/components/inputs';
@@ -169,13 +169,17 @@ export class TasksComponent extends ThemeAwareComponent implements OnDestroy {
           this.toast.showToast(
             'Success',
             `${this.stringUtil.toTitleCase(taskType)} Task has been created`,
-            'success',
+            UIState.Success,
           );
           service.retry$.next();
         }
       },
       error: ({ error }) => {
-        this.toast.showToast('Error: ' + error.code, error.message, 'error');
+        this.toast.showToast(
+          'Error: ' + error.code,
+          error.message,
+          UIState.Error,
+        );
       },
     });
   }
