@@ -28,7 +28,7 @@ export class ToastService {
     const toastOptions: NgpToastOptions = {
       placement: this.defaults.placement,
       duration: this.defaults.duration,
-      context: context as ToastContext,
+      context,
       ...(options ?? {}),
     };
 
