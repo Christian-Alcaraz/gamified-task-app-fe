@@ -33,5 +33,26 @@ export class AuthService extends BaseApiService {
       headers,
     });
   }
+
+  refreshToken() {
+    return this.http.get<any>(`${this.url}/refresh-token`);
+  }
+
+  setAuthToken(token: string) {
+    localStorage.setItem(Token.Auth, token);
+  }
+
+  removeAuthToken() {
+    localStorage.removeItem(Token.Auth);
+  }
+
+  setRefreshToken(token: string) {
+    localStorage.setItem(Token.Refresh, token);
+  }
+
+  removeRefreshToken() {
+    localStorage.removeItem(Token.Refresh);
+  }
+
   /* eslint-enable */
 }
