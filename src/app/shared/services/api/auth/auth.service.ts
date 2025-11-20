@@ -34,24 +34,29 @@ export class AuthService extends BaseApiService {
     });
   }
 
+  logout() {
+    const authToken = localStorage.getItem(Token.Auth);
+    const headers = new HttpHeaders({
+      authorization: `Bearer ${authToken}`,
+    });
+
+    return this.http.post<any>(`${this.url}/logout`, {}, { headers });
+  }
+
   refreshToken() {
-    return this.http.get<any>(`${this.url}/refresh-token`);
+    return this.http.post<any>(`${this.url}/refresh-token`, null);
   }
 
   setAuthToken(token: string) {
     localStorage.setItem(Token.Auth, token);
   }
 
+  getAuthToken() {
+    return localStorage.getItem(Token.Auth);
+  }
+
   removeAuthToken() {
     localStorage.removeItem(Token.Auth);
-  }
-
-  setRefreshToken(token: string) {
-    localStorage.setItem(Token.Refresh, token);
-  }
-
-  removeRefreshToken() {
-    localStorage.removeItem(Token.Refresh);
   }
 
   /* eslint-enable */
