@@ -5,13 +5,21 @@ import {
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
-import { provideHttpClient } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import {
   provideNgIconsConfig,
   withContentSecurityPolicy,
 } from '@ng-icons/core';
 import { routes } from './app.component.routes';
 
+import { ApiErrorInterceptorDI } from '@core/interceptors/api-error/api-error.interceptor';
+import { attachRequestCredentialsInterceptor } from '@core/interceptors/attach-request-credentials/attach-request-credentials.interceptor';
 import { provideIcons } from '@ng-icons/core';
 import * as heroIconsMicro from '@ng-icons/heroicons/micro';
 import * as heroIconsMini from '@ng-icons/heroicons/mini';
@@ -34,9 +42,16 @@ const compiledIcons = {
 };
 
 const maskConfig: NgxMaskOptions = { validation: false };
+
+const interceptorFns = [attachRequestCredentialsInterceptor];
+
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(),
+    provideHttpClient(
+      withInterceptors(interceptorFns),
+      withFetch(),
+      withInterceptorsFromDi(),
+    ),
     provideBrowserGlobalErrorListeners(),
     provideEnvironmentNgxMask(maskConfig),
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -49,5 +64,10 @@ export const appConfig: ApplicationConfig = {
       withContentSecurityPolicy(),
     ),
     UserStateService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ApiErrorInterceptorDI,
+      multi: true,
+    },
   ],
 };
