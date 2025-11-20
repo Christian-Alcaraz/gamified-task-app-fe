@@ -2,10 +2,12 @@ import { Dialog } from '@angular/cdk/dialog';
 import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
 import { Const, DialogOptions } from '@core/constants';
 import { User } from '@core/models';
+import { ToastService } from '@shared/components/toast/toast.service';
+import { AuthService } from '@shared/services/api/auth/auth.service';
 import { UserStateService } from '@shared/services/state/user.state.service';
 import { CreateCharacterModalComponent } from '../create-character-modal/create-character-modal.component';
 import { StatBarComponent } from '../stat-bar/stat-bar.component';
@@ -30,6 +32,9 @@ export class HeaderComponent extends ThemeAwareComponent {
   private readonly _dialog = inject(Dialog);
   private readonly _scrollStrategy = inject(ScrollStrategyOptions);
   private readonly _userStateService = inject(UserStateService);
+  private readonly _authService = inject(AuthService);
+  private readonly _router = inject(Router);
+  private readonly toast = inject(ToastService);
   readonly userState = this._userStateService.userState;
   readonly navItems = Const.NavItems;
 
@@ -63,5 +68,29 @@ export class HeaderComponent extends ThemeAwareComponent {
   toggleTheme() {
     const newTheme = this.theme() === 'dark' ? 'light' : 'dark';
     this.themeService.setTheme(newTheme);
+  }
+
+  me() {
+    this._authService.me().subscribe({
+      next: (user) => {
+        console.log(user);
+      },
+    });
+  }
+
+  logout() {
+    this._authService.logout().subscribe({
+      next: () => {
+        this.toast.showToast('Success', 'Logged out successfully', 'success');
+        this._userStateService.clearUserState();
+        this._authService.removeAuthToken();
+        this._router.navigate(['/auth/login']);
+      },
+      error: () => {
+        this._userStateService.clearUserState();
+        this._authService.removeAuthToken();
+        this._router.navigate(['/auth/login']);
+      },
+    });
   }
 }
