@@ -3,12 +3,17 @@ import {
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
+  HttpStatusCode,
 } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Token } from '@core/constants';
+import {
+  ToastType,
+  ToastTyping,
+} from '@shared/components/toast/toast.component';
 import { ToastService } from '@shared/components/toast/toast.service';
 import { AuthService } from '@shared/services/api/auth/auth.service';
-import { HttpService } from '@shared/services/http/http.service';
 import { catchError, of, Subject, switchMap, tap, throwError } from 'rxjs';
 
 @Injectable()
@@ -16,7 +21,6 @@ export class ApiErrorInterceptorDI implements HttpInterceptor {
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
   private readonly authService = inject(AuthService);
-  private readonly http = inject(HttpService);
 
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _refreshSubject$: Subject<any> = new Subject<any>();
@@ -66,26 +70,53 @@ export class ApiErrorInterceptorDI implements HttpInterceptor {
 
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
   intercept(req: HttpRequest<any>, handler: HttpHandler): any {
-    if (req.url.endsWith('/logout') || req.url.endsWith('/token-refresh')) {
+    const showToast = (
+      message: string,
+      header = 'Error',
+      type: ToastTyping = 'error',
+    ) => {
+      this.toast.showToast(header, message, type);
+    };
+
+    if (req.url.endsWith('/logout')) {
       return handler.handle(req);
     }
+
+    if (req.url.endsWith('/refresh-token')) {
+      return handler.handle(req).pipe(
+        catchError((error) => {
+          if (
+            error instanceof HttpErrorResponse &&
+            error.status === HttpStatusCode.Unauthorized
+          ) {
+            showToast(
+              error.error.message,
+              '',
+              ToastType.Warning as ToastTyping,
+            );
+            if (this.router.url.includes('hub')) {
+              localStorage.removeItem(Token.Auth);
+              this.router.navigate(['auth']);
+            }
+          }
+
+          return throwError(() => error);
+        }),
+      );
+    }
+
     return handler.handle(req).pipe(
       catchError((error) => {
-        const showToastError = (message: string) => {
-          this.toast.showToast('Error', message, 'error');
-        };
         let isServerError = false;
 
         if (error.statusText === 'Unknown Error') {
           isServerError = true;
-          showToastError(
+          showToast(
             'No internet connection. Please check your internet connection and try again.',
           );
         } else if (error.status === 500) {
           isServerError = true;
-          showToastError(
-            'Internal server error. Please contact the administrator.',
-          );
+          showToast('Internal server error. Please contact the administrator.');
         } else if (this._checkTokenExpiryError(error)) {
           return this._ifTokenExpired().pipe(
             switchMap(() => handler.handle(this._updateHeader(req))),
@@ -96,111 +127,4 @@ export class ApiErrorInterceptorDI implements HttpInterceptor {
       }),
     );
   }
-
-  // private _handleError(
-  //   error: HttpErrorResponse,
-  //   request: HttpRequest<any>, //eslint-disable-line @typescript-eslint/no-explicit-any
-  // ) {
-  //   const showToastError = (message: string) => {
-  //     this.toast.showToast('Error', message, 'error');
-  //   };
-
-  //   let isServerError = false;
-
-  //   if (error.statusText === 'Unknown Error') {
-  //     isServerError = true;
-  //     showToastError(
-  //       'No internet connection. Please check your internet connection and try again.',
-  //     );
-  //   } else if (error.status === 500) {
-  //     isServerError = true;
-  //     showToastError(
-  //       'Internal server error. Please contact the administrator.',
-  //     );
-  //   } else if (this._checkTokenExpiryError(error)) {
-  //   }
-
-  //   return isServerError ? of(error) : throwError(() => error);
-  // }
 }
-
-//  private _handleError(
-//     error: HttpErrorResponse,
-//     request: HttpRequest<any>, //eslint-disable-line @typescript-eslint/no-explicit-any
-//   ) {
-//     const showToastError = (message: string) => {
-//       this.toast.showToast('Error', message, 'error');
-//     };
-
-//     let isServerError = false;
-
-//     const isErrorUnauthorizedForbidden = [
-//       HttpStatusCode.Unauthorized,
-//       HttpStatusCode.Forbidden,
-//     ].includes(error.status);
-
-//     if (!error) {
-//       return of();
-//     }
-
-//     if (error.statusText === 'Unknown Error') {
-//       isServerError = true;
-//       showToastError(
-//         'No internet connection. Please check your internet connection and try again.',
-//       );
-//     } else if (error.status === 500) {
-//       isServerError = true;
-//       showToastError(
-//         'Internal server error. Please contact the administrator.',
-//       );
-//     } else if (isErrorUnauthorizedForbidden) {
-//       console.log('IT IS UNAUTHORIZED FORBIDDEN');
-
-//       const isRequestUrlIncludesAuth = request.url.includes('auth');
-//       const isRequestUrlRefreshToken = request.url.endsWith('/refresh-token');
-//       console.log({
-//         url: request.url,
-//         '!isRequestUrlIncludesAuth && !isRequestUrlRefreshToken':
-//           !isRequestUrlIncludesAuth && !isRequestUrlRefreshToken,
-//         isRequestUrlIncludesAuth: isRequestUrlIncludesAuth,
-//         isRequestUrlRefreshToken: isRequestUrlRefreshToken,
-//       });
-//       if (!isRequestUrlIncludesAuth || !isRequestUrlRefreshToken) {
-//         /**
-//          * This means request tried to access a resource and the auth token used is invalid/expired
-//          * So try to get new auth token via refresh token and then retry the request again.
-//          */
-
-//         console.log('Refreshing Token');
-//         this.authService.refreshToken().subscribe({
-//           next: (response) => {
-//             const { token } = response;
-//             this.authService.setAuthToken(token);
-
-//             const method = request.method as HttpMethod;
-//             const url = request.url;
-//             const body = request.body ?? {};
-//             const query = request.params;
-
-//             return this.http.start(method, url, body, query);
-//           },
-//         });
-//       } else if (isRequestUrlRefreshToken) {
-//         /**
-//          * This means request tried to use refresh token to get new access token and failed.
-//          * So forced to reauthenticate user.
-//          */
-
-//         // this.authService.logout();
-//         showToastError(error.error.message);
-
-//         const routerUrlIncludesPortal = this.router.url.includes('portal');
-//         if (routerUrlIncludesPortal) {
-//           this.router.navigate(['/auth/login']);
-//           localStorage.removeItem(Token.Auth);
-//         }
-//       }
-//     }
-
-//     return isServerError ? of(error) : throwError(() => error);
-//   }

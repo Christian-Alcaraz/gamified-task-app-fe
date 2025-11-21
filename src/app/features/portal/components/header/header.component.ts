@@ -78,18 +78,27 @@ export class HeaderComponent extends ThemeAwareComponent {
     });
   }
 
-  logout() {
-    this._authService.logout().subscribe({
+  refreshToken() {
+    this._authService.refreshToken().subscribe({
       next: () => {
-        this.toast.showToast('Success', 'Logged out successfully', 'success');
-        this._userStateService.clearUserState();
-        this._authService.removeAuthToken();
-        this._router.navigate(['/auth/login']);
+        console.log('Should be redirected to auth/login');
+      },
+    });
+  }
+
+  logout() {
+    const executeClientLogout = () => {
+      this._userStateService.clearUserState();
+      this._authService.removeAuthToken();
+      this._router.navigate(['/auth/login']);
+    };
+
+    this._authService.logout().subscribe({
+      complete: () => {
+        executeClientLogout();
       },
       error: () => {
-        this._userStateService.clearUserState();
-        this._authService.removeAuthToken();
-        this._router.navigate(['/auth/login']);
+        executeClientLogout();
       },
     });
   }
