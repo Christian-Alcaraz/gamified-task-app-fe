@@ -87,19 +87,6 @@ export class HeaderComponent extends ThemeAwareComponent {
   }
 
   logout() {
-    const executeClientLogout = () => {
-      this._userStateService.clearUserState();
-      this._authService.removeAuthToken();
-      this._router.navigate(['/auth/login']);
-    };
-
-    this._authService.logout().subscribe({
-      complete: () => {
-        executeClientLogout();
-      },
-      error: () => {
-        executeClientLogout();
-      },
-    });
+    this._authService.logout().subscribe();
   }
 }
