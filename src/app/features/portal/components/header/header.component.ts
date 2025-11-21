@@ -2,11 +2,10 @@ import { Dialog } from '@angular/cdk/dialog';
 import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
 import { Const, DialogOptions } from '@core/constants';
 import { User } from '@core/models';
-import { ToastService } from '@shared/components/toast/toast.service';
 import { AuthService } from '@shared/services/api/auth/auth.service';
 import { UserStateService } from '@shared/services/state/user.state.service';
 import { CreateCharacterModalComponent } from '../create-character-modal/create-character-modal.component';
@@ -33,8 +32,6 @@ export class HeaderComponent extends ThemeAwareComponent {
   private readonly _scrollStrategy = inject(ScrollStrategyOptions);
   private readonly _userStateService = inject(UserStateService);
   private readonly _authService = inject(AuthService);
-  private readonly _router = inject(Router);
-  private readonly toast = inject(ToastService);
   readonly userState = this._userStateService.userState;
   readonly navItems = Const.NavItems;
 
