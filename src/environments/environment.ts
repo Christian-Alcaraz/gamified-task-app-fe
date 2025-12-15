@@ -4,6 +4,7 @@ const env = {
   ENVIRONMENT_NAME: 'development',
   PRODUCTION: false,
   API_URL: 'http://localhost:8000/api/v1',
+  WS_URL: 'http://localhost:8000',
   EMAIL: 'gamified@taskapp.com',
   PASSWORD: 'Password123!',
 };
