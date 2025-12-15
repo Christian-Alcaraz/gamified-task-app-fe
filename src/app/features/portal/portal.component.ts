@@ -8,22 +8,25 @@ import { User } from '@core/models';
 import { UserStateService } from '@shared/services/state/user.state.service';
 import { CreateCharacterModalComponent } from './components/create-character-modal/create-character-modal.component';
 import { HeaderComponent } from './components/header/header.component';
+import { WebsocketService } from './websocket.service';
 
 @Component({
   selector: 'app-portal',
   imports: [RouterOutlet, HeaderComponent],
   templateUrl: './portal.component.html',
   styleUrl: './portal.component.scss',
+  providers: [WebsocketService],
 })
 export class PortalComponent extends ThemeAwareComponent {
   private readonly _dialog = inject(Dialog);
   private readonly _scrollStrategy = inject(ScrollStrategyOptions);
   private readonly _userStateService = inject(UserStateService);
+  private readonly _wsService = inject(WebsocketService);
   readonly userState = this._userStateService.userState();
 
   constructor() {
     super();
-
+    this._wsService.init();
     if (!this.userState?.flags?.hasCreatedCharacter) {
       setTimeout(() => {
         this._openCharacterCreationDialog();
