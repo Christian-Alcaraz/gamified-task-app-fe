@@ -24,7 +24,7 @@ export class HttpService {
     method: HttpMethod,
     endpoint: string,
     body?: unknown,
-    query?: Record<string, number | string | boolean>,
+    query?: Record<string, number | string | boolean> | HttpParams,
     options?: {
       headers?: Record<string, number | string | boolean>;
       responseType?: string;
@@ -51,9 +51,12 @@ export class HttpService {
 
     const url = `${this.baseUrl}${endpoint}`;
 
-    const queryParams = new HttpParams({
-      fromObject: query,
-    });
+    const queryParams =
+      query instanceof HttpParams
+        ? query
+        : new HttpParams({
+            fromObject: query,
+          });
 
     switch (method) {
       case 'get': // get

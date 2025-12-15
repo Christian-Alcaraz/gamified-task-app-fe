@@ -66,6 +66,7 @@ export class LoginComponent extends ThemeAwareComponent {
         this._router.navigate(['hub']);
       },
       error: ({ error }) => {
+        console.log(error);
         this.toast.showToast('Error', error.message, UIState.Error);
       },
     });

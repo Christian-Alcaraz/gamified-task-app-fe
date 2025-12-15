@@ -40,3 +40,9 @@ export interface ToastContext {
 }
 
 export type ToastTyping = 'info' | 'success' | 'warning' | 'error';
+export const ToastType = {
+  Info: 'info',
+  Success: 'success',
+  Warning: 'warning',
+  Error: 'error',
+};

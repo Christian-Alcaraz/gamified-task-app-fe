@@ -12,7 +12,7 @@ const portalNavHeaderItems = [
 const Const = {
   AppTheme: 'app-theme',
   NavItems: portalNavHeaderItems,
-} as const;
+};
 
 export * from './base.constant';
 export * from './color.constant';
