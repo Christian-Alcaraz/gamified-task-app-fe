@@ -61,8 +61,8 @@
       class="inline-flex item-center gap-2 group cursor-pointer transition-colors duration-100 ease-burst-in-slow-out border rounded-xl px-4 py-1.5 w-full"
       [ngClass]="{
         'bg-muted/25 text-muted-foreground cursor-not-allowed pointer-events-none':
-          loading,
-        'bg-primary text-primary-foreground hover:bg-primary/55': !loading,
+          loading(),
+        'bg-primary text-primary-foreground hover:bg-primary/55': !loading(),
       }"
       (click)="submit()"
     >
