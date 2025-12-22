@@ -7,11 +7,9 @@ import {
 } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { EToken } from '@core/constants';
-import {
-  ToastType,
-  ToastTyping,
-} from '@shared/components/toast/toast.component';
+import { EToken, UI_STATE } from '@core/constants';
+import { IToastType } from '@shared/components/toast/toast.component';
+
 import { ToastService } from '@shared/components/toast/toast.service';
 import { AuthService } from '@shared/services/api/auth/auth.service';
 import { catchError, of, Subject, switchMap, tap, throwError } from 'rxjs';
@@ -73,7 +71,7 @@ export class ApiErrorInterceptorDI implements HttpInterceptor {
     const showToast = (
       message: string,
       header = 'Error',
-      type: ToastTyping = 'error',
+      type: IToastType = UI_STATE.Error,
     ) => {
       this.toast.showToast(header, message, type);
     };
@@ -89,11 +87,7 @@ export class ApiErrorInterceptorDI implements HttpInterceptor {
             error instanceof HttpErrorResponse &&
             error.status === HttpStatusCode.Unauthorized
           ) {
-            showToast(
-              error.error.message,
-              '',
-              ToastType.Warning as ToastTyping,
-            );
+            showToast(error.error.message, '', UI_STATE.Warning);
             if (this.router.url.includes('hub')) {
               localStorage.removeItem(EToken.Auth);
               this.router.navigate(['auth']);

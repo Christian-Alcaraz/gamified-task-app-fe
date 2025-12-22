@@ -59,7 +59,7 @@ export function TodoTaskStateFactory(): TaskStateService {
 export class TaskStateService {
   //Todo: have a method that initializes the service with a task type and optional query
   /**
-   * init(taskType: TaskTyping, query?: Record<string, any>) {
+   * init(taskType: ETaskType, query?: Record<string, any>) {
    *  this.taskType$.next(taskType);
    *  if (query) {
    *    this.query$.next(query);

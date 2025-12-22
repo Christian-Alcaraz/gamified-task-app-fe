@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
-import { EToken, EUiState } from '@core/constants';
+import { EToken, UI_STATE } from '@core/constants';
 import { PasswordFieldComponent } from '@shared/components/inputs';
 import { TextFieldComponent } from '@shared/components/inputs/text-field/text-field.component';
 import { ToastService } from '@shared/components/toast/toast.service';
@@ -63,13 +63,13 @@ export class LoginComponent extends ThemeAwareComponent {
         console.log('FUCKING WORKS DAPAT MAY TOKEN NA SA LOCALSTORAGE');
         console.log(user);
         localStorage.setItem(EToken.Auth, user.token);
-        this.toast.showToast('Welcome!', 'Login Successful', EUiState.Success);
+        this.toast.showToast('Welcome!', 'Login Successful', UI_STATE.Success);
         this._userStateService.setUserState(user);
         this._router.navigate(['hub']);
       },
       error: ({ error }) => {
         console.log(error);
-        this.toast.showToast('Error', error.message, EUiState.Error);
+        this.toast.showToast('Error', error.message, UI_STATE.Error);
       },
     });
   }

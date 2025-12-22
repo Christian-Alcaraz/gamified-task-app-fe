@@ -1,6 +1,6 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
-import { DIALOG_OPTIONS, EStatus, EUiState } from '@core/constants';
+import { DIALOG_OPTIONS, EStatus, UI_STATE } from '@core/constants';
 import { EItemType } from '@core/constants/item.constant';
 import { Item } from '@core/models/item.model';
 import { IBaseDialogData } from '@shared/components/dialog';
@@ -107,11 +107,11 @@ export class ItemsComponent {
           ? `Item has been updated.`
           : `Item has been created.`;
 
-        this.toast.showToast(header, message, EUiState.Success);
+        this.toast.showToast(header, message, UI_STATE.Success);
         this.getItems(this.state.query());
       },
       error: ({ error }) => {
-        this.toast.showToast('Error', error.message, EUiState.Error);
+        this.toast.showToast('Error', error.message, UI_STATE.Error);
       },
     });
   }

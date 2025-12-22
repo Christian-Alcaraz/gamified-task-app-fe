@@ -1,4 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
+import { UI_STATE } from '@core/constants';
 import { ThemeService } from '@shared/services/theme/theme.service';
 import {
   injectToastContext,
@@ -36,13 +37,7 @@ export class ToastComponent {
 export interface IToastContext {
   header: string;
   description: string;
-  type: ToastTyping;
+  type: IToastType;
 }
 
-export type ToastTyping = 'info' | 'success' | 'warning' | 'error';
-export const ToastType = {
-  Info: 'info',
-  Success: 'success',
-  Warning: 'warning',
-  Error: 'error',
-};
+export type IToastType = (typeof UI_STATE)[keyof typeof UI_STATE];

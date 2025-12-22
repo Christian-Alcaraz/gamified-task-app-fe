@@ -9,7 +9,7 @@ import {
   output,
 } from '@angular/core';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
-import { DIALOG_OPTIONS, EUiState } from '@core/constants';
+import { DIALOG_OPTIONS, UI_STATE } from '@core/constants';
 import { User } from '@core/models';
 import { ETaskType, Task } from '@core/models/task.model';
 import { UpsertTaskDialogComponent } from '@features/portal/pages/tasks/upsert-task-dialog/upsert-task-dialog.component';
@@ -99,7 +99,7 @@ export class TaskListComponent extends ThemeAwareComponent {
     dialog.closed.subscribe({
       next: (task) => {
         if (!task) return;
-        this.toast.showToast(header, message, EUiState.Success);
+        this.toast.showToast(header, message, UI_STATE.Success);
         this.listChanged.emit();
       },
     });
@@ -111,7 +111,7 @@ export class TaskListComponent extends ThemeAwareComponent {
       this.toast.showToast(
         'Error',
         'Task ID is required to update task completion',
-        EUiState.Error,
+        UI_STATE.Error,
       );
       return;
     }
@@ -130,7 +130,7 @@ export class TaskListComponent extends ThemeAwareComponent {
         const message = completed
           ? `+${reward.gold} Gold +${reward.experience} Exp`
           : `${reward.gold} Gold ${reward.experience} Exp`;
-        const type = completed ? EUiState.Success : EUiState.Error;
+        const type = completed ? UI_STATE.Success : UI_STATE.Error;
         this.toast.showToast(header, message, type);
         this.userStateService.setUserState(updatedUser);
         this.listChanged.emit();
@@ -139,7 +139,7 @@ export class TaskListComponent extends ThemeAwareComponent {
         this.toast.showToast(
           'Error: ' + error.code,
           error.message,
-          EUiState.Error,
+          UI_STATE.Error,
         );
       },
     });

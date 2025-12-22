@@ -9,7 +9,7 @@ import {
   untracked,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { EUiState } from '@core/constants';
+import { UI_STATE } from '@core/constants';
 import { IUserCharacter, User } from '@core/models';
 import { NgIcon } from '@ng-icons/core';
 import {
@@ -90,7 +90,7 @@ export class CreateCharacterModalComponent extends BaseDialog<IBaseDialogData> {
           this.toast.showToast(
             'Error',
             'Something went really wrong. Check console',
-            EUiState.Error,
+            UI_STATE.Error,
           );
           return;
         }
@@ -98,7 +98,7 @@ export class CreateCharacterModalComponent extends BaseDialog<IBaseDialogData> {
         const message = isTaken
           ? 'Character name is already taken.'
           : 'Character name is available.';
-        const type = isTaken ? EUiState.Warning : EUiState.Success;
+        const type = isTaken ? UI_STATE.Warning : UI_STATE.Success;
         this.toast.showToast(header, message, type);
         this.isNameTaken.set(isTaken);
       },
@@ -136,11 +136,11 @@ export class CreateCharacterModalComponent extends BaseDialog<IBaseDialogData> {
           const message = hasCreatedCharacter
             ? 'Character has been updated.'
             : 'Character has been created.';
-          this.toast.showToast(header, message, EUiState.Success);
+          this.toast.showToast(header, message, UI_STATE.Success);
           this.closeDialog(user);
         },
         error: ({ error }) => {
-          this.toast.showToast('Error', error.message, EUiState.Error);
+          this.toast.showToast('Error', error.message, UI_STATE.Error);
         },
       });
   }

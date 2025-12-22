@@ -7,13 +7,13 @@ import {
   Validators,
 } from '@angular/forms';
 import {
-  EUiState,
   ITEM_ATTRIBUTES,
   ITEM_BASE_STATS,
   ITEM_RARITIES,
   ITEM_SOURCES,
   ITEM_TYPES,
   ITEM_USAGE_ATTRIBUTES,
+  UI_STATE,
 } from '@core/constants';
 import { Item } from '@core/models/item.model';
 import { NgIcon } from '@ng-icons/core';
@@ -118,7 +118,7 @@ export class UpsertItemDialogComponent extends BaseDialog<IItemDialogData> {
       this.toastService.showToast(
         'Error',
         'Please fill out all required fields.',
-        EUiState.Error,
+        UI_STATE.Error,
       );
       return;
     }
@@ -140,7 +140,7 @@ export class UpsertItemDialogComponent extends BaseDialog<IItemDialogData> {
           this.toastService.showToast(
             `Error ${error.code}`,
             error.message,
-            EUiState.Error,
+            UI_STATE.Error,
           );
         },
       });

@@ -68,7 +68,7 @@ export interface IUserCharacter {
 export class User {
   _id?: string;
   email?: string;
-  UserTyping?: EUserType;
+  userType?: EUserType;
   status?: EStatus;
   createdAt?: Date;
   updatedAt?: Date;

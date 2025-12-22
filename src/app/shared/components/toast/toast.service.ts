@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
+import { UI_STATE } from '@core/constants';
 import { NgpToastManager } from 'ng-primitives/toast';
 import { NgpToastOptions } from 'node_modules/ng-primitives/toast/toast/toast-manager';
-import { IToastContext, ToastComponent, ToastTyping } from './toast.component';
+import { IToastContext, IToastType, ToastComponent } from './toast.component';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,7 @@ export class ToastService {
   showToast(
     header = '',
     message: string,
-    type: ToastTyping = 'info',
+    type: IToastType = UI_STATE.Info,
     options?: NgpToastOptions,
   ) {
     const context: IToastContext = {
