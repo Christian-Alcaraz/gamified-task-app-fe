@@ -152,12 +152,7 @@ export class UpsertItemDialogComponent extends BaseDialog<IItemDialogData> {
   }
 
   private _updateItem(): Observable<Item> {
-    console.log('updateItem', {
-      pristine: this.itemForm.pristine,
-      dirty: this.itemForm.dirty,
-    });
     if (this.itemForm.pristine) {
-      console.log('update no changes should not api call');
       return of(this.data.item) as Observable<Item>;
     }
     const item = this.data.item;

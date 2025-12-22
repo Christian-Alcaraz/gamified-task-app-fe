@@ -60,15 +60,13 @@ export class LoginComponent extends ThemeAwareComponent {
 
     this._authApi.login(email, password).subscribe({
       next: (user) => {
-        console.log('FUCKING WORKS DAPAT MAY TOKEN NA SA LOCALSTORAGE');
-        console.log(user);
         localStorage.setItem(EToken.Auth, user.token);
         this.toast.showToast('Welcome!', 'Login Successful', UI_STATE.Success);
         this._userStateService.setUserState(user);
         this._router.navigate(['hub']);
       },
       error: ({ error }) => {
-        console.log(error);
+        console.error('Login error:', error);
         this.toast.showToast('Error', error.message, UI_STATE.Error);
       },
     });
