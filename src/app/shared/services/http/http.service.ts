@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Token } from '@core/constants';
+import { EToken } from '@core/constants';
 import { environment } from 'src/environments/environment';
 
 export type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
@@ -13,7 +13,7 @@ export class HttpService {
   private readonly baseUrl = environment.API_URL;
 
   private get headers() {
-    const authToken = localStorage.getItem(Token.Auth);
+    const authToken = localStorage.getItem(EToken.Auth);
     const headers = new HttpHeaders({
       authorization: `Bearer ${authToken}`,
     });

@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavItem } from '@core/interfaces/nav-item.interface';
+import { INavItem } from '@core/interfaces/nav-item.interface';
 import { AdminPortalService } from '@features/admin-portal/admin-portal.service';
 import { NgIcon } from '@ng-icons/core';
 import { ThemeService } from '@shared/services/theme/theme.service';
@@ -36,10 +36,10 @@ export class SidenavComponent {
     const foundNav = this.sidenavItems.find(
       (nav) => nav.route === this.#router.url,
     );
-    this.#adminPortalService.selectedNav = foundNav as NavItem;
+    this.#adminPortalService.selectedNav = foundNav as INavItem;
   }
 
-  selectRoute(nav: NavItem) {
+  selectRoute(nav: INavItem) {
     this.#adminPortalService.selectedNav = nav;
     this.#router.navigateByUrl(nav.route);
   }

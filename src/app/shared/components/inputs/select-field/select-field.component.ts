@@ -19,7 +19,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { BaseInputProps } from '@core/interfaces/base-input.interface';
+import { IBaseInputProps } from '@core/interfaces/base-input.interface';
 import { NgIcon } from '@ng-icons/core';
 import { ThemeService } from '@shared/services/theme/theme.service';
 import { startWith, Subject, takeUntil } from 'rxjs';
@@ -27,7 +27,7 @@ import { BaseInput } from '../base-input.class';
 import { InputErrorComponent } from '../input-error/input-error.component';
 
 export type OptionItem<T> = string | T;
-export interface SelectFieldProps extends BaseInputProps {
+export interface ISelectFieldProps extends IBaseInputProps {
   labelLoc?: 'hide' | 'top';
   labelKey?: string;
   searchPlaceholder?: string;
@@ -49,7 +49,7 @@ export class SelectFieldComponent
   triggerInput!: ElementRef<HTMLInputElement>;
 
   /* eslint-disable */
-  @Input() props!: SelectFieldProps;
+  @Input() props!: ISelectFieldProps;
   @Input() fcName!: string;
   @Input() options!: any[];
   @Input() disabled = false;

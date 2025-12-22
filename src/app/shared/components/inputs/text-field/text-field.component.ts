@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SizeTyping } from '@core/constants';
-import { BaseInputProps } from '@core/interfaces/base-input.interface';
+import { ESize } from '@core/constants';
+import { IBaseInputProps } from '@core/interfaces/base-input.interface';
 import { ThemeService } from '@shared/services/theme/theme.service';
 import { provideNgxMask } from 'ngx-mask';
 import { BaseInput } from '../base-input.class';
@@ -12,10 +12,10 @@ import { NumberInputDirective } from './number-input.directive';
 type LabelLocation = 'top' | 'hide';
 type TextFieldType = 'text' | 'number' | 'email' | 'currency';
 
-export interface TextFieldProps extends BaseInputProps {
+export interface ITextFieldProps extends IBaseInputProps {
   type: TextFieldType;
   labelLoc?: LabelLocation;
-  size?: SizeTyping;
+  size?: ESize;
   hideError?: boolean;
   // mask?: string; //Todo: ngx-mask is finicky as hell
 }
@@ -35,7 +35,7 @@ const NUMBER_MAX_VALUE = 999999999999;
   styleUrl: './text-field.component.scss',
 })
 export class TextFieldComponent extends BaseInput implements OnInit {
-  @Input({ required: true }) props!: TextFieldProps;
+  @Input({ required: true }) props!: ITextFieldProps;
   @Input() fcName!: string;
   @Input() disabled = false;
 

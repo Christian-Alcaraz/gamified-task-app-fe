@@ -1,4 +1,4 @@
-import { Task, TaskType } from '@core/models/task.model';
+import { ETaskType, Task } from '@core/models/task.model';
 
 export const formatTaskRequestBody = (task: Task) => {
   const body = JSON.parse(JSON.stringify(task));
@@ -19,7 +19,7 @@ export const formatTaskRequestBody = (task: Task) => {
     delete body.updatedAt;
   }
 
-  if (task.type === TaskType.Dailies) {
+  if (task.type === ETaskType.Dailies) {
     delete body.deadlineDate;
   } else {
     delete body.frequency;

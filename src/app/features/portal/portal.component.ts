@@ -3,7 +3,7 @@ import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
-import { DialogOptions } from '@core/constants';
+import { DIALOG_OPTIONS } from '@core/constants';
 import { User } from '@core/models';
 import { UserStateService } from '@shared/services/state/user.state.service';
 import { CreateCharacterModalComponent } from './components/create-character-modal/create-character-modal.component';
@@ -36,7 +36,7 @@ export class PortalComponent extends ThemeAwareComponent {
 
   private _openCharacterCreationDialog() {
     const dialogRef = this._dialog.open(CreateCharacterModalComponent, {
-      ...DialogOptions,
+      ...DIALOG_OPTIONS,
       scrollStrategy: this._scrollStrategy.block(),
       data: {
         disableBackdropClose: true,

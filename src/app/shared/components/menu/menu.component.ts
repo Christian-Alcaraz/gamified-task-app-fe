@@ -3,7 +3,7 @@ import { ThemeService } from '@shared/services/theme/theme.service';
 import { Column } from '@tanstack/angular-table';
 import { NgpMenu, NgpMenuItem } from 'ng-primitives/menu';
 
-export interface MenuItem {
+export interface IMenuItem {
   label: string;
   action: string | Column<unknown>;
   icon?: string;
@@ -61,7 +61,7 @@ export interface MenuItem {
 })
 export class MenuComponent {
   readonly theme = inject(ThemeService).theme();
-  menuItems = input.required<MenuItem[] | string[] | number[]>();
+  menuItems = input.required<IMenuItem[] | string[] | number[]>();
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
   selectMenu = output<any>();
 
@@ -74,14 +74,14 @@ export class MenuComponent {
     return `fixed flex flex-col w-max bg-card border shadow rounded-md p-1${theme} z-[9999]`;
   }
 
-  getLabel(item: MenuItem | string | number) {
+  getLabel(item: IMenuItem | string | number) {
     if (typeof item === 'string' || typeof item === 'number') {
       return item;
     }
     return item.label;
   }
 
-  menuSelected(item: MenuItem | string | number) {
+  menuSelected(item: IMenuItem | string | number) {
     if (typeof item === 'string' || typeof item === 'number') {
       this.selectMenu.emit(item);
     } else {

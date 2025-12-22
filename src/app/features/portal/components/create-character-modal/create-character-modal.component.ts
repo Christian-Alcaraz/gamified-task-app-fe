@@ -9,15 +9,15 @@ import {
   untracked,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { UIState } from '@core/constants';
-import { User, UserCharacter } from '@core/models';
+import { EUiState } from '@core/constants';
+import { IUserCharacter, User } from '@core/models';
 import { NgIcon } from '@ng-icons/core';
 import {
   BaseDialog,
-  BaseDialogData,
   DialogActionsDirective,
   DialogContentDirective,
   DialogTitleDirective,
+  IBaseDialogData,
 } from '@shared/components/dialog';
 import { ToastService } from '@shared/components/toast/toast.service';
 import { UserApiService } from '@shared/services/api/user/user.api.service';
@@ -39,7 +39,7 @@ import { finalize, Observable } from 'rxjs';
   templateUrl: './create-character-modal.component.html',
   styleUrl: './create-character-modal.component.scss',
 })
-export class CreateCharacterModalComponent extends BaseDialog<BaseDialogData> {
+export class CreateCharacterModalComponent extends BaseDialog<IBaseDialogData> {
   private readonly _userApi = inject(UserApiService);
   private readonly userState = inject(UserStateService).userState();
   private readonly toast = inject(ToastService);
@@ -90,7 +90,7 @@ export class CreateCharacterModalComponent extends BaseDialog<BaseDialogData> {
           this.toast.showToast(
             'Error',
             'Something went really wrong. Check console',
-            UIState.Error,
+            EUiState.Error,
           );
           return;
         }
@@ -98,7 +98,7 @@ export class CreateCharacterModalComponent extends BaseDialog<BaseDialogData> {
         const message = isTaken
           ? 'Character name is already taken.'
           : 'Character name is available.';
-        const type = isTaken ? UIState.Warning : UIState.Success;
+        const type = isTaken ? EUiState.Warning : EUiState.Success;
         this.toast.showToast(header, message, type);
         this.isNameTaken.set(isTaken);
       },
@@ -109,7 +109,7 @@ export class CreateCharacterModalComponent extends BaseDialog<BaseDialogData> {
   }
 
   submit() {
-    const character: UserCharacter = {
+    const character: IUserCharacter = {
       name: this.characterName(),
       gender: this.selectedGender() as 'male' | 'female',
       class: this.selectedClass() as string,
@@ -136,22 +136,22 @@ export class CreateCharacterModalComponent extends BaseDialog<BaseDialogData> {
           const message = hasCreatedCharacter
             ? 'Character has been updated.'
             : 'Character has been created.';
-          this.toast.showToast(header, message, UIState.Success);
+          this.toast.showToast(header, message, EUiState.Success);
           this.closeDialog(user);
         },
         error: ({ error }) => {
-          this.toast.showToast('Error', error.message, UIState.Error);
+          this.toast.showToast('Error', error.message, EUiState.Error);
         },
       });
   }
 
   private _patchCreateUserCharacter(
-    character: UserCharacter,
+    character: IUserCharacter,
   ): Observable<User> {
     return this._userApi.patchCreateCharacter(character);
   }
 
-  private _updateUserCharacter(character: UserCharacter): Observable<User> {
+  private _updateUserCharacter(character: IUserCharacter): Observable<User> {
     return this._userApi.updateUserCharacter(character);
   }
 }

@@ -1,13 +1,13 @@
-export interface BaseInputProps {
+export interface IBaseInputProps {
   label?: string;
   placeholder?: string;
   fcName?: string;
   hint?: string;
-  validators?: ValidatorType;
+  validators?: IValidator;
   hideError?: boolean;
 }
 
-export interface ValidatorType {
+export interface IValidator {
   required?: boolean;
   email?: boolean;
   max?: number;

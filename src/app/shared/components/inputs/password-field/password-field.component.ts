@@ -8,8 +8,8 @@ import {
   signal,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SizeTyping } from '@core/constants';
-import { BaseInputProps } from '@core/interfaces/base-input.interface';
+import { ESize } from '@core/constants';
+import { IBaseInputProps } from '@core/interfaces/base-input.interface';
 import { NgIcon } from '@ng-icons/core';
 import { ThemeService } from '@shared/services/theme/theme.service';
 import { BaseInput } from '../base-input.class';
@@ -17,9 +17,9 @@ import { InputErrorComponent } from '../input-error/input-error.component';
 
 type LabelLocation = 'top' | 'hide';
 
-export interface PasswordFieldProps extends BaseInputProps {
+export interface IPasswordFieldProps extends IBaseInputProps {
   labelLoc?: LabelLocation;
-  size?: SizeTyping;
+  size?: ESize;
   hideError?: boolean;
 }
 
@@ -30,7 +30,7 @@ export interface PasswordFieldProps extends BaseInputProps {
   styleUrl: './password-field.component.scss',
 })
 export class PasswordFieldComponent extends BaseInput implements OnInit {
-  @Input() props!: PasswordFieldProps;
+  @Input() props!: IPasswordFieldProps;
   @Input() fcName!: string;
   @Input() disabled = false;
 

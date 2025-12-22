@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { Item } from '@core/models/item.model';
-import { ItemTableQuery } from '@features/admin-portal/pages/items/items.component';
+import { IItemTableQuery } from '@features/admin-portal/pages/items/items.component';
 import { HttpService } from '@shared/services/http/http.service';
-import { PaginatedResponse } from '../base-api.class';
+import { IPaginatedResponse } from '../base-api.class';
 
 @Injectable({
   providedIn: 'root',
@@ -23,10 +23,10 @@ export class ItemApiService {
     return this.httpService.start<Item>('get', `${this.url}/${itemId}`);
   }
 
-  getItems(query?: ItemTableQuery) {
-    query = (query ?? {}) as ItemTableQuery;
+  getItems(query?: IItemTableQuery) {
+    query = (query ?? {}) as IItemTableQuery;
 
-    return this.httpService.start<PaginatedResponse<Item>>(
+    return this.httpService.start<IPaginatedResponse<Item>>(
       'get',
       this.url,
       {},

@@ -1,15 +1,15 @@
-import { StatusTyping, UserTyping } from '@core/constants';
+import { EStatus, EUserType } from '@core/constants';
 
-export interface UserFlags {
+export interface IUserFlags {
   hasCreatedCharacter: boolean;
   hasAcceptedTerms: boolean;
 }
 
-export interface UserPreferences {
+export interface IUserPreferences {
   theme: string;
 }
 
-export interface UserEquipment {
+export interface IUserEquipment {
   head?: string;
   face?: string;
   body?: string;
@@ -22,7 +22,7 @@ export interface UserEquipment {
   amulet?: string;
 }
 
-export interface UserStats {
+export interface IUserStats {
   health: number;
   mana: number;
   strength: number;
@@ -36,7 +36,7 @@ export interface UserStats {
   toNextLevel: number;
 }
 
-export interface UserCharacter {
+export interface IUserCharacter {
   name: string;
   skinColor?: string;
   gender: 'male' | 'female';
@@ -68,15 +68,15 @@ export interface UserCharacter {
 export class User {
   _id?: string;
   email?: string;
-  UserTyping?: UserTyping;
-  status?: StatusTyping;
+  UserTyping?: EUserType;
+  status?: EStatus;
   createdAt?: Date;
   updatedAt?: Date;
-  flags?: UserFlags;
-  preferences?: UserPreferences;
-  equipment?: UserEquipment;
-  stats?: UserStats;
-  character?: UserCharacter;
+  flags?: IUserFlags;
+  preferences?: IUserPreferences;
+  equipment?: IUserEquipment;
+  stats?: IUserStats;
+  character?: IUserCharacter;
   imageUrl?: string; // ? for the meantime; will be replaced with layered images using pixi js
 
   constructor(model: Partial<User> = {}) {

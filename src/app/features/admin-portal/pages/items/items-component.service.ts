@@ -1,25 +1,25 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import { Item } from '@core/models/item.model';
-import { PaginatedResponse } from '@shared/services/api/base-api.class';
-import { ItemTableQuery } from './items.component';
+import { IPaginatedResponse } from '@shared/services/api/base-api.class';
+import { IItemTableQuery } from './items.component';
 
-export interface ItemState {
-  items: WritableSignal<PaginatedResponse<Item>>;
-  query: WritableSignal<ItemTableQuery>;
+export interface IItemState {
+  items: WritableSignal<IPaginatedResponse<Item>>;
+  query: WritableSignal<IItemTableQuery>;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class ItemsComponentService {
-  items = signal<PaginatedResponse<Item>>({
+  items = signal<IPaginatedResponse<Item>>({
     records: [],
     total: 0,
   });
 
-  query = signal<ItemTableQuery>({ pageSize: 10, pageIndex: 0 });
+  query = signal<IItemTableQuery>({ pageSize: 10, pageIndex: 0 });
 
-  state: ItemState = {
+  state: IItemState = {
     items: this.items,
     query: this.query,
   };

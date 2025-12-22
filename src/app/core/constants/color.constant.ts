@@ -1,11 +1,9 @@
-export const Color = {
-  Primary: 'primary',
-  Error: 'error',
-  Warning: 'warning',
-  Success: 'success',
-  Neutral: 'neutral',
-} as const;
+export enum EColor {
+  Primary = 'primary',
+  Error = 'error',
+  Warning = 'warning',
+  Success = 'success',
+  Neutral = 'neutral',
+}
 
-export const Colors = Object.keys(Color);
-
-export type ColorTyping = (typeof Color)[keyof typeof Color];
+export const COLORS = Object.keys(EColor);

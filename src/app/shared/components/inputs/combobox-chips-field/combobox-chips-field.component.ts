@@ -11,7 +11,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { BaseInputProps } from '@core/interfaces/base-input.interface';
+import { IBaseInputProps } from '@core/interfaces/base-input.interface';
 import { NgIcon } from '@ng-icons/core';
 import { BaseInput } from '@shared/components/inputs/base-input.class';
 import { ThemeService } from '@shared/services/theme/theme.service';
@@ -26,7 +26,7 @@ import {
 } from 'ng-primitives/combobox';
 import { InputErrorComponent } from '../input-error/input-error.component';
 
-export interface ComboboxChipsProps extends BaseInputProps {
+export interface IComboboxChipsProps extends IBaseInputProps {
   labelLoc?: 'hide' | 'top';
   labelKey?: string;
 }
@@ -61,7 +61,7 @@ export default class ComboboxChipsFieldComponent<
   // ** Inputs
   fcName = input.required<string>();
   options = input.required<T[]>();
-  props = input<ComboboxChipsProps>({});
+  props = input<IComboboxChipsProps>({});
   disabled = input<boolean>(false);
 
   // ** ViewChilds

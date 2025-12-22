@@ -3,13 +3,13 @@ import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { Component, inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
-import { DialogOptions, UIState } from '@core/constants';
-import { TaskType, TaskTyping } from '@core/models/task.model';
+import { DIALOG_OPTIONS, EUiState } from '@core/constants';
+import { ETaskType } from '@core/models/task.model';
 import { NgIcon } from '@ng-icons/core';
 import { TextFieldComponent } from '@shared/components/inputs';
 import {
+  IMenuItem,
   MenuComponent,
-  MenuItem,
 } from '@shared/components/menu/menu.component';
 import { ToastService } from '@shared/components/toast/toast.service';
 import {
@@ -25,8 +25,8 @@ import { NgpButton } from 'ng-primitives/button';
 import { NgpMenuTrigger } from 'ng-primitives/menu';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import {
+  ITaskListFilter,
   TaskListComponent,
-  TaskListFilter,
 } from './task-list/task-list.component';
 import { UpsertTaskDialogComponent } from './upsert-task-dialog/upsert-task-dialog.component';
 
@@ -66,7 +66,7 @@ export class TasksComponent extends ThemeAwareComponent implements OnDestroy {
   readonly todoStateService = inject(TodoTaskStateInstance);
 
   readonly user = this.userStateService.userState();
-  readonly taskType = TaskType;
+  readonly taskType = ETaskType;
 
   readonly searchTaskForm = new FormGroup({
     text: new FormControl(''),
@@ -78,7 +78,7 @@ export class TasksComponent extends ThemeAwareComponent implements OnDestroy {
     return this.searchTaskForm.get('text');
   }
 
-  menuItems: MenuItem[] = [
+  menuItems: IMenuItem[] = [
     {
       label: 'Add Dailies',
       action: 'add_dailies',
@@ -91,7 +91,7 @@ export class TasksComponent extends ThemeAwareComponent implements OnDestroy {
     },
   ];
 
-  todoFilters: TaskListFilter[] = [
+  todoFilters: ITaskListFilter[] = [
     {
       label: 'Active',
       query: { completed: false },
@@ -106,7 +106,7 @@ export class TasksComponent extends ThemeAwareComponent implements OnDestroy {
     },
   ];
 
-  dailiesFilters: TaskListFilter[] = [
+  dailiesFilters: ITaskListFilter[] = [
     {
       label: 'All',
       query: null,
@@ -142,20 +142,20 @@ export class TasksComponent extends ThemeAwareComponent implements OnDestroy {
   }
 
   promptAction(action: string) {
-    const type = action === 'add_dailies' ? TaskType.Dailies : TaskType.Todo;
+    const type = action === 'add_dailies' ? ETaskType.Dailies : ETaskType.Todo;
     setTimeout(() => {
       this._openUpsertTaskDialog(type);
     }, 100);
   }
 
-  private _openUpsertTaskDialog(taskType: TaskTyping) {
+  private _openUpsertTaskDialog(taskType: ETaskType) {
     const service =
-      taskType === TaskType.Dailies
+      taskType === ETaskType.Dailies
         ? this.dailiesStateService
         : this.todoStateService;
 
     const dialogRef = this.dialog.open(UpsertTaskDialogComponent, {
-      ...DialogOptions,
+      ...DIALOG_OPTIONS,
       width: '55vw',
       scrollStrategy: this.scrollStrategy.block(),
       data: {
@@ -169,7 +169,7 @@ export class TasksComponent extends ThemeAwareComponent implements OnDestroy {
           this.toast.showToast(
             'Success',
             `${this.stringUtil.toTitleCase(taskType)} Task has been created`,
-            UIState.Success,
+            EUiState.Success,
           );
           service.retry$.next();
         }
@@ -178,7 +178,7 @@ export class TasksComponent extends ThemeAwareComponent implements OnDestroy {
         this.toast.showToast(
           'Error: ' + error.code,
           error.message,
-          UIState.Error,
+          EUiState.Error,
         );
       },
     });

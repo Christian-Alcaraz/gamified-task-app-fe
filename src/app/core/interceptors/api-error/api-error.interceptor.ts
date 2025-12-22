@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Token } from '@core/constants';
+import { EToken } from '@core/constants';
 import {
   ToastType,
   ToastTyping,
@@ -95,7 +95,7 @@ export class ApiErrorInterceptorDI implements HttpInterceptor {
               ToastType.Warning as ToastTyping,
             );
             if (this.router.url.includes('hub')) {
-              localStorage.removeItem(Token.Auth);
+              localStorage.removeItem(EToken.Auth);
               this.router.navigate(['auth']);
             }
           }

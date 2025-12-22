@@ -1,6 +1,6 @@
 import { environment } from 'src/environments/environment';
 
-export interface PaginatedResponse<T> {
+export interface IPaginatedResponse<T> {
   records: T[];
   total: number;
 }

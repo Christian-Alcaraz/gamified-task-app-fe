@@ -1,12 +1,12 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
-import { DialogOptions, StatusTyping, UIState } from '@core/constants';
-import { ItemTyping } from '@core/constants/item.constant';
+import { DIALOG_OPTIONS, EStatus, EUiState } from '@core/constants';
+import { EItemType } from '@core/constants/item.constant';
 import { Item } from '@core/models/item.model';
-import { BaseDialogData } from '@shared/components/dialog';
+import { IBaseDialogData } from '@shared/components/dialog';
 import {
+  ITableQuery,
   TableComponent,
-  TableQuery,
 } from '@shared/components/table/table.component';
 import { ToastService } from '@shared/components/toast/toast.service';
 import { ApiService } from '@shared/services/api';
@@ -14,15 +14,15 @@ import { ColumnDef } from '@tanstack/angular-table';
 import { ItemsComponentService } from './items-component.service';
 import { UpsertItemDialogComponent } from './upsert-item-dialog/upsert-item-dialog.component';
 
-export interface ItemTableQuery extends TableQuery {
+export interface IItemTableQuery extends ITableQuery {
   name?: string | null;
   description?: string | null;
-  type?: ItemTyping | null;
+  type?: EItemType | null;
   tags?: string[] | null;
-  status?: StatusTyping;
+  status?: EStatus;
 }
 
-export interface ItemDialogData extends BaseDialogData {
+export interface IItemDialogData extends IBaseDialogData {
   item?: Item;
 }
 
@@ -88,12 +88,12 @@ export class ItemsComponent {
   }
 
   openItemUpsertModal(item?: Item) {
-    const data: ItemDialogData = {
+    const data: IItemDialogData = {
       disableBackdropClose: true,
       ...(item ? { item } : {}),
     };
     const dialogRef = this.dialog.open(UpsertItemDialogComponent, {
-      ...DialogOptions,
+      ...DIALOG_OPTIONS,
       width: '75vw',
       ...(item ? { autoFocus: false } : {}),
       data,
@@ -107,21 +107,21 @@ export class ItemsComponent {
           ? `Item has been updated.`
           : `Item has been created.`;
 
-        this.toast.showToast(header, message, UIState.Success);
+        this.toast.showToast(header, message, EUiState.Success);
         this.getItems(this.state.query());
       },
       error: ({ error }) => {
-        this.toast.showToast('Error', error.message, UIState.Error);
+        this.toast.showToast('Error', error.message, EUiState.Error);
       },
     });
   }
 
-  handleQueryChange(query: ItemTableQuery) {
+  handleQueryChange(query: IItemTableQuery) {
     this.state.query.set(query);
     this.getItems(query);
   }
 
-  private getItems(query: ItemTableQuery) {
+  private getItems(query: IItemTableQuery) {
     this.apiService.getItems(query).subscribe({
       next: (response) => {
         this.state.items.set(response);

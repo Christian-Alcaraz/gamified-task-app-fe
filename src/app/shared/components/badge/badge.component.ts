@@ -3,11 +3,14 @@ import { TitleCasePipe } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
 
-export type BadgeType = 'badge' | 'notification';
+export enum EBadgeType {
+  Badge = 'badge',
+  Notification = 'notification',
+}
 
-export interface BadgeProps {
+export interface IBadgeProps {
   bgTailwindCss?: string;
-  type?: BadgeType;
+  type?: EBadgeType;
 }
 
 const BADGE_DEFAULT_CONFIG = {
@@ -33,8 +36,8 @@ export class BadgeComponent extends ThemeAwareComponent {
   badgeValue = input.required<string | number>();
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
   badgeClassificationConfig = input<any>();
-  badgeProps = input<BadgeProps>();
-  badgeType = input<BadgeType>();
+  badgeProps = input<IBadgeProps>();
+  badgeType = input<EBadgeType>();
 
   resolvedType = computed(
     () => this.badgeType() || this.badgeProps()?.type || 'badge',

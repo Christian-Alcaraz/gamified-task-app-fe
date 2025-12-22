@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
-import { Task, TaskType, TaskTyping } from '@core/models/task.model';
+import { ETaskType, Task } from '@core/models/task.model';
 import {
   combineLatest,
   map,
@@ -21,12 +21,16 @@ import {
 } from 'rxjs';
 import { TaskApiService } from '../api/task/task.api.service';
 
-export type TaskStateStatus = 'loading' | 'success' | 'error';
-export interface TasksState {
+export enum ETaskStateStatus {
+  Loading = 'loading',
+  Success = 'success',
+  Error = 'error',
+}
+export interface ITasksState {
   tasks: Signal<Task[]>;
   filter: Signal<string | null>;
   error: Signal<string | null>;
-  status: Signal<TaskStateStatus>;
+  status: Signal<ETaskStateStatus>;
 }
 
 export const DailiesTaskStateInstance = new InjectionToken<TaskStateService>(
@@ -38,13 +42,13 @@ export const TodoTaskStateInstance = new InjectionToken<TaskStateService>(
 
 export function DailiesTaskStateFactory(): TaskStateService {
   const service = new TaskStateService();
-  service.taskType$.next(TaskType.Dailies);
+  service.taskType$.next(ETaskType.Dailies);
   return service;
 }
 
 export function TodoTaskStateFactory(): TaskStateService {
   const service = new TaskStateService();
-  service.taskType$.next(TaskType.Todo);
+  service.taskType$.next(ETaskType.Todo);
   service.query$.next({ completed: false });
   return service;
 }
@@ -79,7 +83,7 @@ export class TaskStateService {
     this.retry$.pipe(startWith(null)),
   ]).pipe(
     switchMap(([taskType, taskQuery]) =>
-      this.apiService.getTasks(taskType as TaskTyping, taskQuery as any).pipe(
+      this.apiService.getTasks(taskType as ETaskType, taskQuery as any).pipe(
         retry({
           delay: (error) => {
             this.error$.next(error);
@@ -98,11 +102,11 @@ export class TaskStateService {
   );
 
   private status$ = merge(
-    this.tasks$.pipe(map(() => 'success' as const)),
+    this.tasks$.pipe(map(() => ETaskStateStatus.Success)),
     merge(this.taskType$, this.retry$, this.query$).pipe(
-      map(() => 'loading' as const),
+      map(() => ETaskStateStatus.Loading),
     ),
-    this.error$.pipe(map(() => 'error' as const)),
+    this.error$.pipe(map(() => ETaskStateStatus.Error)),
   );
 
   // selectors
@@ -112,7 +116,9 @@ export class TaskStateService {
   private error = toSignal(this.error$.pipe(map((err) => err.message)), {
     initialValue: null,
   });
-  private status = toSignal(this.status$, { initialValue: 'loading' });
+  private status = toSignal(this.status$, {
+    initialValue: ETaskStateStatus.Loading,
+  });
 
   private filteredTasks = computed(() => {
     const filter = this.filter();
@@ -127,7 +133,7 @@ export class TaskStateService {
   });
 
   // state
-  public state: TasksState = {
+  public state: ITasksState = {
     tasks: this.filteredTasks,
     filter: this.filter,
     error: this.error,

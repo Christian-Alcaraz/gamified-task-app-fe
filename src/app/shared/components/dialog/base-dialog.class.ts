@@ -22,7 +22,7 @@ export const BaseDialogPosition = {
 type DialogPositionType =
   (typeof BaseDialogPosition)[keyof typeof BaseDialogPosition];
 
-export interface BaseDialogData extends DialogConfig {
+export interface IBaseDialogData extends DialogConfig {
   class?: string;
   position?: DialogPositionType; // 'center' | 'left' | 'right';
   disableBackdropClose?: boolean;
@@ -39,7 +39,7 @@ const DIALOG_RIGHT_CSS = 'absolute top-0 right-0 flex flex-col h-full border-l';
     '[class]': 'hostCss()',
   },
 })
-export abstract class BaseDialog<T extends BaseDialogData>
+export abstract class BaseDialog<T extends IBaseDialogData>
   implements AfterViewInit, OnDestroy
 {
   protected readonly dialogRef = inject(DialogRef);

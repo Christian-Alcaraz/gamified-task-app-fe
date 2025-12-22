@@ -31,7 +31,7 @@ import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { MenuComponent } from '../menu/menu.component';
 import { TableDropMenuComponent } from './table-drop-menu/table-drop-menu.component';
-export interface TableQuery {
+export interface ITableQuery {
   search?: string;
   sort?: string;
   pageSize: number;
@@ -53,7 +53,7 @@ export interface TableQuery {
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
 })
-export class TableComponent<TData, TQueryState extends TableQuery>
+export class TableComponent<TData, KTableQueryState extends ITableQuery>
   implements OnInit, OnDestroy
 {
   //** States
@@ -72,12 +72,12 @@ export class TableComponent<TData, TQueryState extends TableQuery>
   data = input.required<TData[]>();
   columns = input.required<ColumnDef<TData>[]>();
   pageCount = input.required<number>();
-  query = input.required<TQueryState>();
+  query = input.required<KTableQueryState>();
 
   //** Outputs
   addItem = output<void>();
   selectedRow = output<TData>();
-  tableQueryChange = output<TableQuery>();
+  tableQueryChange = output<ITableQuery>();
 
   private onSortingChange = (updater: Updater<SortingState>) => {
     const next =
@@ -181,7 +181,7 @@ export class TableComponent<TData, TQueryState extends TableQuery>
     return isSortStateFalse ? 'heroChevronUpDown' : 'heroChevronUp';
   }
 
-  private _isQueryEqual(query: TQueryState, prevQuery: TQueryState) {
+  private _isQueryEqual(query: KTableQueryState, prevQuery: KTableQueryState) {
     return isEqual(query, prevQuery);
   }
 

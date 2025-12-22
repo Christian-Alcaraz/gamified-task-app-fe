@@ -1,60 +1,39 @@
-// Constants
-const Frequency = {
-  Daily: 'daily',
-  Weekly: 'weekly',
-  Monthly: 'monthly',
-  Yearly: 'yearly',
-} as const;
+export enum ETaskFrequency {
+  Daily = 'daily',
+  Weekly = 'weekly',
+  Monthly = 'monthly',
+  Yearly = 'yearly',
+}
 
-const Difficulty = {
-  Trivial: 'trivial',
-  Easy: 'easy',
-  Medium: 'medium',
-  Hard: 'hard',
-} as const;
+export enum ETaskDifficulty {
+  Trivial = 'trivial',
+  Easy = 'easy',
+  Medium = 'medium',
+  Hard = 'hard',
+}
 
-const Status = {
-  Active: 'active',
-  Cancelled: 'cancelled',
-  Completed: 'completed',
-  Paused: 'paused',
-} as const;
+export enum ETaskStatus {
+  Active = 'active',
+  Cancelled = 'cancelled',
+  Completed = 'completed',
+  Paused = 'paused',
+}
 
-const Stat = {
-  HpTotal: 'hpTotal',
-  HpCurrent: 'hpCurrent',
-  RewardGold: 'rewardGold',
-  RewardXp: 'rewardXp',
-} as const;
+export enum ETaskStat {
+  HpTotal = 'hpTotal',
+  HpCurrent = 'hpCurrent',
+  RewardGold = 'rewardGold',
+  RewardXp = 'rewardXp',
+}
 
-const Type = {
-  Dailies: 'dailies',
-  Todo: 'todo',
-} as const;
+export enum ETaskType {
+  Dailies = 'dailies',
+  Todo = 'todo',
+}
 
 // Lists
-const Frequencies = Object.values(Frequency);
-const Difficulties = Object.values(Difficulty);
-const Statuses = Object.values(Status);
-const Stats = Object.values(Stat);
-const Types = Object.values(Type);
-
-export const Task = {
-  Frequency,
-  Frequencies,
-  Difficulty,
-  Difficulties,
-  Status,
-  Statuses,
-  Stat,
-  Stats,
-  Type,
-  Types,
-};
-
-// Typings
-export type TaskFrequencyType = (typeof Frequency)[keyof typeof Frequency];
-export type TaskDifficultyType = (typeof Difficulty)[keyof typeof Difficulty];
-export type TaskStatusType = (typeof Status)[keyof typeof Status];
-export type TaskStatType = (typeof Stat)[keyof typeof Stat];
-export type TaskType = (typeof Type)[keyof typeof Type];
+export const TASK_FREQUENCIES = Object.values(ETaskFrequency);
+export const TASK_DIFFICULTIES = Object.values(ETaskDifficulty);
+export const TASK_STATUSES = Object.values(ETaskStatus);
+export const TASK_STATS = Object.values(ETaskStat);
+export const TASK_TYPES = Object.values(ETaskType);

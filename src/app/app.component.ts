@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
-import { Const } from '@core/constants';
+import { APP_THEME } from '@core/constants';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +14,7 @@ export class App extends ThemeAwareComponent {
 
   constructor() {
     super();
-    const themeSavedOption = localStorage[Const.AppTheme] ?? 'dark';
+    const themeSavedOption = localStorage[APP_THEME] ?? 'dark';
     this.setTheme(themeSavedOption);
   }
 

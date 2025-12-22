@@ -1,14 +1,18 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 
-export type SameSite = 'Lax' | 'None' | 'Strict';
+export enum ECookieSameSite {
+  Lax = 'Lax',
+  None = 'None',
+  Strict = 'Strict',
+}
 
-export interface CookieOptions {
+export interface ICookieOptions {
   expires?: number | Date;
   path?: string;
   domain?: string;
   secure?: boolean;
-  sameSite?: SameSite;
+  sameSite?: ECookieSameSite;
   partitioned?: boolean;
 }
 
@@ -148,12 +152,12 @@ export class CookieService {
   set(
     name: string,
     value: string,
-    expires?: CookieOptions['expires'],
-    path?: CookieOptions['path'],
-    domain?: CookieOptions['domain'],
-    secure?: CookieOptions['secure'],
-    sameSite?: SameSite,
-    partitioned?: CookieOptions['partitioned'],
+    expires?: ICookieOptions['expires'],
+    path?: ICookieOptions['path'],
+    domain?: ICookieOptions['domain'],
+    secure?: ICookieOptions['secure'],
+    sameSite?: ECookieSameSite,
+    partitioned?: ICookieOptions['partitioned'],
   ): void;
 
   /**
@@ -175,17 +179,17 @@ export class CookieService {
    * @author: Stepan Suvorov
    * @since: 1.0.0
    */
-  set(name: string, value: string, options?: CookieOptions): void;
+  set(name: string, value: string, options?: ICookieOptions): void;
 
   set(
     name: string,
     value: string,
-    expiresOrOptions?: CookieOptions['expires'] | CookieOptions,
-    path?: CookieOptions['path'],
-    domain?: CookieOptions['domain'],
-    secure?: CookieOptions['secure'],
-    sameSite?: SameSite,
-    partitioned?: CookieOptions['partitioned'],
+    expiresOrOptions?: ICookieOptions['expires'] | ICookieOptions,
+    path?: ICookieOptions['path'],
+    domain?: ICookieOptions['domain'],
+    secure?: ICookieOptions['secure'],
+    sameSite?: ECookieSameSite,
+    partitioned?: ICookieOptions['partitioned'],
   ): void {
     if (!this._documentIsAccessible) {
       return;
@@ -200,11 +204,11 @@ export class CookieService {
       sameSite
     ) {
       const optionsBody = {
-        expires: expiresOrOptions as CookieOptions['expires'],
+        expires: expiresOrOptions as ICookieOptions['expires'],
         path,
         domain,
         secure,
-        sameSite: sameSite || 'Lax',
+        sameSite: sameSite || ECookieSameSite.Lax,
         partitioned,
       };
 
@@ -249,7 +253,7 @@ export class CookieService {
     }
 
     if (!options.sameSite) {
-      options.sameSite = 'Lax';
+      options.sameSite = ECookieSameSite.Lax;
     }
 
     cookieString += 'sameSite=' + options.sameSite + ';';
@@ -275,10 +279,10 @@ export class CookieService {
    */
   delete(
     name: string,
-    path?: CookieOptions['path'],
-    domain?: CookieOptions['domain'],
-    secure?: CookieOptions['secure'],
-    sameSite: SameSite = 'Lax',
+    path?: ICookieOptions['path'],
+    domain?: ICookieOptions['domain'],
+    secure?: ICookieOptions['secure'],
+    sameSite: ECookieSameSite = ECookieSameSite.Lax,
   ): void {
     if (!this._documentIsAccessible) {
       return;
@@ -305,10 +309,10 @@ export class CookieService {
    * @since: 1.0.0
    */
   deleteAll(
-    path?: CookieOptions['path'],
-    domain?: CookieOptions['domain'],
-    secure?: CookieOptions['secure'],
-    sameSite: SameSite = 'Lax',
+    path?: ICookieOptions['path'],
+    domain?: ICookieOptions['domain'],
+    secure?: ICookieOptions['secure'],
+    sameSite: ECookieSameSite = ECookieSameSite.Lax,
   ): void {
     if (!this._documentIsAccessible) {
       return;

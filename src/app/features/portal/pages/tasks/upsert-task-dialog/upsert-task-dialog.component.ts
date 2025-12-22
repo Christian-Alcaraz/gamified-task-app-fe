@@ -7,15 +7,14 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { UIState } from '@core/constants';
+import { EUiState } from '@core/constants';
 import {
+  ETaskDifficulties,
+  ETaskFrequencies,
+  ETaskStatuses,
+  ETaskType,
+  ETaskTypes,
   Task,
-  TaskDifficulties,
-  TaskFrequencies,
-  TaskStatuses,
-  TaskType,
-  TaskTypes,
-  TaskTyping,
 } from '@core/models/task.model';
 import { formatTaskRequestBody } from '@features/portal/pages/tasks/tasks.util';
 import { NgIcon } from '@ng-icons/core';
@@ -27,7 +26,7 @@ import {
 } from '@shared/components/dialog';
 import {
   BaseDialog,
-  BaseDialogData,
+  IBaseDialogData,
 } from '@shared/components/dialog/base-dialog.class';
 import { DialogCloseButtonComponent } from '@shared/components/dialog/dialog-close-button.component';
 import { provideBaseDialogToken } from '@shared/components/dialog/dialog.provider';
@@ -40,9 +39,9 @@ import { ToastService } from '@shared/components/toast/toast.service';
 import { TaskApiService } from '@shared/services/api/task/task.api.service';
 import { finalize, Observable } from 'rxjs';
 
-export interface TaskDialogData extends BaseDialogData {
+export interface ITaskDialogData extends IBaseDialogData {
   task?: Task;
-  taskType?: TaskTyping;
+  taskType?: ETaskType;
 }
 
 @Component({
@@ -65,18 +64,18 @@ export interface TaskDialogData extends BaseDialogData {
   templateUrl: './upsert-task-dialog.component.html',
   styleUrl: './upsert-task-dialog.component.scss',
 })
-export class UpsertTaskDialogComponent extends BaseDialog<TaskDialogData> {
+export class UpsertTaskDialogComponent extends BaseDialog<ITaskDialogData> {
   private readonly formBuilder = inject(FormBuilder);
   private readonly inputService = inject(InputService);
   private readonly taskApiService = inject(TaskApiService);
   private readonly toast = inject(ToastService);
 
   taskForm!: FormGroup;
-  taskType = TaskType;
-  types = TaskTypes;
-  statuses = TaskStatuses;
-  difficulties = TaskDifficulties;
-  frequencies = TaskFrequencies;
+  taskType = ETaskType;
+  types = ETaskTypes;
+  statuses = ETaskStatuses;
+  difficulties = ETaskDifficulties;
+  frequencies = ETaskFrequencies;
   loading = signal(false);
   /**
    * Todo: Add Number +- for User Limit; with Max Limit | Min Limit
@@ -95,7 +94,7 @@ export class UpsertTaskDialogComponent extends BaseDialog<TaskDialogData> {
       frequency: [''],
     });
 
-    if (this.data.task?.type === TaskType.Dailies) {
+    if (this.data.task?.type === ETaskType.Dailies) {
       this.taskForm.get('frequency')?.setValidators(Validators.required);
       this.taskForm.updateValueAndValidity();
     }
@@ -120,7 +119,7 @@ export class UpsertTaskDialogComponent extends BaseDialog<TaskDialogData> {
       this.toast.showToast(
         'Error',
         'Please fill out all required fields.',
-        UIState.Error,
+        EUiState.Error,
       );
       return;
     }
@@ -148,7 +147,7 @@ export class UpsertTaskDialogComponent extends BaseDialog<TaskDialogData> {
             this.toast.showToast(
               'Error: ' + error.code,
               error.message,
-              UIState.Error,
+              EUiState.Error,
             );
           },
         });
@@ -157,7 +156,7 @@ export class UpsertTaskDialogComponent extends BaseDialog<TaskDialogData> {
       this.toast.showToast(
         'Error',
         'Check console for details. And contact your system administrator.',
-        UIState.Error,
+        EUiState.Error,
       );
     }
   }

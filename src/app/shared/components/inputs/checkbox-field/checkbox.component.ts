@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { BaseInputProps } from '@core/interfaces/base-input.interface';
+import { IBaseInputProps } from '@core/interfaces/base-input.interface';
 import { ThemeService } from '@shared/services/theme/theme.service';
 import { BaseInput } from '../base-input.class';
 import { Checkbox } from './checkbox';
@@ -12,7 +12,7 @@ import { Checkbox } from './checkbox';
 })
 export class CheckboxComponent extends BaseInput implements OnInit {
   //Todo: Hey, do this with input field boiler fields
-  @Input() props!: BaseInputProps;
+  @Input() props!: IBaseInputProps;
   @Input() disabled = false;
   @Input() fcName!: string;
 

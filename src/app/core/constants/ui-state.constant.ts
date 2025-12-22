@@ -1,10 +1,9 @@
-export const UIState = {
-  Info: 'info',
-  Success: 'success',
-  Warning: 'warning',
-  Error: 'error',
-  Loading: 'loading',
-} as const;
+export enum EUiState {
+  Info = 'info',
+  Success = 'success',
+  Warning = 'warning',
+  Error = 'error',
+  Loading = 'loading',
+}
 
-export const UIStates = Object.values(UIState);
-export type UIStateTyping = (typeof UIState)[keyof typeof UIState];
+export const UI_STATES = Object.values(EUiState);

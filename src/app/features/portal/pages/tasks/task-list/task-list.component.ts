@@ -9,33 +9,33 @@ import {
   output,
 } from '@angular/core';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
-import { DialogOptions, UIState } from '@core/constants';
+import { DIALOG_OPTIONS, EUiState } from '@core/constants';
 import { User } from '@core/models';
-import { Task, TaskTyping } from '@core/models/task.model';
+import { ETaskType, Task } from '@core/models/task.model';
 import { UpsertTaskDialogComponent } from '@features/portal/pages/tasks/upsert-task-dialog/upsert-task-dialog.component';
 import { BadgeComponent } from '@shared/components/badge/badge.component';
-import { BaseDialogData } from '@shared/components/dialog';
+import { IBaseDialogData } from '@shared/components/dialog';
 import { ToastService } from '@shared/components/toast/toast.service';
 import { TaskApiService } from '@shared/services/api/task/task.api.service';
-import { TasksState } from '@shared/services/state/task.state.service';
+import { ITasksState } from '@shared/services/state/task.state.service';
 import { UserStateService } from '@shared/services/state/user.state.service';
 import { UtilService } from '@shared/services/util/util.service';
 import { TaskItemComponent } from '../task-item/task-item.component';
 
-export interface TaskListQueryFilter {
+export interface ITaskListQueryFilter {
   completed?: boolean;
   deadlineDate?: 'exists';
-  type?: TaskTyping;
+  type?: ETaskType;
 }
-export interface TaskListFilter {
+export interface ITaskListFilter {
   label: string;
-  query: TaskListQueryFilter | null | undefined;
+  query: ITaskListQueryFilter | null | undefined;
 }
 
-export interface TaskListProps {
+export interface ITaskListProps {
   header: string;
-  filters?: TaskListFilter[];
-  dialogProps?: BaseDialogData;
+  filters?: ITaskListFilter[];
+  dialogProps?: IBaseDialogData;
 }
 
 @Component({
@@ -58,9 +58,9 @@ export class TaskListComponent extends ThemeAwareComponent {
   readonly queryChanged = output<Record<string, any>>();
 
   readonly tasks = model.required<Task[]>();
-  readonly state = input.required<TasksState>();
-  readonly taskType = input.required<TaskTyping>();
-  readonly props = input<TaskListProps>();
+  readonly state = input.required<ITasksState>();
+  readonly taskType = input.required<ETaskType>();
+  readonly props = input<ITaskListProps>();
 
   tempStatusBadgeConfig = {
     trivial:
@@ -77,7 +77,7 @@ export class TaskListComponent extends ThemeAwareComponent {
     return this.props()?.filters ?? [];
   });
 
-  selectFilter(filter: TaskListFilter, index: number) {
+  selectFilter(filter: ITaskListFilter, index: number) {
     this.selectedFilter = index;
     this.queryChanged.emit(filter.query!);
   }
@@ -85,7 +85,7 @@ export class TaskListComponent extends ThemeAwareComponent {
   openTaskModal(task?: Task) {
     const dialogProps = this.props()?.dialogProps ?? {};
     const dialog = this.dialog.open(UpsertTaskDialogComponent, {
-      ...DialogOptions,
+      ...DIALOG_OPTIONS,
       data: {
         task,
         taskType: this.taskType(),
@@ -99,7 +99,7 @@ export class TaskListComponent extends ThemeAwareComponent {
     dialog.closed.subscribe({
       next: (task) => {
         if (!task) return;
-        this.toast.showToast(header, message, UIState.Success);
+        this.toast.showToast(header, message, EUiState.Success);
         this.listChanged.emit();
       },
     });
@@ -111,7 +111,7 @@ export class TaskListComponent extends ThemeAwareComponent {
       this.toast.showToast(
         'Error',
         'Task ID is required to update task completion',
-        UIState.Error,
+        EUiState.Error,
       );
       return;
     }
@@ -130,7 +130,7 @@ export class TaskListComponent extends ThemeAwareComponent {
         const message = completed
           ? `+${reward.gold} Gold +${reward.experience} Exp`
           : `${reward.gold} Gold ${reward.experience} Exp`;
-        const type = completed ? UIState.Success : UIState.Error;
+        const type = completed ? EUiState.Success : EUiState.Error;
         this.toast.showToast(header, message, type);
         this.userStateService.setUserState(updatedUser);
         this.listChanged.emit();
@@ -139,7 +139,7 @@ export class TaskListComponent extends ThemeAwareComponent {
         this.toast.showToast(
           'Error: ' + error.code,
           error.message,
-          UIState.Error,
+          EUiState.Error,
         );
       },
     });

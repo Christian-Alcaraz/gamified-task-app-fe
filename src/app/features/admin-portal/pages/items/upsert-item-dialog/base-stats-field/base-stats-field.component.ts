@@ -18,8 +18,9 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Item as ItemConst } from '@core/constants';
-import { BaseInputProps } from '@core/interfaces/base-input.interface';
+import { ITEM_BASE_STATS } from '@core/constants';
+
+import { IBaseInputProps } from '@core/interfaces/base-input.interface';
 import { NgIcon } from '@ng-icons/core';
 import { BaseInput, InputErrorComponent } from '@shared/components/inputs';
 import { NumberInputDirective } from '@shared/components/inputs/text-field/number-input.directive';
@@ -34,7 +35,6 @@ import {
 } from 'ng-primitives/combobox';
 import { startWith, Subject, takeUntil } from 'rxjs';
 
-const BASE_STATS = ItemConst.BaseStats;
 const BASE_STATS_MAX_VALUE = 999;
 
 @Component({
@@ -71,7 +71,7 @@ export class BaseStatsFieldComponent
 
   // ** Inputs
   fcName = input<string>();
-  props = input<BaseInputProps>();
+  props = input<IBaseInputProps>();
   baseStatsValue = input<Record<string, number>[]>([]);
   disabled = input<boolean>(false);
 
@@ -85,7 +85,7 @@ export class BaseStatsFieldComponent
   readonly filter = signal<string>('');
 
   readonly filteredOptions = computed(() => {
-    const remainingStats = BASE_STATS.filter(
+    const remainingStats = ITEM_BASE_STATS.filter(
       (option) => !this.selectedStats().includes(option),
     );
     if (!this.filter()) return remainingStats;

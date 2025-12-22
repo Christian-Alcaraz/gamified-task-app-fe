@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Task, TaskTyping } from '@core/models/task.model';
+import { ETaskType, Task } from '@core/models/task.model';
 import { HttpService } from '@shared/services/http/http.service';
 
 @Injectable({
@@ -34,7 +34,7 @@ export class TaskApiService {
     return this.httpService.start<Task>('get', `${this.url}/${taskId}`);
   }
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getTasks(type?: TaskTyping, query?: Record<string, any>) {
+  getTasks(type?: ETaskType, query?: Record<string, any>) {
     query = query ?? {};
 
     if (type) {

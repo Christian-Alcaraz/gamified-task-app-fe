@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { Const } from '@core/constants';
+import { APP_THEME } from '@core/constants';
 
 type AppThemeType = 'light' | 'dark';
 
@@ -13,8 +13,8 @@ export class ThemeService {
   setTheme(theme: AppThemeType) {
     this._theme.set(theme);
 
-    if (theme !== localStorage.getItem(Const.AppTheme)) {
-      localStorage.setItem(Const.AppTheme, theme);
+    if (theme !== localStorage.getItem(APP_THEME)) {
+      localStorage.setItem(APP_THEME, theme);
     }
   }
 }

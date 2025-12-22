@@ -1,12 +1,12 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { Token, UserType } from '@core/constants';
+import { EToken, EUserType } from '@core/constants';
 import { AuthService } from '@shared/services/api/auth/auth.service';
 import { UserStateService } from '@shared/services/state/user.state.service';
 import { catchError, map, of } from 'rxjs';
 
 export const adminPortalGuard: CanActivateFn = () => {
-  const authToken = localStorage.getItem(Token.Auth);
+  const authToken = localStorage.getItem(EToken.Auth);
   const authService = inject(AuthService);
   const router = inject(Router);
   const userStateService = inject(UserStateService);
@@ -17,13 +17,13 @@ export const adminPortalGuard: CanActivateFn = () => {
   }
 
   const navigateToAuth = () => {
-    localStorage.removeItem(Token.Auth);
+    localStorage.removeItem(EToken.Auth);
     router.navigate(['auth']);
   };
 
   return authService.me().pipe(
     map((user) => {
-      if (user.type !== UserType.Admin) {
+      if (user.type !== EUserType.Admin) {
         navigateToAuth();
         return false;
       }

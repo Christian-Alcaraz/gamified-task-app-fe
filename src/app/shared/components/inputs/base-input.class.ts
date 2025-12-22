@@ -6,7 +6,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { ValidatorType } from '@core/interfaces/base-input.interface';
+import { IValidator } from '@core/interfaces/base-input.interface';
 import {
   atleastHasOneLowercase,
   atleastHasOneNumeric,
@@ -61,7 +61,7 @@ export abstract class BaseInput {
     );
   }
 
-  private _setFormValidators(validators: ValidatorType): void {
+  private _setFormValidators(validators: IValidator): void {
     const requirements = [];
     for (const [key, value] of Object.entries(validators)) {
       if (!value) continue;

@@ -4,7 +4,7 @@ import { CommonModule, TitleCasePipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
-import { Const, DialogOptions } from '@core/constants';
+import { DIALOG_OPTIONS, PORTAL_NAV_HEADER_ITEMS } from '@core/constants';
 import { User } from '@core/models';
 import { AuthService } from '@shared/services/api/auth/auth.service';
 import { UserStateService } from '@shared/services/state/user.state.service';
@@ -33,7 +33,7 @@ export class HeaderComponent extends ThemeAwareComponent {
   private readonly _userStateService = inject(UserStateService);
   private readonly _authService = inject(AuthService);
   readonly userState = this._userStateService.userState;
-  readonly navItems = Const.NavItems;
+  readonly navItems = PORTAL_NAV_HEADER_ITEMS;
 
   selectedNavItem: Record<string, string> = this.navItems[0];
   imgUrl = signal('images/avatar_placeholder.png');
@@ -45,7 +45,7 @@ export class HeaderComponent extends ThemeAwareComponent {
   openCharacterCreationDialog() {
     setTimeout(() => {
       const dialogRef = this._dialog.open(CreateCharacterModalComponent, {
-        ...DialogOptions,
+        ...DIALOG_OPTIONS,
         scrollStrategy: this._scrollStrategy.block(),
         data: {
           disableBackdropClose: false,

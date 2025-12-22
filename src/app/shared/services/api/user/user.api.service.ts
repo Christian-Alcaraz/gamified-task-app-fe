@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { User, UserCharacter } from '@core/models';
+import { IUserCharacter, User } from '@core/models';
 import { HttpService } from '@shared/services/http/http.service';
 
 @Injectable({
@@ -20,7 +20,7 @@ export class UserApiService {
     );
   }
 
-  patchCreateCharacter(character: UserCharacter) {
+  patchCreateCharacter(character: IUserCharacter) {
     return this.httpService.start<User>(
       'patch',
       `${this.url}${this.characterUrl}/create`,
@@ -28,7 +28,7 @@ export class UserApiService {
     );
   }
 
-  updateUserCharacter(character: UserCharacter) {
+  updateUserCharacter(character: IUserCharacter) {
     return this.httpService.start<User>(
       'put',
       `${this.url}${this.characterUrl}`,

@@ -1,8 +1,7 @@
-export const Status = {
-  Active: 'Active',
-  Inactive: 'Inactive',
-  Deleted: 'Deleted',
-} as const;
+export enum EStatus {
+  Active = 'Active',
+  Inactive = 'Inactive',
+  Deleted = 'Deleted',
+}
 
-export const Statuses = Object.values(Status);
-export type StatusTyping = (typeof Status)[keyof typeof Status];
+export const STATUSES = Object.values(EStatus);

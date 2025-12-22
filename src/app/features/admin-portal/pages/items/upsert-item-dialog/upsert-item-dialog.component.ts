@@ -6,16 +6,23 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { UIState } from '@core/constants';
-import { Item as ItemConst } from '@core/constants/item.constant';
+import {
+  EUiState,
+  ITEM_ATTRIBUTES,
+  ITEM_BASE_STATS,
+  ITEM_RARITIES,
+  ITEM_SOURCES,
+  ITEM_TYPES,
+  ITEM_USAGE_ATTRIBUTES,
+} from '@core/constants';
 import { Item } from '@core/models/item.model';
 import { NgIcon } from '@ng-icons/core';
 import {
   BaseDialog,
-  BaseDialogData,
   DialogActionsDirective,
   DialogContentDirective,
   DialogTitleDirective,
+  IBaseDialogData,
 } from '@shared/components/dialog';
 import { DialogCloseButtonComponent } from '@shared/components/dialog/dialog-close-button.component';
 import {
@@ -28,7 +35,7 @@ import { ItemApiService } from '@shared/services/api/item/item.api.service';
 import { finalize, Observable, of } from 'rxjs';
 import { BaseStatsFieldComponent } from './base-stats-field/base-stats-field.component';
 
-interface ItemDialogData extends BaseDialogData {
+interface IItemDialogData extends IBaseDialogData {
   item?: Item;
 }
 
@@ -50,19 +57,19 @@ interface ItemDialogData extends BaseDialogData {
   templateUrl: './upsert-item-dialog.component.html',
   styleUrl: './upsert-item-dialog.component.scss',
 })
-export class UpsertItemDialogComponent extends BaseDialog<ItemDialogData> {
+export class UpsertItemDialogComponent extends BaseDialog<IItemDialogData> {
   private readonly formBuilder = inject(FormBuilder);
   private readonly toastService = inject(ToastService);
   private readonly apiService = inject(ItemApiService);
 
   itemForm!: FormGroup;
-  readonly sources = ItemConst.Sources;
-  readonly attributes = ItemConst.Attributes;
-  readonly usageAttributes = ItemConst.UsageAttributes;
-  readonly types = ItemConst.Types;
-  readonly baseStats = ItemConst.BaseStats;
-  readonly rarities = ItemConst.Rarities;
-  readonly allBaseStats = ItemConst.AllBaseStats;
+  readonly sources = ITEM_SOURCES;
+  readonly attributes = ITEM_ATTRIBUTES;
+  readonly usageAttributes = ITEM_USAGE_ATTRIBUTES;
+  readonly types = ITEM_TYPES;
+  readonly baseStats = ITEM_BASE_STATS;
+  readonly rarities = ITEM_RARITIES;
+  readonly allBaseStats = ITEM_BASE_STATS;
 
   baseStatsValue!: Record<string, number>[];
   loading = signal(false);
@@ -111,7 +118,7 @@ export class UpsertItemDialogComponent extends BaseDialog<ItemDialogData> {
       this.toastService.showToast(
         'Error',
         'Please fill out all required fields.',
-        UIState.Error,
+        EUiState.Error,
       );
       return;
     }
@@ -133,7 +140,7 @@ export class UpsertItemDialogComponent extends BaseDialog<ItemDialogData> {
           this.toastService.showToast(
             `Error ${error.code}`,
             error.message,
-            UIState.Error,
+            EUiState.Error,
           );
         },
       });

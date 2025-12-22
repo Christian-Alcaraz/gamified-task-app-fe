@@ -18,7 +18,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { BaseInputProps } from '@core/interfaces/base-input.interface';
+import { IBaseInputProps } from '@core/interfaces/base-input.interface';
 import { NgIcon } from '@ng-icons/core';
 import { ThemeService } from '@shared/services/theme/theme.service';
 import { UtilService } from '@shared/services/util/util.service';
@@ -26,7 +26,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { BaseInput, InputErrorComponent } from '../inputs';
 import { DatePicker } from './components/date-picker.component';
 
-export interface DatePickerProps extends BaseInputProps {
+export interface IDatePickerProps extends IBaseInputProps {
   labelLoc?: 'hide' | 'top';
 }
 
@@ -50,7 +50,7 @@ export class DatePickerComponent extends BaseInput implements OnInit {
   datePicker!: TemplateRef<unknown>;
 
   /* eslint-disable */
-  @Input() props!: DatePickerProps;
+  @Input() props!: IDatePickerProps;
   @Input() fcName!: string;
   @Input() options!: any[];
   @Input() disabled = false;

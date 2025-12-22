@@ -1,10 +1,10 @@
 import {
-  ItemAttributeTyping,
-  ItemBaseStatTyping,
-  ItemSourceTyping,
-  ItemTyping,
-  ItemUsageAttributeTyping,
-} from '@core/constants/item.constant';
+  EItemAttribute,
+  EItemBaseStat,
+  EItemSource,
+  EItemType,
+  EItemUsageAttribute,
+} from '@core/constants';
 
 /* eslint-disable */
 export class Item {
@@ -13,14 +13,14 @@ export class Item {
   description?: string;
   modelName?: string;
   texture?: string;
-  type?: ItemTyping;
+  type?: EItemType;
   tags?: string[];
-  attributes?: Record<ItemAttributeTyping, any>;
-  usageAttributes?: Record<ItemUsageAttributeTyping, any>;
+  attributes?: Record<EItemAttribute, any>;
+  usageAttributes?: Record<EItemUsageAttribute, any>;
   cost?: string;
   maxStackSize?: number;
-  sources?: Array<ItemSourceTyping>;
-  baseStats?: Record<ItemBaseStatTyping, number>[];
+  sources?: Array<EItemSource>;
+  baseStats?: Record<EItemBaseStat, number>[];
   rollRanges?: Record<string, number>;
 
   createdAt?: Date;

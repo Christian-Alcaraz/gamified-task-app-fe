@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Token } from '@core/constants';
+import { EToken } from '@core/constants';
 import { UserStateService } from '@shared/services/state/user.state.service';
 import { finalize } from 'rxjs';
 import { BaseApiService } from '../base-api.class';
@@ -31,7 +31,7 @@ export class AuthService extends BaseApiService {
   }
 
   me() {
-    const authToken = localStorage.getItem(Token.Auth);
+    const authToken = localStorage.getItem(EToken.Auth);
     const headers = new HttpHeaders({
       authorization: `Bearer ${authToken}`,
     });
@@ -41,7 +41,7 @@ export class AuthService extends BaseApiService {
   }
 
   logout() {
-    const authToken = localStorage.getItem(Token.Auth);
+    const authToken = localStorage.getItem(EToken.Auth);
     const headers = new HttpHeaders({
       authorization: `Bearer ${authToken}`,
     });
@@ -60,15 +60,15 @@ export class AuthService extends BaseApiService {
   }
 
   setAuthToken(token: string) {
-    localStorage.setItem(Token.Auth, token);
+    localStorage.setItem(EToken.Auth, token);
   }
 
   getAuthToken() {
-    return localStorage.getItem(Token.Auth);
+    return localStorage.getItem(EToken.Auth);
   }
 
   removeAuthToken() {
-    localStorage.removeItem(Token.Auth);
+    localStorage.removeItem(EToken.Auth);
   }
 
   /* eslint-enable */

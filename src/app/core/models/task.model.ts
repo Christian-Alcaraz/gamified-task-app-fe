@@ -1,61 +1,54 @@
 // --- TASK Frequency for Dailies ---
-export const TaskFrequency = {
-  Daily: 'daily',
-  Weekly: 'weekly',
-  Monthly: 'monthly',
-  Yearly: 'yearly',
-} as const;
-export const TaskFrequencies = Object.values(TaskFrequency);
-export type TaskFrequencyTyping =
-  (typeof TaskFrequency)[keyof typeof TaskFrequency];
+export enum ETaskFrequency {
+  Daily = 'daily',
+  Weekly = 'weekly',
+  Monthly = 'monthly',
+  Yearly = 'yearly',
+}
+export const ETaskFrequencies = Object.values(ETaskFrequency);
 
 // --- TASK Difficulty ---
-export const TaskDifficulty = {
-  Trivial: 'trivial',
-  Easy: 'easy',
-  Medium: 'medium',
-  Hard: 'hard',
-} as const;
-export const TaskDifficulties = Object.values(TaskDifficulty);
-export type TaskDifficultyTyping =
-  (typeof TaskDifficulty)[keyof typeof TaskDifficulty];
+export enum ETaskDifficulty {
+  Trivial = 'trivial',
+  Easy = 'easy',
+  Medium = 'medium',
+  Hard = 'hard',
+}
+export const ETaskDifficulties = Object.values(ETaskDifficulty);
 
 //  --- TASK STATUS ---
-export const TaskStatus = {
-  Active: 'active',
-  Cancelled: 'cancelled',
-  Completed: 'completed',
-  Paused: 'paused',
-} as const;
+export enum ETaskStatus {
+  Active = 'active',
+  Cancelled = 'cancelled',
+  Completed = 'completed',
+  Paused = 'paused',
+}
 
-export const TaskStatuses = Object.values(TaskStatus);
-export type TaskStatusTyping = (typeof TaskStatus)[keyof typeof TaskStatus];
+export const ETaskStatuses = Object.values(ETaskStatus);
 
 // --- TASK STAT ---
-export const TaskStat = {
-  HpTotal: 'hpTotal',
-  HpCurrent: 'hpCurrent',
-  RewardGold: 'rewardGold',
-  RewardXp: 'rewardXp',
-} as const;
-export const TaskStats = Object.values(TaskStat);
-export type TaskStatTyping = (typeof TaskStat)[keyof typeof TaskStat];
+export enum ETaskStat {
+  HpTotal = 'hpTotal',
+  HpCurrent = 'hpCurrent',
+  RewardGold = 'rewardGold',
+  RewardXp = 'rewardXp',
+}
+export const ETaskStats = Object.values(ETaskStat);
 
 // --- TASK TYPE ---
-export const TaskType = {
-  Dailies: 'dailies',
-  Todo: 'todo',
-} as const;
-export const TaskTypes = Object.values(TaskType);
-export type TaskTyping = (typeof TaskType)[keyof typeof TaskType];
+export enum ETaskType {
+  Dailies = 'dailies',
+  Todo = 'todo',
+}
+export const ETaskTypes = Object.values(ETaskType);
 
-interface Subtask {
+interface ISubtask {
   _id: string;
   name: string;
   completed: boolean;
 }
 
-export interface TaskReward {
+export interface ITaskReward {
   gold: number;
   experience: number;
 }
@@ -64,17 +57,17 @@ export class Task {
   _id?: string;
   name?: string;
   description?: string;
-  type?: TaskTyping;
-  subtasks?: Subtask[];
+  type?: ETaskType;
+  subtasks?: ISubtask[];
   completed?: boolean;
   userLimit?: number;
   deadlineDate?: Date;
-  difficulty?: TaskDifficultyTyping;
-  frequency?: TaskFrequencyTyping;
+  difficulty?: ETaskDifficulty;
+  frequency?: ETaskFrequency;
   streak?: number;
-  stat?: Record<TaskStatTyping, number>;
+  stat?: Record<ETaskStat, number>;
   _userId?: string;
-  rewardGranted?: TaskReward;
+  rewardGranted?: ITaskReward;
 
   createdAt?: Date;
   updatedAt?: Date;

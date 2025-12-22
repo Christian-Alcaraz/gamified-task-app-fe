@@ -22,7 +22,7 @@ export class ToastComponent {
   private readonly theme = inject(ThemeService).theme;
   private readonly toastManager = inject(NgpToastManager);
   private readonly toast = inject(NgpToast);
-  protected readonly context = injectToastContext<ToastContext>();
+  protected readonly context = injectToastContext<IToastContext>();
   protected hostCss = computed(() => {
     const isDark = this.theme() === 'dark';
     return `${this.context.type}${isDark && ' dark'}`;
@@ -33,7 +33,7 @@ export class ToastComponent {
   }
 }
 
-export interface ToastContext {
+export interface IToastContext {
   header: string;
   description: string;
   type: ToastTyping;

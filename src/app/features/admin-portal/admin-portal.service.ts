@@ -1,12 +1,12 @@
 import { Injectable, signal } from '@angular/core';
-import { NavItem } from '@core/interfaces/nav-item.interface';
+import { INavItem } from '@core/interfaces/nav-item.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminPortalService {
   #showSidenavState = signal(true);
-  #selectedNav = signal<NavItem | undefined>(undefined);
+  #selectedNav = signal<INavItem | undefined>(undefined);
 
   getSidenavState() {
     return this.#showSidenavState();
@@ -16,11 +16,11 @@ export class AdminPortalService {
     this.#showSidenavState.set(state);
   }
 
-  get selectedNav(): NavItem | undefined {
+  get selectedNav(): INavItem | undefined {
     return this.#selectedNav();
   }
 
-  set selectedNav(nav: NavItem) {
+  set selectedNav(nav: INavItem) {
     this.#selectedNav.set(nav);
   }
 }

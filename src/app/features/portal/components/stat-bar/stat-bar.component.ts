@@ -1,7 +1,7 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { UserStateService } from '@shared/services/state/user.state.service';
 
-export interface StatBarProps {
+export interface IStatBarProps {
   bgColorTailwindCss?: string;
   prefix?: string;
   heightPx?: string | number;
@@ -17,7 +17,7 @@ export interface StatBarProps {
   styleUrl: './stat-bar.component.scss',
 })
 export class StatBarComponent {
-  props = input<StatBarProps>();
+  props = input<IStatBarProps>();
 
   /**
    * ? I don't know if it is good to encapsulate userState here?
