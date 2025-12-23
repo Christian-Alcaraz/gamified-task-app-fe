@@ -8,6 +8,7 @@ import {
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { EToken, UI_STATE } from '@core/constants';
+import { WebsocketService } from '@features/portal/websocket.service';
 import { IToastType } from '@shared/components/toast/toast.component';
 
 import { ToastService } from '@shared/components/toast/toast.service';
@@ -19,6 +20,7 @@ export class ApiErrorInterceptorDI implements HttpInterceptor {
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
   private readonly authService = inject(AuthService);
+  private readonly websocketService = inject(WebsocketService);
 
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _refreshSubject$: Subject<any> = new Subject<any>();
@@ -89,6 +91,10 @@ export class ApiErrorInterceptorDI implements HttpInterceptor {
           ) {
             showToast(error.error.message, '', UI_STATE.Warning);
             if (this.router.url.includes('hub')) {
+              if (this.websocketService.hasSocket()) {
+                this.websocketService.disconnect();
+              }
+
               localStorage.removeItem(EToken.Auth);
               this.router.navigate(['auth']);
             }
