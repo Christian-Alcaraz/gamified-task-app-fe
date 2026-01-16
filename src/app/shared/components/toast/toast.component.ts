@@ -26,7 +26,7 @@ export class ToastComponent {
   protected readonly context = injectToastContext<IToastContext>();
   protected hostCss = computed(() => {
     const isDark = this.theme() === 'dark';
-    return `${this.context.type}${isDark && ' dark'}`;
+    return `${this.context.type} ${isDark && ' dark'}`;
   });
 
   dismiss(): void {
