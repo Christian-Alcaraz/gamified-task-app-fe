@@ -5,8 +5,8 @@ const env = {
   PRODUCTION: false,
   API_URL: 'http://localhost:8000/api/v1',
   WS_URL: 'http://localhost:8000',
-  EMAIL: 'gamified@taskapp.com',
-  PASSWORD: 'Password123!',
+  EMAIL: 'gamified@taskapp.com', //Todo: Delete this in deployment
+  PASSWORD: 'Password123!', //Todo: Delete this in deployment
 };
 
 export const environment = {

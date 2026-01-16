@@ -123,7 +123,7 @@ export class TaskListComponent extends ThemeAwareComponent {
 
         const reward = this.characterUtil.getGoldExpDifference(
           this.userStateService.userState() as User,
-          updatedUser,
+          updatedUser as User,
         );
 
         const header = completed ? 'Well Done!' : "It's okay.";
@@ -132,7 +132,7 @@ export class TaskListComponent extends ThemeAwareComponent {
           : `${reward.gold} Gold ${reward.experience} Exp`;
         const type = completed ? UI_STATE.Success : UI_STATE.Error;
         this.toast.showToast(header, message, type);
-        this.userStateService.setUserState(updatedUser);
+        this.userStateService.setUserState(updatedUser as User);
         this.listChanged.emit();
       },
       error: ({ error }) => {
