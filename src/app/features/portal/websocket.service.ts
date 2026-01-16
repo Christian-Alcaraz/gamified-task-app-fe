@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { EToken, UI_STATE } from '@core/constants';
+import * as enums from '@core/constants';
 import { ToastService } from '@shared/components/toast/toast.service';
 import { AuthService } from '@shared/services/api/auth/auth.service';
 import { UserStateService } from '@shared/services/state/user.state.service';
@@ -28,54 +28,71 @@ export class WebsocketService {
       retries: RETRIES,
       ackTimeout: ACK_TIMEOUT,
       query: {
-        [EToken.Auth]: this._authService.getAuthToken(),
+        [enums.EToken.Auth]: this._authService.getAuthToken(),
       },
-    }); // Replace with your server URL
+    });
 
     this.startListeners();
   }
 
   startListeners() {
     if (!this.socket) {
-      console.error('This must not happen');
+      console.error(
+        'startListeners initiated without socket, THIS MUST NOT HAPPEN',
+      );
       return;
     }
 
-    this.socket.on('hello', (data) => {
-      console.log('Received hello', JSON.stringify(data));
-    });
-
-    this.socket.on('error', (data) => {
-      const { message, name, code } = JSON.parse(data);
-      this._toastService.showToast(`${name} ${code}`, message, UI_STATE.Error);
-    });
-
-    this.socket.on('disconnect', (reason) => {
-      if (this.socket?.active) {
-        // temporary disconnection, the socket will automatically try to reconnect
-        console.log('Will reconnect');
-      } else {
-        // the connection was forcefully closed by the server or the client itself
-        // in that case, `socket.connect()` must be manually called in order to reconnect
-        console.log('Must manually reconnect', reason);
-      }
-    });
-
-    this.socket.on('token_expired', () => {
-      this._authService.refreshToken().subscribe((res) => {
-        this._authService.setAuthToken(res.token);
-        const message = {
-          userId: this._userState!._id,
-          [EToken.Auth]: this._authService.getAuthToken(),
-        };
-        this.socket!.emit('reauthenticate', JSON.stringify(message));
-      });
-    });
+    this.socket.on(enums.ESocketType.Error, this._handleError);
+    this.socket.on(enums.ESocketType.Disconnect, this._handleDisconnect);
+    this.socket.on(enums.ESocketType.TokenExpired, this._handleTokenExpired);
+    this.socket.on(enums.ESocketType.Success, this._handleSuccess);
   }
 
   disconnect(): void {
     if (this.socket) {
       this.socket.close();
+      this.socket = null;
     }
+  }
+
+  private _handleSuccess(message: string) {
+    console.log('Success', message);
+  }
+
+  private _handleError(error: string) {
+    const { message, name, code } = JSON.parse(error);
+    this._toastService.showToast(
+      `${name} ${code}`,
+      message,
+      enums.UI_STATE.Error,
+    );
+  }
+
+  private _handleDisconnect(reason: string) {
+    if (this.socket?.active) {
+      // temporary disconnection, the socket will automatically try to reconnect
+      console.log('Will reconnect');
+    } else {
+      // the connection was forcefully closed by the server or the client itself
+      // in that case, `socket.connect()` must be manually called in order to reconnect
+      console.log('Must manually reconnect', reason);
+    }
+  }
+
+  private _handleTokenExpired() {
+    this._authService.refreshToken().subscribe((res) => {
+      this._authService.setAuthToken(res.token);
+
+      const message = {
+        userId: this._userState!._id,
+        [enums.EToken.Auth]: this._authService.getAuthToken(),
+      };
+
+      this.socket!.emit(
+        enums.ESocketType.Reauthenticate,
+        JSON.stringify(message),
+      );
+    });
   }
 }
