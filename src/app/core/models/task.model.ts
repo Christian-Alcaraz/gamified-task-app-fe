@@ -42,25 +42,30 @@ export enum ETaskType {
 }
 export const ETaskTypes = Object.values(ETaskType);
 
-interface ISubtask {
-  _id: string;
-  name: string;
-  completed: boolean;
-}
+// interface ISubtask {
+//   _id: string;
+//   name: string;
+//   completed: boolean;
+// }
 
 export interface ITaskReward {
   gold: number;
   experience: number;
 }
 
+export interface ITaskHistory {
+  date: number;
+  completed: boolean;
+  isDue: boolean;
+  value: number;
+}
+
 export class Task {
-  _id?: string;
-  name?: string;
+  _id: string;
+  name: string;
   description?: string;
-  type?: ETaskType;
-  subtasks?: ISubtask[];
-  completed?: boolean;
-  userLimit?: number;
+  type: ETaskType;
+  completed: boolean;
   deadlineDate?: Date;
   difficulty?: ETaskDifficulty;
   frequency?: ETaskFrequency;
@@ -68,11 +73,28 @@ export class Task {
   stat?: Record<ETaskStat, number>;
   _userId?: string;
   rewardGranted?: ITaskReward;
+  // subtasks?: ISubtask[];
+  // userLimit?: number;
 
+  history?: ITaskHistory[];
   createdAt?: Date;
   updatedAt?: Date;
 
-  constructor(model: Partial<Task> = {}) {
-    Object.assign(this, model);
+  constructor(model: Task) {
+    this._id = model._id;
+    this.name = model.name;
+    this.description = model.description;
+    this.type = model.type;
+    this.completed = model.completed;
+    this.deadlineDate = model.deadlineDate;
+    this.difficulty = model.difficulty;
+    this.frequency = model.frequency;
+    this.streak = model.streak;
+    this.stat = model.stat;
+    this._userId = model._userId;
+    this.rewardGranted = model.rewardGranted;
+    this.createdAt = model.createdAt;
+    this.updatedAt = model.updatedAt;
+    this.history = model.history;
   }
 }

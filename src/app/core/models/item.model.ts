@@ -5,15 +5,16 @@ import {
   EItemType,
   EItemUsageAttribute,
 } from '@core/constants';
+import { IUserLog } from '@core/interfaces/user-log.interface';
 
 /* eslint-disable */
 export class Item {
   _id?: string;
-  name?: string;
+  name: string;
   description?: string;
-  modelName?: string;
+  type: EItemType;
+  modelName: string;
   texture?: string;
-  type?: EItemType;
   tags?: string[];
   attributes?: Record<EItemAttribute, any>;
   usageAttributes?: Record<EItemUsageAttribute, any>;
@@ -25,9 +26,22 @@ export class Item {
 
   createdAt?: Date;
   updatedAt?: Date;
+  updatedBy?: IUserLog;
 
-  constructor(model: Partial<Item> = {}) {
-    Object.assign(this, model);
+  constructor(model: Item) {
+    this.name = model.name;
+    this.type = model.type;
+    this.modelName = model.modelName;
+    this.texture = model.texture;
+    this.tags = model.tags;
+    this.attributes = model.attributes;
+    this.usageAttributes = model.usageAttributes;
+    this.cost = model.cost;
+    this.maxStackSize = model.maxStackSize;
+    this.sources = model.sources;
+    this.baseStats = model.baseStats;
+    this.updatedBy = model.updatedBy;
+    this.rollRanges = model.rollRanges;
   }
 }
 /* eslint-enable */

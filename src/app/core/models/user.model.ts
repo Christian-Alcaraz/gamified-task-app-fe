@@ -1,4 +1,5 @@
 import { EStatus, EUserType } from '@core/constants';
+import { IUserLog } from '@core/interfaces/user-log.interface';
 
 export interface IUserFlags {
   hasCreatedCharacter: boolean;
@@ -66,20 +67,35 @@ export interface IUserCharacter {
 }
 
 export class User {
-  _id?: string;
-  email?: string;
-  userType?: EUserType;
-  status?: EStatus;
-  createdAt?: Date;
-  updatedAt?: Date;
+  _id: string;
+  email: string;
+  userType: EUserType;
+  status: EStatus;
   flags?: IUserFlags;
   preferences?: IUserPreferences;
   equipment?: IUserEquipment;
-  stats?: IUserStats;
+  stats: IUserStats;
   character?: IUserCharacter;
   imageUrl?: string; // ? for the meantime; will be replaced with layered images using pixi js
+  createdAt: Date;
+  updatedAt?: Date;
+  updatedBy?: IUserLog;
+  _partyId?: string;
 
-  constructor(model: Partial<User> = {}) {
-    Object.assign(this, model);
+  constructor(model: User) {
+    this._id = model._id;
+    this.email = model.email;
+    this.userType = model.userType;
+    this.status = model.status;
+    this.flags = model.flags;
+    this.preferences = model.preferences;
+    this.equipment = model.equipment;
+    this.stats = model.stats;
+    this.character = model.character;
+    this.imageUrl = model.imageUrl;
+    this.createdAt = model.createdAt;
+    this.updatedAt = model.updatedAt;
+    this.updatedBy = model.updatedBy;
+    this._partyId = model._partyId;
   }
 }
