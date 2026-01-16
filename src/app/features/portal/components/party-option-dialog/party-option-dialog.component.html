@@ -1,0 +1,48 @@
+<section appDialogTitle>
+  <app-dialog-close-button (willClose)="closeDialog()" />
+</section>
+
+<main
+  appDialogContent
+  class="flex items-center flex-col max-h-[35vh] overflow-y-auto styled-scrollbars px-6 gap-3"
+>
+  <h1 class="text-lg text-center pb-4">You have not joined a party yet.</h1>
+  <section class="text-center">
+    <button
+      class="w-fit flex item-center gap-2 group cursor-pointer transition-colors duration-100 ease-burst-in-slow-out border rounded-xl px-4 py-1.5 active:bg-primary/30"
+      [ngClass]="{
+        'bg-muted/25 text-muted-foreground cursor-not-allowed pointer-events-none':
+          loading(),
+        'bg-primary text-primary-foreground hover:bg-primary/55': !loading(),
+      }"
+      (click)="createParty()"
+    >
+      @if (loading()) {
+        <ng-icon name="heroArrowPath" class="animate-spin"></ng-icon>
+      } @else {
+        <ng-icon name="heroPlus"></ng-icon>
+      }
+
+      <p class="text-sm">Create Party</p>
+    </button>
+    <p class="text-foreground pt-1.5">You can create a party</p>
+  </section>
+
+  <section class="flex flex-col items-center mt-4">
+    <button
+      class="w-fit flex item-center gap-2 group cursor-pointer transition-colors duration-100 ease-burst-in-slow-out border rounded-xl px-4 py-1.5 active:bg-primary/30"
+      [ngClass]="{
+        'bg-muted/25 text-muted-foreground cursor-not-allowed pointer-events-none':
+          loading(),
+        'bg-primary text-primary-foreground hover:bg-primary/55': !loading(),
+      }"
+      (click)="createParty()"
+    >
+      <p class="text-sm">See Public Parties List</p>
+    </button>
+    <p class="inline-block text-foreground py-1.5">or</p>
+    <p class="text-foreground">Enter Party Code</p>
+  </section>
+</main>
+
+<div class="h-3 w-full"></div>
