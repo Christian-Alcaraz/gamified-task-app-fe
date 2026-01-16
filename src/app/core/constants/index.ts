@@ -1,3 +1,5 @@
+import { INavItem } from '@core/interfaces/nav-item.interface';
+
 export * from './base.constant';
 export * from './color.constant';
 export * from './item.constant';
@@ -6,16 +8,39 @@ export * from './status.constant';
 export * from './token.constant';
 export * from './ui-state.constant';
 export * from './userType.constant';
+export * from './websocket.constant';
 
-export const PORTAL_NAV_HEADER_ITEMS = [
+export enum EPortalNavTitles {
+  Tasks = 'Tasks',
+  Party = 'Party',
+  Shop = 'Shop',
+}
+
+export enum EPortalNavRouteName {
+  Tasks = 'tasks',
+  Party = 'party',
+  Shop = 'shop',
+}
+
+export enum EPortalNavRouteUrl {
+  Tasks = '/hub/tasks',
+  Party = '/hub/party',
+  Shop = '/hub/shop',
+}
+
+export const PORTAL_NAV_HEADER_ITEMS: INavItem[] = [
   {
-    label: 'Tasks',
-    route: '/hub/tasks',
+    title: EPortalNavTitles.Tasks,
+    route: EPortalNavRouteUrl[EPortalNavTitles.Tasks],
   },
-  // {
-  //   label: 'Party',
-  //   route: '/hub/party',
-  // },
+  {
+    title: EPortalNavTitles.Party,
+    route: EPortalNavRouteUrl[EPortalNavTitles.Party],
+  },
+  {
+    title: EPortalNavTitles.Shop,
+    route: EPortalNavRouteUrl[EPortalNavTitles.Shop],
+  },
 ];
 
 export const APP_THEME = 'app-theme';
