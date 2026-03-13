@@ -3,10 +3,12 @@ import * as enums from '@core/constants';
 export interface ISocketSendMessageBody {
   target: string;
   message: string;
+  conversationId?: string;
 }
 
 export interface ISocketGetMessageBody {
   page: number;
+  conversationId?: string;
 }
 
 export interface ISocketGetDetailedBody {
@@ -15,7 +17,7 @@ export interface ISocketGetDetailedBody {
 }
 
 export interface ISocketReadMessageBody {
-  chatId: string;
+  messageId: string;
   userId: string;
 }
 
@@ -42,10 +44,18 @@ export interface ISocketOutMessage {
   state?: string;
 }
 
+export interface ISocketSendMessageDto {
+  sender: string;
+  receiver: string;
+  body: string;
+  conversationId: string;
+}
+
 export interface IFullChatMessageEntity {
   sender: string;
   receiver: string;
   read: boolean;
-  chatId: string;
+  conversationId: string;
+  messageId: string;
   message: string;
 }

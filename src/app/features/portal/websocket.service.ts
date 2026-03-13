@@ -32,7 +32,7 @@ export class WebsocketService {
       },
     });
 
-    this.startListeners();
+    setTimeout(() => this.startListeners(), 0);
   }
 
   startListeners() {
@@ -43,17 +43,44 @@ export class WebsocketService {
       return;
     }
 
-    this.socket.on(enums.ESocketType.Error, this._handleError);
-    this.socket.on(enums.ESocketType.Disconnect, this._handleDisconnect);
-    this.socket.on(enums.ESocketType.TokenExpired, this._handleTokenExpired);
-    this.socket.on(enums.ESocketType.Success, this._handleSuccess);
+    this.socket.on(enums.ESocketType.Error, this._handleError.bind(this));
+    this.socket.on(
+      enums.ESocketType.Disconnect,
+      this._handleDisconnect.bind(this),
+    );
+    this.socket.on(
+      enums.ESocketType.TokenExpired,
+      this._handleTokenExpired.bind(this),
+    );
+    this.socket.on(enums.ESocketType.Success, this._handleSuccess.bind(this));
+    this.socket.on(enums.ESocketType.Message, this._handleMessage.bind(this));
+    this.socket.on(
+      enums.ESocketType.ChatMessage,
+      this._handleChatMessage.bind(this),
+    );
   }
 
   disconnect(): void {
-    if (this.socket) {
-      this.socket.close();
-      this.socket = null;
+    if (!this.socket) return;
+
+    this.socket.close();
+    this.socket = null;
+  }
+
+  sendMessage(message: unknown) {
+    if (this.socket?.connected) {
+      this.socket.emit(enums.ESocketType.Message, JSON.stringify(message));
+    } else {
+      console.error('Socket is not connected. Message not sent:', message);
     }
+  }
+
+  private _handleMessage(message: string) {
+    console.log('Message', message);
+  }
+
+  private _handleChatMessage(message: string) {
+    console.log('ChatMessage', message);
   }
 
   private _handleSuccess(message: string) {

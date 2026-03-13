@@ -1,0 +1,37 @@
+<section class="flex flex-col w-full p-4">
+  <h1 class="text-foreground text-xl">Party Name</h1>
+</section>
+
+<main class="flex flex-col">
+  <section
+    class="h-[58vh] flex flex-col grow overflow-y-scroll styled-scrollbars bg-card border-t border-muted px-4 pt-2 pb-4 transition-all duration-[50ms] ease-burst-in-slow-out"
+  >
+    <section data-messages class="flex flex-col gap-2 w-full">
+      <div
+        class="bg-slate-100 h-fit w-fit px-4 py-2 border border-muted rounded-md"
+      >
+        Test Message
+      </div>
+    </section>
+  </section>
+</main>
+<section
+  data-input
+  class="bg-background text-foreground flex-1 flex justify-center items-center gap-1 h-full w-full px-4 py-2 border-t border-muted"
+  [formGroup]="fGroup"
+>
+  <app-text-field
+    class="w-full"
+    fcName="message"
+    (keydown.enter)="submit()"
+    [props]="{ type: 'text', placeholder: 'Aa', disableHelperText: true }"
+  ></app-text-field>
+
+  <button
+    class="bg-primary h-[2.4rem] w-[10%] flex items-center justify-center gap-2 px-4 py-1 text-sm text-primary-foreground rounded-full border cursor-pointer hover:bg-primary/85 disabled:bg-muted/25 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:pointer-events-none active:bg-primary/75"
+    (click)="submit()"
+  >
+    <ng-icon name="saxSend1Outline"></ng-icon>
+    Send
+  </button>
+</section>

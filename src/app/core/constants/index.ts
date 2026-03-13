@@ -28,6 +28,8 @@ export enum EPortalNavRouteUrl {
   Shop = '/hub/shop',
 }
 
+export const EPortalSetting = 'portal';
+
 export const PORTAL_NAV_HEADER_ITEMS: INavItem[] = [
   {
     title: EPortalNavTitles.Tasks,

@@ -1,4 +1,7 @@
-<main class="h-full bg-background" [class.dark]="theme() === 'dark'">
+<main
+  class="flex flex-col flex-1 pb-4 bg-background"
+  [class.dark]="theme() === 'dark'"
+>
   <section class="flex items-center justify-center gap-2 px-4 pt-4">
     <section class="w-[calc(100vw*0.25)]" [formGroup]="searchTaskForm">
       <app-text-field
@@ -19,7 +22,7 @@
     </button>
   </section>
 
-  <section class="h-[calc(100vh-20%)] grid grid-cols-12 pt-5 px-4 gap-4">
+  <section class="flex-1 grid grid-cols-12 pt-5 px-4 gap-4">
     <main class="col-span-4 h-full overflow-y-hidden">
       <app-task-list
         [tasks]="dailiesStateService.state.tasks()"

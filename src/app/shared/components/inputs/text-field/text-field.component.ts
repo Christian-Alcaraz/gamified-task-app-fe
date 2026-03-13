@@ -17,6 +17,8 @@ export interface ITextFieldProps extends IBaseInputProps {
   labelLoc?: LabelLocation;
   size?: ESize;
   hideError?: boolean;
+  disableHelperText?: boolean; //Where lies the error and hint
+  disableHoverEffect?: boolean;
   // mask?: string; //Todo: ngx-mask is finicky as hell
 }
 
@@ -39,7 +41,7 @@ export class TextFieldComponent extends BaseInput implements OnInit {
   @Input() fcName!: string;
   @Input() disabled = false;
 
-  readonly theme = inject(ThemeService).theme();
+  readonly theme = inject(ThemeService).theme;
 
   inputType = 'text';
 

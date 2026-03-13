@@ -7,11 +7,12 @@ import { ThemeAwareComponent } from '@core/classes/theme-aware-component.class';
 import {
   DIALOG_OPTIONS,
   EPortalNavTitles,
+  EPortalSetting,
   PORTAL_NAV_HEADER_ITEMS,
-  UI_STATE,
 } from '@core/constants';
 import { INavItem } from '@core/interfaces/nav-item.interface';
 import { User } from '@core/models';
+import { PortalService } from '@features/portal/portal.service';
 import { ToastService } from '@shared/components/toast/toast.service';
 import { AuthService } from '@shared/services/api/auth/auth.service';
 import { UserStateService } from '@shared/services/state/user.state.service';
@@ -26,7 +27,7 @@ import { StatBarComponent } from '../stat-bar/stat-bar.component';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   host: {
-    class: 'flex flex-col justify-center w-[inherit]',
+    class: 'flex flex-col justify-center',
   },
 })
 export class HeaderComponent extends ThemeAwareComponent {
@@ -36,11 +37,17 @@ export class HeaderComponent extends ThemeAwareComponent {
   private readonly _authService = inject(AuthService);
   private readonly _router = inject(Router);
   private readonly _toast = inject(ToastService);
+  private readonly _portalService = inject(PortalService);
   readonly userState = this._userStateService.userState;
   readonly navItems = PORTAL_NAV_HEADER_ITEMS;
 
   selectedNavItem: INavItem = this.navItems[0];
   imgUrl = signal('images/avatar_placeholder.png');
+
+  constructor() {
+    super();
+    this._checkActivePortalRoute();
+  }
 
   selectNav(navItem: INavItem) {
     const { title } = navItem;
@@ -48,8 +55,7 @@ export class HeaderComponent extends ThemeAwareComponent {
     if (title === EPortalNavTitles.Party) {
       this._handlePartyMenuClick(navItem);
     } else {
-      this.selectedNavItem = navItem;
-      this._router.navigate([navItem.route]);
+      this._assignActiveRoute(navItem);
     }
   }
 
@@ -98,6 +104,24 @@ export class HeaderComponent extends ThemeAwareComponent {
     this._authService.logout().subscribe();
   }
 
+  private _assignActiveRoute(nav: INavItem) {
+    localStorage.setItem(EPortalSetting, nav.route);
+    this._portalService.activeRoute = nav;
+    this.selectedNavItem = nav;
+    this._router.navigate([nav.route]);
+  }
+
+  private _checkActivePortalRoute() {
+    const storedActiveRoute = localStorage.getItem(EPortalSetting);
+    const foundNavItem = PORTAL_NAV_HEADER_ITEMS.find(
+      (item) => item.route === storedActiveRoute,
+    );
+
+    const option = foundNavItem ?? PORTAL_NAV_HEADER_ITEMS[0];
+    this._portalService.activeRoute = option;
+    this.selectNav(option);
+  }
+
   private _handlePartyMenuClick(nav: INavItem) {
     if (!this.userState()) {
       console.error(
@@ -112,13 +136,10 @@ export class HeaderComponent extends ThemeAwareComponent {
       this.selectedNavItem = nav;
       //router to party screen
     } else if (isUserAtleastLevel5) {
-      this._openPartyOptionDialog();
+      // this._openPartyOptionDialog();
+      this._assignActiveRoute(nav);
     } else {
-      this._toast.showToast(
-        'Feature Locked',
-        'You need to be level 5+ to access the party menu.',
-        UI_STATE.Info,
-      );
+      this._assignActiveRoute(nav);
     }
   }
 

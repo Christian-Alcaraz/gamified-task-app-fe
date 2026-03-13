@@ -6,4 +6,4 @@ export enum ESize {
   ExtraSmall = 'xs',
 }
 
-export const SIZES = Object.keys(ESize);
+export const SIZES = Object.values(ESize);
