@@ -1,5 +1,12 @@
 <section class="flex flex-col w-full p-4">
   <h1 class="text-foreground text-xl">Party Name</h1>
+
+  <button
+    (click)="getMessages()"
+    class="bg-primary h-[2.4rem] w-[10%] flex items-center justify-center gap-2 px-4 py-1 text-sm text-primary-foreground rounded-full border cursor-pointer hover:bg-primary/85 disabled:bg-muted/25 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:pointer-events-none active:bg-primary/75"
+  >
+    <p>GET MESSAGES</p>
+  </button>
 </section>
 
 <main class="flex flex-col">
